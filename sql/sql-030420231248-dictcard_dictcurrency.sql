@@ -6,21 +6,21 @@ CREATE TABLE dict_card_types
 );
 
 INSERT INTO dict_card_types (code, letter, name)
-VALUES ('03', 'A', 'American Express (AmEx)');
+VALUES ('03', 'A', 'American Express (AmEx)') ON CONFLICT DO NOTHING;
 INSERT INTO dict_card_types (code, letter, name)
-VALUES ('02', 'V', 'Visa');
+VALUES ('02', 'V', 'Visa') ON CONFLICT DO NOTHING;
 INSERT INTO dict_card_types (code, letter, name)
-VALUES ('01', 'M', 'MasterCard (Master)');
+VALUES ('01', 'M', 'MasterCard (Master)') ON CONFLICT DO NOTHING;
 INSERT INTO dict_card_types (code, letter, name)
-VALUES ('10', 'DS', 'Discover');
+VALUES ('10', 'DS', 'Discover') ON CONFLICT DO NOTHING;
 INSERT INTO dict_card_types (code, letter, name)
-VALUES ('28', 'J', 'JCB');
+VALUES ('28', 'J', 'JCB') ON CONFLICT DO NOTHING;
 INSERT INTO dict_card_types (code, letter, name)
-VALUES ('20', 'E', 'enRoute');
+VALUES ('20', 'E', 'enRoute') ON CONFLICT DO NOTHING;
 INSERT INTO dict_card_types (code, letter, name)
-VALUES ('04', 'DN', 'Diners Club (Diners)');
+VALUES ('04', 'DN', 'Diners Club (Diners)') ON CONFLICT DO NOTHING;
 INSERT INTO dict_card_types (code, letter, name)
-VALUES ('72', 'GB', 'GSB');
+VALUES ('72', 'GB', 'GSB') ON CONFLICT DO NOTHING;
 
 CREATE TABLE dict_currencies
 (
