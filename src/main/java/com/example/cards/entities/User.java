@@ -1,19 +1,22 @@
 package com.example.cards.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
 @Table(name = "users", schema = "public")
-public class User implements UserDetails {
+public class User implements UserDetails, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,7 +54,13 @@ public class User implements UserDetails {
     @Column(name = "last_login")
     private Timestamp lastLogin;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @Column(name = "role", length = 10)
+    private String role;
+
+    @Column(name = "isblocked", columnDefinition = "boolean default false")
+    boolean isBlocked;
+
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_add_id")
     private UserAddress userAddress;
 
@@ -62,11 +71,15 @@ public class User implements UserDetails {
         return id;
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + getRole()));
+        return authorities;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return this.password;
     }
@@ -83,7 +96,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return !this.isBlocked;
     }
 
     @Override
@@ -93,7 +106,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return !this.isBlocked;
     }
 
     public String getEmail() {
@@ -116,12 +129,34 @@ public class User implements UserDetails {
         return phone;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public Timestamp getCreatedOn() {
         return createdOn;
     }
 
+    @JsonIgnore
+    public Boolean getBlocked() {
+        return isBlocked;
+    }
+
+    @JsonIgnore
+    public void setBlocked(Boolean blocked) {
+        isBlocked = blocked;
+    }
+
     public Timestamp getUpdateOn() {
         return updateOn;
+    }
+
+    public void setUpdateOn(Timestamp updateOn) {
+        this.updateOn = updateOn;
     }
 
     public Timestamp getLastLogin() {
@@ -136,6 +171,7 @@ public class User implements UserDetails {
         return userDocuments;
     }
 
+    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }

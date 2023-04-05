@@ -1,34 +1,24 @@
 package com.example.cards.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+
 @Table(name = "user_accounts", schema = "public")
 public class UserAccount {
+    @EmbeddedId
+    @Getter
+    @Setter
+    private UserAccountKey userAccountKey;
 
-    @Id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User userId;
-
-    public User getUserId() {
-        return userId;
+    public UserAccount(UserAccountKey userAccountKey) {
+        this.userAccountKey = userAccountKey;
     }
 
-    public void setUserId(User userId) {
-        this.userId = userId;
+    public UserAccount() {
     }
-
-    public Account getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Account accountId) {
-        this.accountId = accountId;
-    }
-
-    @Id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id")
-    private Account accountId;
 }

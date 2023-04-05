@@ -1,32 +1,32 @@
 package com.example.cards.entities.dict;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "dict_card_types", schema = "public")
 public class CardType {
     @Id
-    @Column(name = "code", length = 2)
-    Character code;
+    @Column(name = "code", columnDefinition = "character(2)")
+    @Getter
+    String code;
 
-    @Column(name = "letter", length = 2, nullable = false)
-    Character letter;
+    @JsonIgnore
+    @Column(name = "letter",  columnDefinition = "character(2) not null")
+    @Getter
+    String letter;
 
+    @JsonIgnore
     @Column(name = "name", length = 50, nullable = false)
+    @Getter
     String name;
 
-    public Character getCode() {
-        return code;
-    }
-
-    public Character getLetter() {
-        return letter;
-    }
-
-    public String getName() {
-        return name;
+    public CardType(String code) {
+        this.code = code;
     }
 }

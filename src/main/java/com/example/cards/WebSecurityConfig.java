@@ -1,10 +1,9 @@
 package com.example.cards;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -13,9 +12,14 @@ public class WebSecurityConfig{
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests((requests) -> requests
+        http
+                .authorizeHttpRequests((requests) -> requests
                         //.requestMatchers("/", "/home", "/registration/*").permitAll()
-                        .anyRequest().permitAll())//.authenticated())
+                        .requestMatchers("/api/auth/registration", "/api/auth/login").permitAll()
+                        //.anyRequest().hasRole("user")
+                        //        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
+                        )
 
                 .formLogin((form) -> form
                         .loginPage("/login")

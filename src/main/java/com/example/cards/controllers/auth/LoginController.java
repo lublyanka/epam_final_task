@@ -1,23 +1,24 @@
-package com.example.cards.controllers;
+package com.example.cards.controllers.auth;
 
+import com.example.cards.JwtTokenUtil;
 import com.example.cards.LoginRequest;
 import com.example.cards.entities.User;
 import com.example.cards.repositories.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.cards.JwtTokenUtil;
+
+import java.sql.Timestamp;
+import java.time.Instant;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 public class LoginController {
 
     @Autowired
@@ -42,8 +43,9 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
 
-        String token = jwtTokenUtil.generateToken((UserDetails) user);
-
+        String token = jwtTokenUtil.generateToken(user);
+        user.setUpdateOn(Timestamp.from(Instant.now()));
+        userRepository.save(user);
         return ResponseEntity.ok(token);
     }
 }
