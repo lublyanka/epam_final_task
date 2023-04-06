@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth/profile")
@@ -58,13 +59,46 @@ public class UserProfileController {
                 .equals(updatedUser.getUserAddress()))
             userToSave.setUserAddress(updatedUser.getUserAddress());
 
-
-        userToSave.setUpdateOn(Timestamp.from(Instant.now()));
+        userToSave.setUpdatedOn(Timestamp.from(Instant.now()));
 
         userToSave = userRepository.save(userToSave);
         userRepository.flush();
         return ResponseEntity.ok(userToSave);//.build();
-
     }
 
+
+    @PutMapping("/{userId}/block")
+    public ResponseEntity<?> blockUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                          @PathVariable Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (user.isEnabled()) {
+                user.setBlocked(true);
+                user.setUpdatedOn(Timestamp.from(Instant.now()));
+                userRepository.save(user);
+            }
+            return ResponseEntity.ok("User blocked successfully.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+    @PutMapping("/{userId}/unblock")
+    public ResponseEntity<?> unblockUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                            @PathVariable Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (!user.isEnabled()) {
+                user.setBlocked(false);
+                user.setUpdatedOn(Timestamp.from(Instant.now()));
+                userRepository.save(user);
+            }
+            return ResponseEntity.ok("User unblocked successfully.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

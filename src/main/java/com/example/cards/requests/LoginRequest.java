@@ -1,4 +1,4 @@
-package com.example.cards;
+package com.example.cards.requests;
 
 import com.example.cards.repositories.UserRepository;
 import jakarta.validation.constraints.NotBlank;

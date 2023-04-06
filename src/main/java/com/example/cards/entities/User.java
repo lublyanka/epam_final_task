@@ -3,6 +3,8 @@ package com.example.cards.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,36 +31,54 @@ public class User implements UserDetails, Serializable {
     private String password;
 
     @Column(name = "email", nullable = false, unique = true)
+    @Getter
+    @Setter
     private String email;
 
     @Column(name = "name", nullable = false)
+    @Getter
+    @Setter
     private String name;
 
     @Column(name = "surname", nullable = false)
+    @Getter
+    @Setter
     private String surname;
 
     @Column(name = "middlename")
+    @Getter
+    @Setter
     private String middlename;
 
     @Column(name = "phone", length = 20)
+    @Getter
+    @Setter
     private String phone;
 
     @Column(name = "created_on", nullable = false)
     @CreationTimestamp
+    @Getter
+    @Setter
     private Timestamp createdOn;
 
-    @Column(name = "update_on")
+    @Column(name = "updated_on")
     @CreationTimestamp
-    private Timestamp updateOn;
+    @Getter
+    @Setter
+    private Timestamp updatedOn;
 
     @Column(name = "last_login")
+    @Getter
+    @Setter
     private Timestamp lastLogin;
 
     @Column(name = "role", length = 10)
+    @Getter
+    @Setter
     private String role;
 
     @Column(name = "isblocked", columnDefinition = "boolean default false")
-    boolean isBlocked;
+    private boolean isBlocked;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_add_id")
@@ -109,58 +129,9 @@ public class User implements UserDetails, Serializable {
         return !this.isBlocked;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public String getMiddlename() {
-        return middlename;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public Timestamp getCreatedOn() {
-        return createdOn;
-    }
-
-    @JsonIgnore
-    public Boolean getBlocked() {
-        return isBlocked;
-    }
-
     @JsonIgnore
     public void setBlocked(Boolean blocked) {
         isBlocked = blocked;
-    }
-
-    public Timestamp getUpdateOn() {
-        return updateOn;
-    }
-
-    public void setUpdateOn(Timestamp updateOn) {
-        this.updateOn = updateOn;
-    }
-
-    public Timestamp getLastLogin() {
-        return lastLogin;
     }
 
     public UserAddress getUserAddress() {
@@ -174,22 +145,6 @@ public class User implements UserDetails, Serializable {
     @JsonProperty
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public void setUserAddress(UserAddress userAddress) {

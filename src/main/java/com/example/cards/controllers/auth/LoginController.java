@@ -1,7 +1,7 @@
 package com.example.cards.controllers.auth;
 
 import com.example.cards.JwtTokenUtil;
-import com.example.cards.LoginRequest;
+import com.example.cards.requests.LoginRequest;
 import com.example.cards.entities.User;
 import com.example.cards.repositories.UserRepository;
 import jakarta.validation.Valid;
@@ -44,7 +44,7 @@ public class LoginController {
         }
 
         String token = jwtTokenUtil.generateToken(user);
-        user.setUpdateOn(Timestamp.from(Instant.now()));
+        user.setUpdatedOn(Timestamp.from(Instant.now()));
         userRepository.save(user);
         return ResponseEntity.ok(token);
     }

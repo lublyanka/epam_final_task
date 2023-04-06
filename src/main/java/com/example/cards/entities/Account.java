@@ -5,50 +5,48 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.UUID;
 
 @Entity
 @Table(name = "accounts", schema = "public")
 public class Account {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "card_number", length = 19)
+    @Column(name = "name", nullable = false)
     @Getter
     @Setter
-    private String cardNumber;
+    private String name;
 
-    /*    @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "card_type")
-        @JsonDeserialize(using = CardTypeDeserializer.class)
-        private CardType cardType;*/
-    @Column(columnDefinition = "character(2)")
+    @Column(name = "number", nullable = false)
     @Getter
     @Setter
-    private String cardType;
+    private String number;
 
-    @Column(name = "month", columnDefinition = "character(2)")
-    @Getter
-    @Setter
-    private String month;
+  /*public Currency getCurrency() {
+        return currency;
+    }
 
-    @Column(name = "year", columnDefinition = "character(4)")
-    @Getter
-    @Setter
-    private String year;
-
-/*    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "currency")
-    private Currency currency;*/
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }*/
 
     @JsonProperty("currency")
     @Column(columnDefinition = "character(3)")
     @Getter
     @Setter
     private String currencyCode;
+
+
+    @Column(name="available_balance", columnDefinition = "decimal(10,2) default 0.0")
+    @Getter
+    @Setter
+    private BigDecimal currentBalance;
+
 
     @Column(name = "created_on")
     @Getter
@@ -65,34 +63,14 @@ public class Account {
     @Setter
     boolean isBlocked;
 
+
     public UUID getId() {
         return id;
     }
 
-/*    public CardType getCardType() {
-        return cardType;
-    }
-
-    public void setCardType(CardType cardType) {
-        this.cardType = cardType;
-    }*/
-
-    /*public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }*/
-
-    public Account(String cardNumber, String cardType, String month, String year, String currency) {
-        this.cardNumber = cardNumber;
-        this.cardType = cardType;
-        this.month = month;
-        this.year = year;
+   /* public Account(String currency) {
         this.currencyCode = currency;
-        //this.currency = currency;
-    }
+    }*/
 
     public Account() {
     }
