@@ -3,6 +3,7 @@ plugins {
     id("org.springframework.boot") version "3.0.5"
     id("io.spring.dependency-management") version "1.1.0"
     id("org.hibernate.orm") version "6.2.0.Final"
+    id("io.swagger.core.v3.swagger-gradle-plugin") version "2.2.9"
 }
 
 group = "com.example"
@@ -43,7 +44,8 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
     implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
-    implementation ("com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.13.0")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.13.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
 }
 
 tasks.withType<Test> {

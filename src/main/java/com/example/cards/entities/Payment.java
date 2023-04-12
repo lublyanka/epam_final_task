@@ -53,7 +53,7 @@ public class Payment {
 
     @Setter
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
@@ -61,7 +61,7 @@ public class Payment {
     @Transient
     @Getter
     @Setter
-    private UUID accountId = account.getId();
+    private UUID accountId;
 
     @Column(name = "created_on", nullable = false)
     @CreationTimestamp
@@ -80,3 +80,4 @@ public class Payment {
         return account;
     }
 }
+
