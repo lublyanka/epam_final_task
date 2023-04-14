@@ -1,9 +1,9 @@
 package com.example.cards.controllers.auth;
 
 import com.example.cards.JwtTokenUtil;
-import com.example.cards.requests.LoginRequest;
 import com.example.cards.entities.User;
 import com.example.cards.repositories.UserRepository;
+import com.example.cards.requests.LoginRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +26,8 @@ public class LoginController {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+
+
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {

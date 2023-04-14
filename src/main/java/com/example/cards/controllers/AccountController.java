@@ -1,15 +1,11 @@
 package com.example.cards.controllers;
 
-import com.example.cards.JwtTokenUtil;
-import com.example.cards.entities.*;
-import com.example.cards.repositories.AccountRepository;
-import com.example.cards.repositories.CreditCardRepository;
-import com.example.cards.repositories.UserAccountRepository;
-import com.example.cards.repositories.UserRepository;
-import com.example.cards.repositories.dict.CardTypeRepository;
-import com.example.cards.repositories.dict.CurrencyRepository;
+import com.example.cards.entities.Account;
+import com.example.cards.entities.CreditCard;
+import com.example.cards.entities.User;
 import com.example.cards.services.AccountService;
 import com.example.cards.services.CreditCardService;
+import com.example.cards.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,49 +20,26 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/account")
 public class AccountController {
-    @Autowired
-    private UserRepository userRepository;
 
-    @Autowired
-    private UserAccountRepository userAccountRepository;
 
-    @Autowired
-    private AccountRepository accountRepository;
-
+    public static final ResponseEntity<String> ACCOUNT_DOES_NOT_EXIST = ResponseEntity.badRequest().body("Account does not exist.");
+    public static final ResponseEntity<String> INVALID_CREDIT_CARD_NUMBER = ResponseEntity.badRequest().body("Invalid credit card number.");
     @Autowired
     private AccountService accountService;
 
     @Autowired
-    private CurrencyRepository currencyRepository;
-
-    @Autowired
-    private CreditCardRepository creditCardRepository;
+    private UserService userService;
 
     @Autowired
     private CreditCardService creditCardService;
 
-    @Autowired
-    private CardTypeRepository cardTypeRepository;
-
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("/all")
     public ResponseEntity<?> loadUserAccounts(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                               @RequestParam(required = false, defaultValue = "number") String sortBy,
                                               @RequestParam(required = false, defaultValue = "asc") String sortOrder) {
-        User user = userRepository.findByEmail(jwtTokenUtil.extractUsername(token));
-
-        List<UserAccount> userAccountList = userAccountRepository
-                .findAllByUserAccountKeyUserId(user);
-        List<Account> accounts = userAccountList
-                .stream()
-                .map(userAccount -> userAccount.getUserAccountKey().getAccountId().getId())
-                .map(accountRepository::findById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .sorted(accountService.getComparator(sortBy, sortOrder))
-                .toList();
+        User user = userService.getUserByToken(token);
+        List<Account> accounts = accountService.getAllUserAccounts(sortBy, sortOrder, user);
 
         if (!(accounts.isEmpty()))
             return ResponseEntity.ok(accounts);
@@ -76,98 +47,62 @@ public class AccountController {
             return ResponseEntity.noContent().build();
     }
 
+
     @GetMapping("/{accountId}")
     public ResponseEntity<?> loadAccountById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                              @PathVariable UUID accountId) {
-        User user = userRepository.findByEmail(jwtTokenUtil.extractUsername(token));
+        Optional<Account> accountOptional = accountService.getOptionalAccount(token, accountId);
 
-        Optional<Account> accountOptional = accountRepository.findById(accountId);
-        if (accountOptional.isPresent()) {
-            Account account = accountOptional.get();
-            if (userAccountRepository.findByUserAccountKeyUserIdAndUserAccountKeyAccountId(user, account).isPresent())
-                return ResponseEntity.ok(account);
-        }
+        if (accountOptional.isPresent())
+            return ResponseEntity.ok(accountOptional.get());
 
-      /*  Optional<Account> accounts = userAccountList
-                .stream()
-                .map(userAccount -> userAccount.getUserAccountKey().getAccountId()).findFirst();
-      */
-        return ResponseEntity.notFound().build();
+        return ACCOUNT_DOES_NOT_EXIST;
     }
 
 
     @PutMapping("/{accountId}/block")
     public ResponseEntity<?> blockAccount(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                           @PathVariable UUID accountId) {
-        String email = jwtTokenUtil.extractUsername(token);
-        User user = userRepository.findByEmail(email);
-        Optional<Account> accountOptional = accountRepository.findById(accountId);
-        if (accountOptional.isPresent()) {
-            Account account = accountOptional.get();
-            Optional<UserAccount> userAccountOptional = userAccountRepository
-                    .findByUserAccountKeyUserIdAndUserAccountKeyAccountId(user, account);
+        Optional<Account> accountOptional = accountService.getOptionalAccount(token, accountId);
 
-            if (userAccountOptional.isPresent()) {
-                UserAccount userAccount = userAccountOptional.get();
-                if (!account.isBlocked()) {
-                    account.setBlocked(true);
-                    account.setUpdatedOn(Timestamp.from(Instant.now()));
-                    accountRepository.save(account);
-                }
-                return ResponseEntity.ok("Account blocked successfully.");
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+        if (accountOptional.isPresent()) {
+            accountService.block(accountOptional.get());
+            return ResponseEntity.ok("Account blocked successfully.");
         } else {
-            return ResponseEntity.notFound().build();
+            return ACCOUNT_DOES_NOT_EXIST;
         }
     }
 
     @PutMapping("/{accountId}/unblock")
     public ResponseEntity<?> unblockAccount(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                             @PathVariable UUID accountId) {
-        String email = jwtTokenUtil.extractUsername(token);
-        User user = userRepository.findByEmail(email);
+        Optional<Account> accountOptional = accountService.getOptionalAccount(token, accountId);
 
-        Optional<Account> accountOptional = accountRepository.findById(accountId);
         if (accountOptional.isPresent()) {
-            Account account = accountOptional.get();
-            Optional<UserAccount> userAccountOptional = userAccountRepository
-                    .findByUserAccountKeyUserIdAndUserAccountKeyAccountId(user, account);
-
-            if (userAccountOptional.isPresent()) {
-                UserAccount userAccount = userAccountOptional.get();
-                if (account.isBlocked()) {
-                    account.setBlocked(false);
-                    account.setUpdatedOn(Timestamp.from(Instant.now()));
-                    accountRepository.save(account);
-                }
-                return ResponseEntity.ok("Account unblocked successfully.");
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            accountService.unblock(accountOptional.get());
+            return ResponseEntity.ok("Account unblocked successfully.");
         } else {
-            return ResponseEntity.notFound().build();
+            return ACCOUNT_DOES_NOT_EXIST;
         }
     }
 
     @GetMapping("/{accountId}/cards")
     public ResponseEntity<?> loadAccountCreditCards(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                                     @PathVariable UUID accountId) {
-        User user = userRepository.findByEmail(jwtTokenUtil.extractUsername(token));
+        Optional<Account> accountOptional = accountService.getOptionalAccount(token, accountId);
 
-        Optional<Account> accountOptional = accountRepository.findById(accountId);
         if (accountOptional.isPresent()) {
             Account account = accountOptional.get();
-            if (userAccountRepository.findByUserAccountKeyUserIdAndUserAccountKeyAccountId(user, account).isPresent()) {
-                List<CreditCard> creditCards = creditCardRepository.findAllByAccount(account);
-                //here should be another way of doing it. maybe initialize it in constructor??
-                creditCards.forEach(card -> card.setAccountId(account.getId()));
+            List<CreditCard> creditCards = creditCardService.getCreditCards(account);
+
+            if (!(creditCards.isEmpty()))
                 return ResponseEntity.ok(creditCards);
-            }
+            else
+                return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.notFound().build();
+        return ACCOUNT_DOES_NOT_EXIST;
     }
+
 
     @GetMapping("/{accountId}/{cardNumber}")
     public ResponseEntity<?> loadCreditCard(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
@@ -175,82 +110,73 @@ public class AccountController {
                                             @PathVariable String cardNumber) {
 
         if (!creditCardService.isValidCreditCardNumber(cardNumber))
-            return ResponseEntity.badRequest().body("Invalid credit card number");
+            return INVALID_CREDIT_CARD_NUMBER;
 
-        User user = userRepository.findByEmail(jwtTokenUtil.extractUsername(token));
+        User user = userService.getUserByToken(token);
 
-        Optional<Account> accountOptional = accountRepository.findById(accountId);
+        Optional<Account> accountOptional = accountService.getOptionalAccount(accountId);
         if (accountOptional.isPresent()) {
             Account account = accountOptional.get();
-            if (userAccountRepository.findByUserAccountKeyUserIdAndUserAccountKeyAccountId(user, account).isPresent()) {
-                Optional<CreditCard> creditCardOptional = creditCardRepository.findById(cardNumber);
-                if (creditCardOptional.isPresent()) {
-                    CreditCard creditCard = creditCardOptional.get();
-                    if (account.getId().equals(creditCard.getAccount().getId())) {
-                        creditCard.setAccountId(account.getId());
-                        return ResponseEntity.ok(creditCard);
-                    }
-                }
-            }
-        }
-        return ResponseEntity.notFound().build();
+            if (accountService.getOptionalAccount(token, account.getId()).isPresent()) {
+                Optional<CreditCard> creditCardOptional = creditCardService.getCreditCard(cardNumber, account);
+                if (creditCardOptional.isPresent())
+                    return ResponseEntity.ok(creditCardOptional.get());
+                else
+                    return ResponseEntity.badRequest().body("Credit card does not exist");
+            } else return ACCOUNT_DOES_NOT_EXIST;
+        } else return ACCOUNT_DOES_NOT_EXIST;
     }
+
 
     @PostMapping("/{accountId}/refill")
-    public ResponseEntity<?> replenishAccount(@PathVariable UUID accountId, @RequestParam BigDecimal amount) {
-        Optional<Account> optionalAccount = accountRepository.findById(accountId);
+    public ResponseEntity<?> replenishAccount(@PathVariable UUID accountId,
+                                              @RequestParam BigDecimal amount) {
+        Optional<Account> optionalAccount = accountService.getOptionalAccount(accountId);
 
         if (optionalAccount.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ACCOUNT_DOES_NOT_EXIST;
+        }
+        if (amount.compareTo(BigDecimal.ZERO) != 1) {
+            return ResponseEntity.badRequest().body("Refilling sum can't be zero or negative.");
         }
 
-        Account account = optionalAccount.get();
-        account.setCurrentBalance(account.getCurrentBalance().add(amount));
-        accountRepository.save(account);
-
+        accountService.refillAccount(amount, optionalAccount.get());
         return ResponseEntity.ok().build();
     }
+
 
     @PostMapping("/create")
     public ResponseEntity<?> createUserAccount(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                                @RequestBody Account account) {
-        User user = userRepository.findByEmail(jwtTokenUtil.extractUsername(token));
+        User user = userService.getUserByToken(token);
 
-        if (!currencyRepository.existsById(account.getCurrencyCode()))
+        if (!accountService.isAccountCurrencPresent(account))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Currency code does not exist.");
 
-        Account accountToSave = account;
-        accountToSave.setCreatedOn(Timestamp.from(Instant.now()));
-        accountToSave.setUpdatedOn(Timestamp.from(Instant.now()));
-        accountToSave = accountRepository.save(account);
-        UserAccountKey userAccountKey = new UserAccountKey(user, accountToSave);
-        UserAccount userAccount = new UserAccount(userAccountKey);
-        userAccount = userAccountRepository.save(userAccount);
-        accountRepository.flush();
-        userAccountRepository.flush();
-        return ResponseEntity.ok(accountToSave);//"User account created successfully.");
+        return ResponseEntity.ok(accountService.saveAccount(account, user));
     }
 
     @PostMapping("/addCard")
-    public ResponseEntity<?> addCredicCard(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+    public ResponseEntity<?> addCreditCard(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                            @RequestBody CreditCard creditCard) {
 
         if (!creditCardService.isValidCreditCardNumber(creditCard.getCardNumber()))
-            return ResponseEntity.badRequest().body("Invalid credit card number");
+            return INVALID_CREDIT_CARD_NUMBER;
 
-        User user = userRepository.findByEmail(jwtTokenUtil.extractUsername(token));
-
-        if (!cardTypeRepository.existsById(creditCard.getCardType()))
+        if (!creditCardService.isCreditCardTypePresent(creditCard))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Card Type does not exist.");
 
-        Optional<Account> account = accountRepository.findById(creditCard.getAccountId());
-        if (account.isEmpty())
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Account does not exist.");
-        creditCard.setAccount(account.get());
-        creditCardRepository.save(creditCard);
-        creditCardRepository.flush();
-        return ResponseEntity.ok(creditCard);
+        Optional<Account> accountOptional = accountService.getOptionalAccount(creditCard.getAccountId());
+        if (accountOptional.isEmpty())
+            return ACCOUNT_DOES_NOT_EXIST;
+
+        User user = userService.getUserByToken(token);
+        accountOptional = accountService.getAccountExistenceByUser(accountOptional.get(), user);
+        if (accountOptional.isPresent()) {
+            creditCard = creditCardService.saveCreditCard(creditCard, accountOptional.get());
+            return ResponseEntity.ok(creditCard);
+        }
+
+        return ACCOUNT_DOES_NOT_EXIST;
     }
-
-
 }

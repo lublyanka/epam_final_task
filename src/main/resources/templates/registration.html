@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- CSS and other head tags -->
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css" th:href="@{/css/styles.css}">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+</head>
+<body>
+<div th:replace="fragments/header"></div>
+<main>
+        <div class="row">
+            <form id="registration-form" class="col s6 offset-s3">
+                <h2>Registration Form</h2>
+                <div class="input-field">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required class="validate"><br>
+                </div>
+                <div class="input-field ">
+                    <label for="surname">Surname:</label>
+                    <input type="text" id="surname" name="surname" required class="validate"><br>
+                </div>
+                <div class="input-field">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required class="validate"><br>
+                </div>
+                <div class="input-field">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required class="validate"><br>
+                </div>
+                <div class="input-field">
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" id="phone" name="phone" required class="validate"><br>
+                </div>
+                <button class="btn waves-effect waves-light" type="submit" name="action">Register
+                    <i class="material-icons right">send</i>
+                </button>
+            </form>
+            <div id="response-message"></div>
+        </div>
+    </div>
+</main>
+<div th:replace="fragments/footer"></div>
+<script src="js/registration.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+.logo {
+    width: auto;
+    height: 4.3rem;
+    border-radius: 15px;
+    margin: 0 15px;
+}
+.nav-logo {
+    height: 7rem;
+    border-radius: 15px;
+     margin-top: 16.4px;
+}
+
+.main-banner {
+    max-width: 100%;
+    height: 75vh;
+    object-fit: cover;
+    margin-bottom: -10px;
+    filter: sepia(0.6) saturate(0.7) hue-rotate(143deg);
+}

@@ -1,0 +1,5 @@
+.profile a, .accounts a, .payments a {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 70%;
+}

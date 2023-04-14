@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- CSS and other head tags -->
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" type="text/css" href="/static/css/dashboard.css" th:href="@{/css/dashboard.css}">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="/js/dashboard.js"></script>
+</head>
+<body>
+<div th:replace="fragments/header"></div>
+<main>
+    <div class="container">
+        <div class="row profile">
+            <h3><span>Profile</span><a href="/profile" th:href="@{/profile}">edit</a></h3>
+            <span id="name-surname"></span>
+        </div>
+        <div class="row accounts">
+            <h3><span>Accounts</span><a href="#">show all</a></h3>
+            <!-- list of accounts goes here -->
+        </div>
+
+        <div class="row payments">
+            <h3><span>Payments</span><a href="#">show all</a></h3>
+            <!-- list of payments goes here -->
+        </div>
+    </div>
+</main>
+<div th:replace="fragments/footer"></div>
+</body>
+</html>

@@ -1,10 +1,10 @@
 package com.example.cards.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.UUID;
 
@@ -49,27 +49,5 @@ public class CreditCard {
     public Account getAccount() {
         return account;
     }
-
-    /* public UUID getAccountId() {
-        return account.getId();
-    }*/
-
-    /*    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_type")
-    @JsonDeserialize(using = CardTypeDeserializer.class)
-    private CardType cardType;*/
-
-    /*    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "currency")
-    private Currency currency;*/
-
-    /*    public CardType getCardType() {
-        return cardType;
-    }
-
-    public void setCardType(CardType cardType) {
-        this.cardType = cardType;
-    }*/
 
 }

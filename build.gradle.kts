@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 plugins {
     java
     id("org.springframework.boot") version "3.0.5"
@@ -9,6 +11,19 @@ plugins {
 group = "com.example"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
+
+/*val filter_tokens = mapOf(
+        "default" to mapOf(
+                "version" to project.version,
+                "build_time" to System.currentTimeMillis().toString()
+        ),
+        "prod" to mapOf(
+                "env" to "prod"
+        ),
+        "dev" to mapOf(
+                "env" to "dev"
+        )
+)*/
 
 configurations {
     compileOnly {
@@ -36,7 +51,6 @@ dependencies {
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("org.postgresql:postgresql")
-    //runtimeOnly("org.postgresql:postgresql:42.2.5")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
@@ -51,3 +65,18 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+//tasks.processResources {
+ //   val profile = project.properties["profile"]
+  //  val replaceTokens: MutableMap<String, String> = profile?.let { filter_tokens[it] }?.toMutableMap() ?: filter_tokens["default"].toMutableMap()
+
+ //   exclude("**/*.ttf")
+
+   // from("src/main/resources") {
+     //   filter(FilteringResource { ReplaceTokens(it.inputStream().reader().readText(), tokens = replaceTokens) })
+   // }
+
+   // from("src/main/resources") {
+    //    include("**/*.ttf")
+    //}
+//}

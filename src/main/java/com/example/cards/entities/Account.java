@@ -27,13 +27,6 @@ public class Account {
     @Setter
     private String number;
 
-  /*public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }*/
 
     @JsonProperty("currency")
     @Column(columnDefinition = "character(3)")
