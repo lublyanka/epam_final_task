@@ -15,6 +15,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users", schema = "public")
@@ -153,5 +154,17 @@ public class User implements UserDetails, Serializable {
 
     public void setUserDocuments(List<UserDocument> userDocuments) {
         this.userDocuments = userDocuments;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof User user)) {
+            return false;
+        }
+
+        return Objects.equals(this.getId(), user.getId());
     }
 }

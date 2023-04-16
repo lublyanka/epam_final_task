@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class PaymentService {
@@ -33,8 +36,17 @@ public class PaymentService {
         paymentRepository.flush();
         return payment;
     }
+
     public boolean isPaymentSumPositive(BigDecimal sum, Account account) {
         return account.getCurrentBalance().compareTo(sum) < 0;
+    }
+
+    public Optional<Payment> getById(UUID paymentId) {
+        return paymentRepository.findById(paymentId);
+    }
+
+    public List<Payment> getPaymentListByUser(User user) {
+        return paymentRepository.findAllByUser(user);
     }
 
 }

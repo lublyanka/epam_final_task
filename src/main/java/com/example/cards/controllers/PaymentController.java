@@ -1,6 +1,5 @@
 package com.example.cards.controllers;
 
-import com.example.cards.JwtTokenUtil;
 import com.example.cards.entities.Account;
 import com.example.cards.entities.Payment;
 import com.example.cards.entities.User;
@@ -26,20 +25,15 @@ public class PaymentController {
     private UserService userService;
     @Autowired
     private AccountService accountService;
-
     @Autowired
     PaymentService paymentService;
-
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
 
     @GetMapping("/all")
     public ResponseEntity<?> loadUserPayments(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                               @RequestParam(required = false, defaultValue = "number") String sortBy,
                                               @RequestParam(required = false, defaultValue = "asc") String sortOrder) {
         User user = userService.getUserByToken(token);
-        List<Payment> payments = paymentRepository.findAllByUser(user);
+        List<Payment> payments = paymentService.getPaymentListByUser(user);
 
         if (!(payments.isEmpty()))
             return ResponseEntity.ok(payments);
@@ -47,11 +41,12 @@ public class PaymentController {
             return ResponseEntity.noContent().build();
     }
 
+
     @GetMapping("/{paymentId}")
     public ResponseEntity<?> loadPaymentById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                              @PathVariable UUID paymentId) {
         User user = userService.getUserByToken(token);
-        Optional<Payment> paymentOptional = paymentRepository.findById(paymentId);
+        Optional<Payment> paymentOptional = paymentService.getById(paymentId);
 
         if (paymentOptional.isPresent()) {
             Payment payment = paymentOptional.get();

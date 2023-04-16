@@ -1,4 +1,4 @@
-package com.example.cards.controllers;
+package com.example.cards.controllers.acc;
 
 import com.example.cards.entities.Account;
 import com.example.cards.entities.CreditCard;
@@ -24,12 +24,11 @@ public class AccountController {
 
     public static final ResponseEntity<String> ACCOUNT_DOES_NOT_EXIST = ResponseEntity.badRequest().body("Account does not exist.");
     public static final ResponseEntity<String> INVALID_CREDIT_CARD_NUMBER = ResponseEntity.badRequest().body("Invalid credit card number.");
+
     @Autowired
     private AccountService accountService;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private CreditCardService creditCardService;
 
