@@ -1,4 +1,4 @@
-package com.example.cards;
+package com.example.cards.configs;
 
 import com.example.cards.deserializers.CardTypeDeserializer;
 import com.example.cards.entities.dict.CardType;

@@ -1,4 +1,4 @@
-package com.example.cards;
+package com.example.cards.configs;
 
 import org.springframework.boot.web.server.MimeMappings;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
