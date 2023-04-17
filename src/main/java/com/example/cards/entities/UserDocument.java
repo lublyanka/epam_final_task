@@ -1,7 +1,6 @@
 package com.example.cards.entities;
 
 import jakarta.persistence.*;
-
 import java.util.Date;
 
 @Entity
@@ -28,27 +27,6 @@ public class UserDocument {
     @JoinColumn(name = "user_id")
     private User userId;
 
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public void setValidFrom(Date validFrom) {
-        this.validFrom = validFrom;
-    }
-
-    public void setValidTo(Date validTo) {
-        this.validTo = validTo;
-    }
-
-    public void setAuthority(String authority) {
-        this.authority = authority;
-    }
-
-    public void setUserId(User userId) {
-        this.userId = userId;
-    }
-
     public Long getId() {
         return id;
     }
@@ -57,20 +35,40 @@ public class UserDocument {
         return number;
     }
 
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
     public Date getValidFrom() {
         return validFrom;
+    }
+
+    public void setValidFrom(Date validFrom) {
+        this.validFrom = validFrom;
     }
 
     public Date getValidTo() {
         return validTo;
     }
 
+    public void setValidTo(Date validTo) {
+        this.validTo = validTo;
+    }
+
     public String getAuthority() {
         return authority;
     }
 
+    public void setAuthority(String authority) {
+        this.authority = authority;
+    }
+
     public User getUserId() {
         return userId;
+    }
+
+    public void setUserId(User userId) {
+        this.userId = userId;
     }
 
 }

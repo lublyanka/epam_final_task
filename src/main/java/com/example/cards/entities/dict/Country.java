@@ -15,20 +15,20 @@ public class Country {
     @Column(name = "name", length = 50, nullable = false)
     String name;
 
-    public String getAlpha_2() {
-        return alpha_2;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public Country() {
     }
 
     // add a constructor that takes a String argument
     public Country(String alpha2) {
         this.alpha_2 = alpha2;
+    }
+
+    public String getAlpha_2() {
+        return alpha_2;
+    }
+
+    public String getName() {
+        return name;
     }
 
     /*// add a static factory method that takes a String argument and returns a Country object

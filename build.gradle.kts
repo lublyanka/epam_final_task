@@ -1,5 +1,3 @@
-import org.apache.tools.ant.filters.ReplaceTokens
-
 plugins {
     java
     id("org.springframework.boot") version "3.0.5"
@@ -60,6 +58,10 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.13.0")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
+    implementation ("com.google.googlejavaformat:google-java-format:1.15.0") //requirements from Iryna Afanasieva
+
+
+
 }
 
 tasks.withType<Test> {
@@ -67,16 +69,16 @@ tasks.withType<Test> {
 }
 
 //tasks.processResources {
- //   val profile = project.properties["profile"]
-  //  val replaceTokens: MutableMap<String, String> = profile?.let { filter_tokens[it] }?.toMutableMap() ?: filter_tokens["default"].toMutableMap()
+//   val profile = project.properties["profile"]
+//  val replaceTokens: MutableMap<String, String> = profile?.let { filter_tokens[it] }?.toMutableMap() ?: filter_tokens["default"].toMutableMap()
 
- //   exclude("**/*.ttf")
+//   exclude("**/*.ttf")
 
-   // from("src/main/resources") {
-     //   filter(FilteringResource { ReplaceTokens(it.inputStream().reader().readText(), tokens = replaceTokens) })
-   // }
+// from("src/main/resources") {
+//   filter(FilteringResource { ReplaceTokens(it.inputStream().reader().readText(), tokens = replaceTokens) })
+// }
 
-   // from("src/main/resources") {
-    //    include("**/*.ttf")
-    //}
+// from("src/main/resources") {
+//    include("**/*.ttf")
+//}
 //}

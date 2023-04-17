@@ -7,9 +7,6 @@ import com.example.cards.entities.UserAccountKey;
 import com.example.cards.repositories.AccountRepository;
 import com.example.cards.repositories.UserAccountRepository;
 import com.example.cards.repositories.dict.CurrencyRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -17,6 +14,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AccountService {

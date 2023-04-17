@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <title>Profile</title>
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <!-- CSS and other head tags -->
-    <link rel="stylesheet" type="text/css" href="/static/css/styles.css" th:href="@{/css/styles.css}">
+    <link href="/static/css/styles.css" rel="stylesheet" th:href="@{/css/styles.css}" type="text/css">
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <script type="text/javascript" src="/js/profile.js"></script>
+    <link href="/favicon.ico" rel="icon" type="image/x-icon">
+    <script src="/js/profile.js" type="text/javascript"></script>
 </head>
 <body>
 <div th:replace="fragments/header"></div>
@@ -23,61 +23,61 @@
             <form>
                 <div class="input-field col s6">
                     <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" class="validate" data-length="255" value="John">
+                    <input class="validate" data-length="255" id="name" name="name" type="text" value="John">
                 </div>
                 <div class="input-field col s6">
                     <label for="surname">Surname:</label>
-                    <input type="text" id="surname" name="surname" class="validate" data-length="255" value="Doe">
+                    <input class="validate" data-length="255" id="surname" name="surname" type="text" value="Doe">
                 </div>
                 <div class="input-field col s6">
                     <label for="surname">Middlename:</label>
-                    <input type="text" id="middlename" name="middlename" class="validate" data-length="255" value="">
+                    <input class="validate" data-length="255" id="middlename" name="middlename" type="text" value="">
                 </div>
                 <div class="input-field col s6">
                     <label for="surname">Role:</label>
-                    <input disabled type="text" id="role" name="role" class="validate" data-length="255" value="">
+                    <input class="validate" data-length="255" disabled id="role" name="role" type="text" value="">
                 </div>
                 <div class="input-field col s12">
                     <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" class="validate" data-length="255"
+                    <input class="validate" data-length="255" id="email" name="email" type="email"
                            value="johndoe+4@example.com">
                 </div>
                 <div class="input-field col s12">
                     <label for="phone">Phone:</label>
-                    <input type="text" id="phone" name="phone" class="validate" data-length="20" value="125">
+                    <input class="validate" data-length="20" id="phone" name="phone" type="text" value="125">
                 </div>
                 <div class="input-field col s6">
                     <label for="country">Country:</label>
-                    <input type="text" id="country" name="country" class="validate" value="Spain">
+                    <input class="validate" id="country" name="country" type="text" value="Spain">
                 </div>
                 <div class="input-field col s6">
                     <label for="state">State:</label>
-                    <input type="text" id="state" name="state" class="validate" value="Malaga">
+                    <input class="validate" id="state" name="state" type="text" value="Malaga">
                 </div>
                 <div class="input-field col s6">
                     <label for="city">City:</label>
-                    <input type="text" id="city" name="city" class="validate" value="Malaga">
+                    <input class="validate" id="city" name="city" type="text" value="Malaga">
                 </div>
                 <div class="input-field col s6">
                     <label for="code">Postal Code:</label>
-                    <input type="text" id="code" name="code" class="validate" value="29010">
+                    <input class="validate" id="code" name="code" type="text" value="29010">
                 </div>
                 <div class="input-field col s12">
                     <label for="address1">Address 1:</label>
-                    <input type="text" id="address1" name="address1" class="validate" value="BV Louis Pasteur 17">
+                    <input class="validate" id="address1" name="address1" type="text" value="BV Louis Pasteur 17">
                 </div>
                 <div class="input-field col s12">
                     <label for="address2">Address 2:</label>
-                    <input type="text" id="address2" name="address2" value="1 1 1 ">
+                    <input id="address2" name="address2" type="text" value="1 1 1 ">
                 </div>
                 <div class="input-field col s12">
                     <label for="note">Note:</label>
-                    <input type="text" id="note" name="note" value="">
+                    <input id="note" name="note" type="text" value="">
                 </div>
                 <div class="btn-group">
-                    <button type="submit" class="waves-effect waves-light btn-small">Save</button>
-                    <button type="button" class="waves-effect waves-light btn-small"
-                            onclick="window.location.href='/dashboard'">Cancel
+                    <button class="waves-effect waves-light btn-small" type="submit">Save</button>
+                    <button class="waves-effect waves-light btn-small" onclick="window.location.href='/dashboard'"
+                            type="button">Cancel
                     </button>
                 </div>
             </form>

@@ -1,7 +1,6 @@
 package com.example.cards.entities;
 
 import jakarta.persistence.*;
-
 import java.util.UUID;
 
 @Entity

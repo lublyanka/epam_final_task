@@ -1,17 +1,17 @@
 package com.example.cards.enums;
 
 public enum PaymentStatus {
-    PREPARED("prepared"),
+  PREPARED("prepared"),
 
-    SENT("sent");
+  SENT("sent");
 
-    private String statusName;
+  private final String statusName;
 
-    private PaymentStatus(String statusName) {
-        this.statusName = statusName;
-    }
+  PaymentStatus(String statusName) {
+    this.statusName = statusName;
+  }
 
-    public String getStatusName() {
-        return statusName;
-    }
+  public String getStatusName() {
+    return statusName;
+  }
 }

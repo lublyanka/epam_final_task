@@ -7,26 +7,25 @@ import com.example.cards.requests.PaymentRequest;
 import com.example.cards.services.AccountService;
 import com.example.cards.services.PaymentService;
 import com.example.cards.services.UserService;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 @Controller
 @RequestMapping("/api/payment")
 public class PaymentController {
 
     @Autowired
+    PaymentService paymentService;
+    @Autowired
     private UserService userService;
     @Autowired
     private AccountService accountService;
-    @Autowired
-    PaymentService paymentService;
 
     @GetMapping("/all")
     public ResponseEntity<?> loadUserPayments(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
