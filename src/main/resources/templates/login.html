@@ -3,20 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
-    <!-- CSS and other head tags -->
-    <link href="/static/css/styles.css" rel="stylesheet" th:href="@{/css/styles.css}" type="text/css">
-    <link href="/static/css/styles_login.css" rel="stylesheet" th:href="@{/css/styles_login.css}" type="text/css">
-    <!-- Compiled and minified CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="/favicon.ico" rel="icon" type="image/x-icon">
+    <title data-i18n-key="login-title">Login</title>
+    <div th:replace="fragments/head.html"> </div>
+    <link href="/static/css/login.css" rel="stylesheet" th:href="@{/css/login.css}" type="text/css">
     <script src="/js/login.js" type="text/javascript"></script>
-    <script async>
-
-    </script>
 </head>
 <body>
 <div th:replace="fragments/header"></div>
@@ -28,25 +18,40 @@
                     <div id="response-message"></div>
                     <div class="input-field">
                         <i class="material-icons prefix">person_outline</i>
-                        <input id="username" name="username" placeholder="Email" type="text">
+                        <label data-i18n-key="email" for="username">Email</label>
+                        <input id="username" name="username" type="text">
                     </div>
                     <div class="input-field">
                         <i class="material-icons prefix">lock_outline</i>
-                        <input class="input-field" id="password" name="password" placeholder="Password"
+                        <label data-i18n-key="password" for="password">Password</label>
+                        <input  id="password" name="password"
                                type="password">
                     </div>
-                    <button class="btn-small waves-effect waves-light" name="action" onclick="login()" type="submit">Log
-                        In
+                    <button lang="en" class="btn-small waves-effect waves-light" name="action" onclick="login()" type="submit">
+                        Log In
+                        <i class="material-icons right">chevron_right</i>
+                    </button>
+                    <button lang="es" class="btn-small waves-effect waves-light" name="action" onclick="login()" type="submit">
+                        Acceder
                         <i class="material-icons right">chevron_right</i>
                     </button>
                 </form>
                 <div class="social-login">
-                    <b>LOG IN VIA</b>
+                    <b lang="en">LOG IN VIA</b>
+                    <b lang="es">ACCEDER POR</b>
                     <div class="social-icons">
                         <a class="social-login__icon fab fa-instagram" href="#"><i class="material-icons prefix">lock_outline</i></a>
                         <a class="social-login__icon fab fa-facebook" href="#"><i class="material-icons prefix">lock_outline</i></a>
                         <a class="social-login__icon fab fa-twitter" href="#"><i class="material-icons prefix">lock_outline</i></a>
                     </div>
+                    <button lang="en" class="btn-small waves-effect waves-light" name="action" onclick="window.location.href='/register'" type="submit">
+                        Sign up
+                        <i class="material-icons right">chevron_right</i>
+                    </button>
+                    <button lang="es" class="btn-small waves-effect waves-light" name="action" onclick="window.location.href='/register'" type="submit">
+                        Inscribir
+                        <i class="material-icons right">chevron_right</i>
+                    </button>
                 </div>
             </div>
             <div class="screen__background">
@@ -59,18 +64,8 @@
     </div>
 </main>
 <div th:replace="fragments/footer"></div>
-
-
-<script defer>
-const wes = document.querySelector('button[name="action"]');
-wes.addEventListener("click", function(event) {
-  console.log(event);
-  event.preventDefault();
-});
-
-
-</script>
-
-
+<div th:replace="fragments/button.html"> </div>
 </body>
+
+
 </html>

@@ -2,16 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Profile</title>
-    <!-- Compiled and minified CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
-    <!-- CSS and other head tags -->
-    <link href="/static/css/styles.css" rel="stylesheet" th:href="@{/css/styles.css}" type="text/css">
-
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="/favicon.ico" rel="icon" type="image/x-icon">
+    <title data-i18n-key="profile-title">Profile</title>
+    <div th:replace="fragments/head.html"></div>
     <script src="/js/profile.js" type="text/javascript"></script>
 </head>
 <body>
@@ -19,71 +11,75 @@
 <main>
     <div class="row">
         <div class="col s6 offset-s3">
-            <h2>Personal Information</h2>
+            <h2 lang="en">Personal Information</h2>
+            <h2 lang="es">Información personal</h2>
             <form>
                 <div class="input-field col s6">
-                    <label for="name">Name:</label>
+                    <label data-i18n-key="name" for="name">Name</label>
                     <input class="validate" data-length="255" id="name" name="name" type="text" value="John">
                 </div>
                 <div class="input-field col s6">
-                    <label for="surname">Surname:</label>
+                    <label data-i18n-key="surname" for="surname">Surname</label>
                     <input class="validate" data-length="255" id="surname" name="surname" type="text" value="Doe">
                 </div>
                 <div class="input-field col s6">
-                    <label for="surname">Middlename:</label>
+                    <label data-i18n-key="middlename" for="middlename">Middlename</label>
                     <input class="validate" data-length="255" id="middlename" name="middlename" type="text" value="">
                 </div>
                 <div class="input-field col s6">
-                    <label for="surname">Role:</label>
+                    <label data-i18n-key="role" for="role">Role</label>
                     <input class="validate" data-length="255" disabled id="role" name="role" type="text" value="">
                 </div>
                 <div class="input-field col s12">
-                    <label for="email">Email:</label>
+                    <label data-i18n-key="email" for="email">Email</label>
                     <input class="validate" data-length="255" id="email" name="email" type="email"
                            value="johndoe+4@example.com">
                 </div>
                 <div class="input-field col s12">
-                    <label for="phone">Phone:</label>
+                    <label data-i18n-key="phone" for="phone">Phone number</label>
                     <input class="validate" data-length="20" id="phone" name="phone" type="text" value="125">
                 </div>
                 <div class="input-field col s6">
-                    <label for="country">Country:</label>
+                    <label data-i18n-key="country" for="country">Country</label>
                     <input class="validate" id="country" name="country" type="text" value="Spain">
                 </div>
                 <div class="input-field col s6">
-                    <label for="state">State:</label>
+                    <label data-i18n-key="state" for="state">State</label>
                     <input class="validate" id="state" name="state" type="text" value="Malaga">
                 </div>
                 <div class="input-field col s6">
-                    <label for="city">City:</label>
+                    <label data-i18n-key="city" for="city">City</label>
                     <input class="validate" id="city" name="city" type="text" value="Malaga">
                 </div>
                 <div class="input-field col s6">
-                    <label for="code">Postal Code:</label>
+                    <label data-i18n-key="code" for="code">Postal Code</label>
                     <input class="validate" id="code" name="code" type="text" value="29010">
                 </div>
                 <div class="input-field col s12">
-                    <label for="address1">Address 1:</label>
+                    <label data-i18n-key="address1" for="address1">Address 1</label>
                     <input class="validate" id="address1" name="address1" type="text" value="BV Louis Pasteur 17">
                 </div>
                 <div class="input-field col s12">
-                    <label for="address2">Address 2:</label>
+                    <label data-i18n-key="address2" for="address2">Address 2</label>
                     <input id="address2" name="address2" type="text" value="1 1 1 ">
                 </div>
                 <div class="input-field col s12">
-                    <label for="note">Note:</label>
+                    <label data-i18n-key="note" for="note">Notes</label>
                     <input id="note" name="note" type="text" value="">
                 </div>
                 <div class="btn-group">
-                    <button class="waves-effect waves-light btn-small" type="submit">Save</button>
-                    <button class="waves-effect waves-light btn-small" onclick="window.location.href='/dashboard'"
+                    <button data-i18n-key="save" class="waves-effect waves-light btn-small" type="submit">Save</button>
+                    <button data-i18n-key="cancel" class="waves-effect waves-light btn-small"
+                            onclick="window.location.href='/dashboard'"
                             type="button">Cancel
                     </button>
                 </div>
             </form>
-            <h2>Documents</h2>
+            <h2 lang="en">Documents</h2>
+            <h2 lang="es">Documentos</h2>
             <ul>
-                <li>No documents available.</li>
+                <li lang="en">No documents available.</li>
+                <li lang="es">No hay documentos disponibles.</li>
             </ul>
         </div>
     </div>

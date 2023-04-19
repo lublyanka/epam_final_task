@@ -17,3 +17,11 @@
     margin-bottom: -10px;
     filter: sepia(0.6) saturate(0.7) hue-rotate(143deg);
 }
+
+/*localization*/
+[lang] {
+  display: none;
+}
+[lang=en] {
+  display: unset;
+}

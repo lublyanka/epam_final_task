@@ -3,14 +3,12 @@ package com.example.cards.controllers.auth;
 import com.example.cards.entities.User;
 import com.example.cards.requests.LoginRequest;
 import com.example.cards.services.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -39,6 +37,4 @@ public class LoginController {
         String token = userService.getToken(user);
         return ResponseEntity.ok(token);
     }
-
-
 }

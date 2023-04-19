@@ -19,7 +19,7 @@ public class RegistrationController {
     @PostMapping("/registration")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         if (userService.isExistsByEmail(user)) {
-            return ResponseEntity.badRequest().body("Email already exists");
+            return ResponseEntity.status(409).body("Email already exists");
         }
         user = userService.updateUser(user);
         return ResponseEntity.ok(user);

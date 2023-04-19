@@ -1,5 +1,4 @@
 async function login() {
-  event.preventDefault();
   var url = "/api/auth/login";
   var username = document.getElementById('username').value;
   var password = document.getElementById('password').value;
@@ -17,9 +16,7 @@ async function login() {
       body: JSON.stringify(data)
     })
 
-    console.log(response);
-
-    if (response.ok) {
+    if (response.status===200) {
       const token = await response.text();
       localStorage.setItem("token", token);
       window.location.href='/dashboard';
@@ -33,6 +30,4 @@ async function login() {
     document.getElementById('response-message').innerText = "Please fill in both fields.";
     return;
   };
-
-
 };

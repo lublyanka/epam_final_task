@@ -44,7 +44,12 @@ public class Payment {
   @Setter
   private String currencyCode;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @Column(name = "number", nullable = false)
+  @Getter
+  @Setter
+  private String number;
+
+    @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   @Getter
   @Setter

@@ -32,7 +32,7 @@ public class PaymentController {
                                               @RequestParam(required = false, defaultValue = "number") String sortBy,
                                               @RequestParam(required = false, defaultValue = "asc") String sortOrder) {
         User user = userService.getUserByToken(token);
-        List<Payment> payments = paymentService.getPaymentListByUser(user);
+        List<Payment> payments = paymentService.getPaymentListByUser(sortBy, sortOrder, user);
 
         if (!(payments.isEmpty()))
             return ResponseEntity.ok(payments);
@@ -55,8 +55,22 @@ public class PaymentController {
         return ResponseEntity.notFound().build();
     }
 
+    @PostMapping("/{paymentId}/send")
+    public ResponseEntity<?> sendPayment(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                             @PathVariable UUID paymentId) {
+        User user = userService.getUserByToken(token);
+        Optional<Payment> paymentOptional = paymentService.getById(paymentId);
 
-    @PostMapping("/create")
+        if (paymentOptional.isPresent()) {
+            Payment payment = paymentOptional.get();
+            if (user.getId().equals(payment.getUser().getId()))
+                return ResponseEntity.ok(paymentService.sendPayment(payment));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+
+    @PutMapping("/create")
     public ResponseEntity<?> createPayment(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                            PaymentRequest paymentRequest) {
         if (!paymentRequest.isValid()) {

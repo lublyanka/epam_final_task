@@ -33,7 +33,7 @@ public class UserProfileController {
         User userByEmail = userService.getUserByEmail(updatedUser.getEmail());
 
         if (userByEmail != null
-                && !Objects.equals(userToSave.getId(), userByEmail.getId())) {
+                && userToSave.getId().equals(userByEmail.getId())) {
             return ResponseEntity.badRequest().body("Email already exists");
         }
         userToSave = userService.updateUser(updatedUser, userToSave);

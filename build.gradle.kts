@@ -10,19 +10,6 @@ group = "com.example"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
-/*val filter_tokens = mapOf(
-        "default" to mapOf(
-                "version" to project.version,
-                "build_time" to System.currentTimeMillis().toString()
-        ),
-        "prod" to mapOf(
-                "env" to "prod"
-        ),
-        "dev" to mapOf(
-                "env" to "dev"
-        )
-)*/
-
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
@@ -58,9 +45,7 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.13.0")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
-    implementation ("com.google.googlejavaformat:google-java-format:1.15.0") //requirements from Iryna Afanasieva
-
-
+    implementation("com.google.googlejavaformat:google-java-format:1.15.0") //requirements from Iryna Afanasieva
 
 }
 
