@@ -25,8 +25,7 @@ public class CreditCardService {
 
     public List<CreditCard> getCreditCards(Account account) {
         List<CreditCard> creditCards = creditCardRepository.findAllByAccount(account);
-        //TODO
-        //here should be another way of doing it. maybe initialize it in constructor??
+        //TODO here should be another way of doing it. maybe initialize it in constructor??
         creditCards.forEach(card -> card.setAccountId(account.getId()));
         return creditCards;
     }

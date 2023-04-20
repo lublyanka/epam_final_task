@@ -20,6 +20,7 @@
   "save": "Save",
   "cancel" : "Cancel",
   "register": "Register",
+  "logout": "Logout",
   "number": "Number",
   "c-balance": "Current Balance",
   "status": "Status"

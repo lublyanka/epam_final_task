@@ -1,12 +1,10 @@
 package com.example.cards.controllers.auth;
 
-import com.example.cards.entities.User;
 import com.example.cards.requests.LoginRequest;
-import com.example.cards.services.UserService;
-import jakarta.servlet.http.HttpSession;
+import com.example.cards.services.AuthorizationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import static com.example.cards.enums.Responses.INVALID_EMAIL_OR_PASSWORD;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,27 +12,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class LoginController {
 
-    public static final ResponseEntity<String> INVALID_EMAIL_OR_PASSWORD = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
-    @Autowired
-    private UserService userService;
 
+  @Autowired private AuthorizationService authorizationService;
 
-    @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+  @PostMapping("/login")
+  public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-        String email = loginRequest.getEmail();
-        String password = loginRequest.getPassword();
+    String email = loginRequest.getEmail();
+    String password = loginRequest.getPassword();
 
-        User user = userService.getUserByEmail(email);
-        if (user == null) {
-            return INVALID_EMAIL_OR_PASSWORD;
-        }
+    String token = authorizationService.checkUserPassword(password, email);
+    if (token == null) return INVALID_EMAIL_OR_PASSWORD;
 
-        if (!userService.isPasswordMatch(password, user)) {
-            return INVALID_EMAIL_OR_PASSWORD;
-        }
-
-        String token = userService.getToken(user);
-        return ResponseEntity.ok(token);
-    }
+    return ResponseEntity.ok(token);
+  }
 }

@@ -1,5 +1,5 @@
 const urlProfile = "/api/auth/profile";
-const urlAccounts = "/api/account/all";
+const urlAccounts = "/api/account/all?page=0&size=10";
 var surname;
 var name;
 
