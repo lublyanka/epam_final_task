@@ -113,8 +113,3 @@ body {
 	transform: scale(1.5);
 }
 
-#response-message {
-  color: red;
-  font-size: 18px;
-  text-align: left;
-}

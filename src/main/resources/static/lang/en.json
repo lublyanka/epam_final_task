@@ -23,5 +23,8 @@
   "logout": "Logout",
   "number": "Number",
   "c-balance": "Current Balance",
-  "status": "Status"
+  "status": "Status",
+  "sum": "Sum",
+  "desc": "Description",
+  "date": "Date"
 }

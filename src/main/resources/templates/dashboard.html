@@ -50,7 +50,25 @@
             <div class="col s12">
                 <h4 lang="en"><span>Payments</span><a href="#">show all</a></h4>
                 <h4 lang="es"><span>Pagos</span><a href="#">mostrar todos</a></h4>
+
+                <ul id="no-payments">
+                    <li lang="en">No accounts available.</li>
+                    <li lang="es">No hay cuentas disponibles.</li>
+                </ul>
                 <!-- list of payments goes here -->
+                <table id="payments" class="striped" style="display:none">
+                    <thead>
+                    <tr>
+                        <th data-i18n-key="number">Number</th>
+                        <th data-i18n-key="sum">Sum</th>
+                        <th data-i18n-key="desc">Description</th>
+                        <th data-i18n-key="date">Date</th>
+                        <th data-i18n-key="status">Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

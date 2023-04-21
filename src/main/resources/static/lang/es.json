@@ -23,5 +23,8 @@
   "logout": "Salir",
   "number": "Numero",
   "c-balance": "Saldo actual",
-  "status": "Estatus"
+  "status": "Estatus",
+  "sum": "Summa",
+  "desc": "Descripción",
+  "date": "Fecha"
 }

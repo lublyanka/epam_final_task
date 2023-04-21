@@ -15,7 +15,6 @@
         <div class="screen row">
             <div class="screen__content col s3">
                 <form class="login" method="post" th:action="@{/api/auth/login}">
-                    <div id="response-message"></div>
                     <div class="input-field">
                         <i class="material-icons prefix">person_outline</i>
                         <label data-i18n-key="email" for="username">Email</label>
@@ -52,6 +51,7 @@
                         Inscribir
                         <i class="material-icons right">chevron_right</i>
                     </button>
+                    <div id="response-message"></div>
                 </div>
             </div>
             <div class="screen__background">

@@ -1,5 +1,6 @@
 package com.example.cards.controllers;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -28,5 +29,10 @@ public class NavigationController {
     @GetMapping("/profile")
     public String getProfilePage() {
         return "profile";
+    }
+
+    @GetMapping("/500test")
+    public String get500() {
+        return new ResponseEntity<String>("500", null, 500).getStatusCode().toString();
     }
 }

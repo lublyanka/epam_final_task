@@ -12,10 +12,18 @@
 
 .main-banner {
     max-width: 100%;
-    height: 75vh;
-    object-fit: cover;
     margin-bottom: -10px;
-    filter: sepia(0.6) saturate(0.7) hue-rotate(143deg);
+}
+
+.img-container {
+  /*display: inline-block;*/
+  position: relative;
+}
+
+.img-container button {
+    position: absolute;
+    top: 72%;
+    left: 7%;
 }
 
 /*localization*/
@@ -24,4 +32,10 @@
 }
 [lang=en] {
   display: unset;
+}
+
+#response-message {
+  color: #ab0533;
+  font-size: 18px;
+  text-align: left;
 }
