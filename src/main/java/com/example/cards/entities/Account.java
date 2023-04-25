@@ -12,10 +12,6 @@ import lombok.Setter;
 @Table(name = "accounts", schema = "public")
 public class Account {
 
-    @Column(name = "isblocked", columnDefinition = "boolean default false")
-    @Getter
-    @Setter
-    boolean isBlocked;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -44,6 +40,14 @@ public class Account {
     @Getter
     @Setter
     private Timestamp updatedOn;
+    @Column(name = "isblocked", columnDefinition = "boolean default false")
+    @Getter
+    @Setter
+    boolean isBlocked;
+    @Column(name = "isrequested", columnDefinition = "boolean default false")
+    @Getter
+    @Setter
+    boolean isRequested;
 
 
     public Account() {

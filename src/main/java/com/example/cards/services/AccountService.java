@@ -45,14 +45,14 @@ public class AccountService {
     return Optional.empty();
   }
 
-  public List<Account> getAllUserAccounts(
+  public Page<Account>getAllUserAccounts(
       String sortBy, String sortOrder, int page, int size, String token) {
     User user = userService.getUserByToken(token);
     Page<Account> pageResult =
         accountRepository.findByUserIdWithPagination(
             user,
             PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy)));
-    return pageResult.stream().toList();
+    return pageResult;
   }
 
   public Optional<Account> refillAccount(String token, UUID accountId, BigDecimal amount) {
@@ -70,6 +70,7 @@ public class AccountService {
   public Account saveAccount(Account account, String token) {
     User user = userService.getUserByToken(token);
     Account accountToSave = account;
+    accountToSave.setCurrentBalance(BigDecimal.ZERO);
     accountToSave.setCreatedOn(Timestamp.from(Instant.now()));
     accountToSave.setUpdatedOn(Timestamp.from(Instant.now()));
     accountToSave = accountRepository.save(account);
@@ -100,6 +101,18 @@ public class AccountService {
       if (account.isBlocked()) {
         account.setBlocked(false);
         account.setUpdatedOn(Timestamp.from(Instant.now()));
+        accountRepository.save(account);
+      }
+      return accountOptional;
+    } else return Optional.empty();
+  }
+
+  public Optional<Account> unblockRequest(String token, UUID accountId) {
+    Optional<Account> accountOptional = getOptionalAccount(token, accountId);
+    if (accountOptional.isPresent()) {
+      Account account = accountOptional.get();
+      if (account.isBlocked()&&!account.isRequested()) {
+        account.setRequested(true);
         accountRepository.save(account);
       }
       return accountOptional;

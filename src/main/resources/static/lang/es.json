@@ -26,5 +26,15 @@
   "status": "Estatus",
   "sum": "Summa",
   "desc": "Descripción",
-  "date": "Fecha"
+  "date": "Fecha",
+  "lastChange": "Ultimo cambio:",
+  "addAccount": "Añadir cuenta",
+  "addCard" : "Añadir tarjeta",
+  "currency": "Moneda",
+  "cardType": "Tipo de tarjeta",
+  "cardHolder": "Titular de la tarjeta",
+  "month": "mes",
+  "year" :"año",
+  "unblock": "Desbloquear",
+  "block": "Bloquear"
 }

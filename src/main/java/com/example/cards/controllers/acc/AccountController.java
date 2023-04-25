@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +28,10 @@ public class AccountController {
   public ResponseEntity<?> loadUserAccounts(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
       @RequestParam(required = false, defaultValue = "number") String sortBy,
-      @RequestParam(required = false, defaultValue = "asc") String sortOrder) {
-    List<Account> accounts = accountService.getAllUserAccounts(sortBy, sortOrder, 0, 10, token);
+      @RequestParam(required = false, defaultValue = "asc") String sortOrder,
+      @RequestParam(required = false, defaultValue = "0")int page,
+      @RequestParam(required = false, defaultValue = "10") int size) {
+    Page<Account> accounts = accountService.getAllUserAccounts(sortBy, sortOrder, page, size, token);
     if (!(accounts.isEmpty())) return ResponseEntity.ok(accounts);
     else return ResponseEntity.noContent().build();
   }
@@ -43,7 +46,6 @@ public class AccountController {
     return ACCOUNT_DOES_NOT_EXIST;
   }
 
-  // TODO rewrite to block request
   @PutMapping("/{accountId}/block")
   public ResponseEntity<?> blockAccount(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable UUID accountId) {
@@ -51,7 +53,7 @@ public class AccountController {
     Optional<Account> accountOptional = accountService.block(token, accountId);
 
     if (accountOptional.isPresent()) {
-      return ResponseEntity.ok("Account blocked successfully.");
+      return ResponseEntity.noContent().build();
     } else {
       return ACCOUNT_DOES_NOT_EXIST;
     }
@@ -61,10 +63,10 @@ public class AccountController {
   @PutMapping("/{accountId}/unblock")
   public ResponseEntity<?> unblockAccount(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable UUID accountId) {
-    Optional<Account> accountOptional = accountService.unblock(token, accountId);
+    Optional<Account> accountOptional = accountService.unblockRequest(token, accountId);
 
     if (accountOptional.isPresent()) {
-      return ResponseEntity.ok("Account unblocked successfully.");
+      return ResponseEntity.noContent().build();
     } else {
       return ACCOUNT_DOES_NOT_EXIST;
     }

@@ -19,7 +19,10 @@ async function login() {
     if (response.status===200) {
       const token = await response.text();
       localStorage.setItem("token", token);
-      window.location.href='/dashboard';
+      M.toast({html: 'Successfully logged in!', displayLength: 2000});
+      setTimeout(() => {
+            window.location.href = "/dashboard";
+          }, "2000");
     } else {
       const text = await response.text();
       console.log(text);

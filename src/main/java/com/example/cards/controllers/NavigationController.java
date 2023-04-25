@@ -3,12 +3,23 @@ package com.example.cards.controllers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class NavigationController {
     @GetMapping("")
     public String getIndex() {
         return "index";
+    }
+
+    @GetMapping("/accounts")
+    public String getAccountsPage() {
+        return "accounts";
+    }
+
+    @RequestMapping(value="/account/{accountId}")
+    public String getAccountPage() {
+        return "account";
     }
 
     @GetMapping("/login")

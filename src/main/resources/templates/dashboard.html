@@ -8,6 +8,7 @@
 
     <link href="/static/css/dashboard.css" rel="stylesheet" th:href="@{/css/dashboard.css}" type="text/css">
     <script src="/js/dashboard.js" type="text/javascript" defer></script>
+    <script src="/js/loadAccounts.js" type="text/javascript"></script>
 </head>
 <body>
 <div th:replace="fragments/header"></div>
@@ -15,6 +16,7 @@
     <div class="container">
         <div class="row profile">
             <div class="col s12">
+                <h4></h4>
                 <h4 lang="en"><span>Profile</span><a href="/profile" th:href="@{/profile}">edit</a></h4>
                 <h4 lang="es"><span>Perfil</span><a href="/profile" th:href="@{/profile}">editar</a></h4>
                 <div id="name-surname" style="font-size : 1.1rem"></div>
@@ -22,8 +24,8 @@
         </div>
         <div class="row accounts">
             <div class="col s12">
-                <h4 lang="en"><span>Accounts</span><a href="#">show all</a></h4>
-                <h4 lang="es"><span>Cuentas</span><a href="#">mostrar todo</a></h4>
+                <h4 lang="en"><span>Accounts</span><a href="/accounts">show all</a></h4>
+                <h4 lang="es"><span>Cuentas</span><a href="/accounts">mostrar todo</a></h4>
 
                 <ul id="no-accounts">
                     <li lang="en">No accounts available.</li>

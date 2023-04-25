@@ -26,5 +26,15 @@
   "status": "Status",
   "sum": "Sum",
   "desc": "Description",
-  "date": "Date"
+  "date": "Date",
+  "lastChange": "Last change:",
+  "addAccount": "Add account",
+  "addCard" : "Add card",
+  "currency": "Currency",
+  "cardType": "Card type",
+  "cardHolder": "Card  holder",
+  "month": "month",
+  "year" :"year",
+  "unblock": "Unblock",
+  "block": "Block"
 }

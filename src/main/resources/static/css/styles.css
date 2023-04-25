@@ -26,16 +26,24 @@
     left: 7%;
 }
 
+main {
+    min-height: 80vh;
+    display: flex;}
+
+
+.btn-flat{
+    padding-left: 0px;}
+
 /*localization*/
 [lang] {
-  display: none;
+    display: none;
 }
 [lang=en] {
-  display: unset;
+    display: unset;
 }
 
 #response-message {
-  color: #ab0533;
-  font-size: 18px;
-  text-align: left;
+    color: #ab0533;
+    font-size: 18px;
+    text-align: left;
 }

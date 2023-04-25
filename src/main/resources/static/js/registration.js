@@ -23,8 +23,10 @@ async function registerUser() {
   });
 
   if (response.status === 200) {
-    window.location.href = "/login";
-    alert("Registration ok");
+    M.toast({html: 'Successfully registered!', displayLength: 2000});
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, "2000");
   } else {
     const text = await response.text();
     console.log(text);

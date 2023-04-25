@@ -13,7 +13,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface AccountRepository extends JpaRepository<Account, UUID> {
 
-    @Query("SELECT a FROM Account a LEFT JOIN FETCH UserAccount ua WHERE ua.userAccountKey.userId = :user")
+    @Query("SELECT a FROM Account a LEFT JOIN FETCH UserAccount ua on a = ua.userAccountKey.accountId WHERE ua.userAccountKey.userId = :user")
     Page<Account> findByUserIdWithPagination(@Param("user") User user, Pageable pageable);
 }
 

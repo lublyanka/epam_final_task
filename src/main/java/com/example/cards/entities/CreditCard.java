@@ -22,6 +22,16 @@ public class CreditCard {
     @Setter
     private String cardType;
 
+    @Column(name = "name")
+    @Getter
+    @Setter
+    private String cardTitle;
+
+    @Column(name = "card_holder", nullable = false)
+    @Getter
+    @Setter
+    private String cardHolder;
+
     @Column(name = "month", columnDefinition = "character(2)")
     @Getter
     @Setter
