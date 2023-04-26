@@ -17,9 +17,19 @@ public class NavigationController {
         return "accounts";
     }
 
+    @GetMapping("/payments")
+    public String getPaymentsPage() {
+        return "payments";
+    }
+
     @RequestMapping(value="/account/{accountId}")
     public String getAccountPage() {
         return "account";
+    }
+
+    @RequestMapping(value="/payment/{paymentId}")
+    public String getPaymentPage() {
+        return "payment";
     }
 
     @GetMapping("/login")
@@ -42,7 +52,7 @@ public class NavigationController {
         return "profile";
     }
 
-    @GetMapping("/500test")
+    @GetMapping("/500")
     public String get500() {
         return new ResponseEntity<String>("500", null, 500).getStatusCode().toString();
     }

@@ -30,11 +30,14 @@
   "lastChange": "Last change:",
   "addAccount": "Add account",
   "addCard" : "Add card",
+  "addPayment": "Create payment",
   "currency": "Currency",
   "cardType": "Card type",
   "cardHolder": "Card  holder",
   "month": "month",
   "year" :"year",
   "unblock": "Unblock",
-  "block": "Block"
+  "block": "Block",
+  "refill": "Refill",
+  "refillsum" : "Sum to refill"
 }

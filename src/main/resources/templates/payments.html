@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Accounts</title>
+    <title>Payments</title>
     <div th:replace="fragments/head.html"></div>
 
-    <script src="/js/accounts.js" type="text/javascript" defer></script>
-    <script src="/js/loadAccounts.js" type="text/javascript"></script>
+    <script src="/js/payments.js" type="text/javascript" defer></script>
+    <script src="/js/loadPayments.js" type="text/javascript"></script>
     <script src="/js/pagination.js" type="text/javascript" defer></script>
 </head>
 <body>
@@ -16,34 +16,36 @@
         <div class="row">
             <div class="col s12">
                 <h4></h4>
-                <h4 class="col s10" lang="en"><span>Accounts</span></h4>
-                <h4 class="col s10" lang="es"><span>Cuentas</span></h4>
+                <h4 class="col s10" lang="en"><span>Payments</span></h4>
+                <h4 class="col s10" lang="es"><span>Pagos</span></h4>
                 <h4 class="col s2 valign-wrapper right-align">
-                    <a data-i18n-key="addAccount" class="waves-effect waves-light btn modal-trigger" href="#modal1"><i
-                            class="material-icons right">add_box</i>Add account</a>
+                    <a data-i18n-key="addPayment" class="waves-effect waves-light btn modal-trigger" href="#modal1"><i
+                            class="material-icons right">add_box</i>Create payment</a>
                 </h4>
 
 
-                <ul id="no-accounts" class="col s3">
-                    <li lang="en">No accounts available.</li>
-                    <li lang="es">No hay cuentas disponibles.</li>
+                <ul id="no-payments" class="col s3">
+                    <li lang="en">No payments available.</li>
+                    <li lang="es">No hay pagos disponibles.</li>
                 </ul>
 
                 <!-- list of accounts goes here -->
-                <table id="accounts" class="striped" style="display:none">
+                <table id="payments" class="striped" style="display:none">
                     <thead>
                     <tr>
                         <th id="numberH">
                             <a data-i18n-key="number" class="waves-effect waves-teal btn-flat">
                                 Number <i class="material-icons right">arrow_downward</i></a>
                         </th>
-                        <th id="nameH"><a data-i18n-key="name" class="waves-effect waves-teal btn-flat">
-                            Name <i class="material-icons right blue-grey-text text-lighten-4">arrow_downward</i></a>
-                        </th>
-                        <th id="c-balanceH"><a data-i18n-key="c-balance" class="waves-effect waves-teal btn-flat">
-                            Current balance <i
+                        <th id="sumH"><a data-i18n-key="sum" class="waves-effect waves-teal btn-flat">
+                            Sum <i
                                 class="material-icons right blue-grey-text text-lighten-4">arrow_downward</i></a>
                         </th>
+                        <th id="descH"><a data-i18n-key="desc" class="waves-effect waves-teal btn-flat">
+                            Description</a>
+                        </th>
+                        <th data-i18n-key="date">Date<i
+                                class="material-icons right blue-grey-text text-lighten-4">arrow_downward</i></th>
                         <th id="statusH" data-i18n-key="status">Status</th>
                     </tr>
                     </thead>
@@ -60,27 +62,28 @@
 <!-- Modal Structure -->
 <div id="modal1" class="modal">
     <div class="modal-content">
-        <h4 data-i18n-key="addAccount">Add account</h4>
+        <h4 data-i18n-key="createPayment">Create payment</h4>
         <div class="row">
             <div class="col s12">
                 <form>
-                    <div class="input-field col s6">
-                        <label data-i18n-key="name" for="name">Name</label>
-                        <input class="validate" data-length="255" id="name" name="name" type="text" required>
-                    </div>
                     <div class="input-field col s6">
                         <label data-i18n-key="number" for="number">Number</label>
                         <input class="validate" data-length="255" id="number" name="number" type="text" required>
                     </div>
                     <div class="input-field col s6">
-                        <label data-i18n-key="currency" for="currency">Currency</label>
-                        <input class="validate" data-length="3" id="currency" name="currency" type="text" required>
+                        <label data-i18n-key="sum" for="sum">Sum</label>
+                        <input class="validate" data-length="255" id="sum" name="sum" type="text" required>
+                    </div>
+                    <div class="input-field col s6">
+                        <label data-i18n-key="desc" for="desc">Decription</label>
+                        <input class="validate" data-length="255" id="desc" name="desc" type="text" required>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <div class="col s8" id="response-message"></div>
-                <a href="#!" data-i18n-key="save" class="modal-close waves-effect waves-green btn" onclick="addAccount()">Save</a>
+                <a href="#!" data-i18n-key="save" class="modal-close waves-effect waves-green btn"
+                   onclick="createPayment()">Save</a>
                 <a href="#!" data-i18n-key="cancel" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
             </div>
         </div>

@@ -30,11 +30,14 @@
   "lastChange": "Ultimo cambio:",
   "addAccount": "Añadir cuenta",
   "addCard" : "Añadir tarjeta",
+  "addPayment": "Crear un pago",
   "currency": "Moneda",
   "cardType": "Tipo de tarjeta",
   "cardHolder": "Titular de la tarjeta",
   "month": "mes",
   "year" :"año",
   "unblock": "Desbloquear",
-  "block": "Bloquear"
+  "block": "Bloquear",
+  "refill": "Recargar",
+  "refillsum" : "Suma para recargar"
 }

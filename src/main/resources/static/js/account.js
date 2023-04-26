@@ -6,7 +6,9 @@ document.addEventListener('DOMContentLoaded', function () {
   loadAccount(urlAccount);
   loadCards(urlAccount + "/cards");
   var elems = document.querySelectorAll('.modal');
-  var instances = M.Modal.init(elems, options);
+  var modals = M.Modal.init(elems, options);
+  elems = document.querySelectorAll('.collapsible');
+  var collapsibles = M.Collapsible.init(elems, options);
 });
 
 async function loadAccount(url) {
@@ -188,5 +190,41 @@ async function unblockAccount() {
   } else {
     const text = await response.text();
     document.getElementById('response-message').innerText = text;
+  }
+}
+
+async function refill() {
+  let url = urlAccount + "/refill";
+let amount = document.getElementById("refillsum").value;
+  var data = {
+    amount: amount,
+  };
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.token
+    },
+    body: document.getElementById("refillsum").value
+  });
+
+  if (response.status === 200) {
+    var json = await response.json();
+    const data = JSON.stringify(json);
+    var jsonData = JSON.parse(data);
+    insertAccount(jsonData);
+    var instance = M.Collapsible.getInstance(document.getElementById("collapsible"));
+    instance.close();
+    if (localStorage.language == "es")
+      M.toast({ html: 'Cuenta recargada!', displayLength: 3000 });
+    else
+      M.toast({ html: 'Account refilled!', displayLength: 3000 });
+    /*setTimeout(() => {
+      window.location.href = "#!";
+    }, "2000");*/
+  } else {
+    const text = await response.text();
+    M.toast({ html: text, displayLength: 3000 });
   }
 }

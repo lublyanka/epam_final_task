@@ -113,7 +113,10 @@ public class AccountController {
   public ResponseEntity<?> replenishAccount(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
       @PathVariable UUID accountId,
-      @RequestParam BigDecimal amount) {
+      @RequestBody String amountStr) {
+    if (!amountStr.matches("^\\d+(\\.|,){0,1}\\d{0,2}$"))
+      return ResponseEntity.badRequest().body("Refilling sum is not numeric.");
+    BigDecimal amount = new BigDecimal(amountStr);
     if (amount.compareTo(BigDecimal.ZERO) != 1) {
       return ResponseEntity.badRequest().body("Refilling sum can't be zero or negative.");
     }

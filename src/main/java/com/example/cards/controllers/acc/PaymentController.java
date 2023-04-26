@@ -1,4 +1,4 @@
-package com.example.cards.controllers;
+package com.example.cards.controllers.acc;
 
 import com.example.cards.entities.Account;
 import com.example.cards.entities.Payment;
