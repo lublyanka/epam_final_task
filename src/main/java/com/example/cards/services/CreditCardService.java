@@ -5,11 +5,10 @@ import com.example.cards.entities.CreditCard;
 import com.example.cards.repositories.CreditCardRepository;
 import com.example.cards.repositories.dict.CardTypeRepository;
 import com.example.cards.repositories.dict.CurrencyRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class CreditCardService {
@@ -26,8 +25,7 @@ public class CreditCardService {
 
     public List<CreditCard> getCreditCards(Account account) {
         List<CreditCard> creditCards = creditCardRepository.findAllByAccount(account);
-        //TODO
-        //here should be another way of doing it. maybe initialize it in constructor??
+        //TODO here should be another way of doing it. maybe initialize it in constructor??
         creditCards.forEach(card -> card.setAccountId(account.getId()));
         return creditCards;
     }

@@ -2,12 +2,11 @@ package com.example.cards.requests;
 
 import com.example.cards.enums.PaymentStatus;
 import com.example.cards.repositories.dict.CurrencyRepository;
+import java.math.BigDecimal;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.math.BigDecimal;
-import java.util.UUID;
 
 public class PaymentRequest {
 

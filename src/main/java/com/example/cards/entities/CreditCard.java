@@ -3,10 +3,9 @@ package com.example.cards.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.UUID;
 
 @Entity
 @Table(name = "credit_cards", schema = "public")
@@ -22,6 +21,16 @@ public class CreditCard {
     @Getter
     @Setter
     private String cardType;
+
+    @Column(name = "name")
+    @Getter
+    @Setter
+    private String cardTitle;
+
+    @Column(name = "card_holder", nullable = false)
+    @Getter
+    @Setter
+    private String cardHolder;
 
     @Column(name = "month", columnDefinition = "character(2)")
     @Getter

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Accounts</title>
+    <div th:replace="fragments/head.html"></div>
+
+    <script src="/js/accounts.js" type="text/javascript" defer></script>
+    <script src="/js/loadAccounts.js" type="text/javascript"></script>
+    <script src="/js/pagination.js" type="text/javascript" defer></script>
+</head>
+<body>
+<div th:replace="fragments/header"></div>
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                <h4></h4>
+                <h4 class="col s10" lang="en"><span>Accounts</span></h4>
+                <h4 class="col s10" lang="es"><span>Cuentas</span></h4>
+                <h4 class="col s2 valign-wrapper right-align">
+                    <a data-i18n-key="addAccount" class="waves-effect waves-light btn modal-trigger" href="#modal1"><i
+                            class="material-icons right">add_box</i>Add account</a>
+                </h4>
+
+
+                <ul id="no-accounts" class="col s3">
+                    <li lang="en">No accounts available.</li>
+                    <li lang="es">No hay cuentas disponibles.</li>
+                </ul>
+
+                <!-- list of accounts goes here -->
+                <table id="accounts" class="striped" style="display:none">
+                    <thead>
+                    <tr>
+                        <th id="numberH">
+                            <a data-i18n-key="number" class="waves-effect waves-teal btn-flat">
+                                Number <i class="material-icons right">arrow_downward</i></a>
+                        </th>
+                        <th id="nameH"><a data-i18n-key="name" class="waves-effect waves-teal btn-flat">
+                            Name <i class="material-icons right blue-grey-text text-lighten-4">arrow_downward</i></a>
+                        </th>
+                        <th id="c-balanceH"><a data-i18n-key="c-balance" class="waves-effect waves-teal btn-flat">
+                            Current balance <i
+                                class="material-icons right blue-grey-text text-lighten-4">arrow_downward</i></a>
+                        </th>
+                        <th id="statusH" data-i18n-key="status">Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <div id="pagination"></div>
+            </div>
+        </div>
+    </div>
+</main>
+<div th:replace="fragments/footer"></div>
+</body>
+<!-- Modal Structure -->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <h4 data-i18n-key="addAccount">Add account</h4>
+        <div class="row">
+            <div class="col s12">
+                <form>
+                    <div class="input-field col s6">
+                        <label data-i18n-key="name" for="name">Name</label>
+                        <input class="validate" data-length="255" id="name" name="name" type="text" required>
+                    </div>
+                    <div class="input-field col s6">
+                        <label data-i18n-key="number" for="number">Number</label>
+                        <input class="validate" data-length="255" id="number" name="number" type="text" required>
+                    </div>
+                    <div class="input-field col s6">
+                        <label data-i18n-key="currency" for="currency">Currency</label>
+                        <input class="validate" data-length="3" id="currency" name="currency" type="text" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="col s8" id="response-message"></div>
+                <a href="#!" data-i18n-key="save" class="modal-close waves-effect waves-green btn" onclick="addAccount()">Save</a>
+                <a href="#!" data-i18n-key="cancel" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

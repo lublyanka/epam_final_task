@@ -1,10 +1,9 @@
 package com.example.cards.entities;
 
 import jakarta.persistence.*;
+import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serializable;
 
 @Embeddable
 public class UserAccountKey implements Serializable {

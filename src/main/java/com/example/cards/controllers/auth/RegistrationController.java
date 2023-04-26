@@ -8,23 +8,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import static com.example.cards.enums.Responses.EMAIL_ALREADY_EXISTS;
 
 @RestController
 @RequestMapping("/api/auth")
 public class RegistrationController {
+
 
     @Autowired
     private UserService userService;
 
     @PostMapping("/registration")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
-        if (userService.isExistsByEmail(user)) {
-            return ResponseEntity.badRequest().body("Email already exists");
+        User registeredUser = userService.registerUser(user);
+        if (registeredUser == null) {
+            return EMAIL_ALREADY_EXISTS;
         }
-        user = userService.updateUser(user);
-        return ResponseEntity.ok(user);
-
+        return ResponseEntity.ok(registeredUser);
     }
-
-
 }

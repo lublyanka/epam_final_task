@@ -1,12 +1,41 @@
-    <div class="navbar-fixed " >
-        <nav class="nav light-blue lighten-1" role="navigation">
-            <div class="nav-wrapper">
-                <a href="/" class="brand-logo" th:href="@{/}">
-                    <img class="logo"  src="images/logo.png" alt="logo">
-                </a>
-                <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li><a href="/login" th:href="@{/login}"><i class="material-icons prefix">account_circle</i></a></li>
-                </ul>
-            </div>
-        </nav>
-      </div>
+<div class="navbar-fixed ">
+    <nav class="nav light-blue lighten-1" role="navigation">
+        <div class="nav-wrapper">
+            <a class="brand-logo" href="/" th:href="@{/}">
+                <img alt="logo" class="logo" src="/images/logo.png">
+            </a>
+            <ul class="right hide-on-med-and-down" id="nav-mobile">
+                <li><!-- Dropdown Trigger -->
+                    <a class='dropdown-trigger' href='#' data-target='dropdown1'>
+                        <i class="material-icons">language</i>
+                    </a>
+                </li>
+                <li><a id="login" href="/login" th:href="@{/login}">
+                    <i class="material-icons">account_circle</i></a>
+                </li>
+                <li><!-- Dropdown Trigger -->
+                    <a id="profile" class='dropdown-trigger' href='#' data-target='dropdown2' style="display:none;">
+                        <i class="material-icons">dehaze</i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+<!-- Dropdown Structure -->
+<ul id='dropdown1' class='dropdown-content'>
+    <li><a href="#!" onclick="setLocale('en');return false;">EN</a></li>
+    <li><a href="#!" onclick="setLocale('es');return false;">ES</a></li>
+</ul>
+
+<!-- Dropdown Structure -->
+<ul id='dropdown2' class='dropdown-content'>
+    <li>
+        <a data-i18n-key="dash-title" id="dash" href="/dashboard" th:href="@{/dashboard}">
+            <i class="material-icons prefix">dashboard</i> Dashboard
+        </a>
+    <li>
+        <a data-i18n-key="logout" id="logout" href="/" th:href="@{/}">
+            <i class="material-icons prefix">exit_to_app</i> Logout
+        </a>
+</ul>

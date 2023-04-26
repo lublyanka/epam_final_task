@@ -1,4 +1,4 @@
-.profile a, .accounts a, .payments a {
+.profile h4>a, .accounts h4>a, .payments h4>a {
     display: inline-block;
     margin-left: 10px;
     font-size: 70%;

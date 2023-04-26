@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>404 Not Found</title>
+    <div th:replace="fragments/head.html"></div>
+    <link href="/static/css/404.css" rel="stylesheet" th:href="@{/css/404.css}" type="text/css">
+</head>
+<body>
+<div th:replace="fragments/header"></div>
+<div  class="body">
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="main">
+    <h1>404</h1>
+    <p lang="en">It looks like you're lost...
+        <br>That's a trouble?</p>
+    <p lang="es">Parece que estas perdido ...
+        <br>¿Eso es un problema?</p>
+<br>
+    <a lang="en" class="waves-effect waves-light btn-small button" onclick="window.location.href='/'"> Go back</a>
+    <a lang="es" class="waves-effect waves-light btn-small button" onclick="window.location.href='/'"> Regresar</a>
+</div>
+</div>
+
+<div th:replace="fragments/footer"></div>
+</body>
+<!--add to head or not
+<link href='https://fonts.googleapis.com/css?family=Nunito:400,700' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>-->
+</html>

@@ -8,27 +8,24 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig{
+public class WebSecurityConfig {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests((requests) -> requests
-                        //.requestMatchers("/", "/home", "/registration/*").permitAll()
-                        .requestMatchers("/api/auth/registration", "/api/auth/login").permitAll()
-                        //.anyRequest().hasRole("user")
-                        //        .anyRequest().authenticated()
-                        .anyRequest().permitAll()
-                        )
-
-                .formLogin((form) -> form
-                        .loginPage("/login")
-                        .permitAll()
-                )
-                .logout((logout) -> logout.permitAll())
-                .csrf().disable();
-        return http.build();
-    }
-
-
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http.authorizeHttpRequests(
+            (requests) ->
+                requests
+                    // .requestMatchers("/", "/home", "/registration/*").permitAll()
+                    .requestMatchers("/api/auth/registration", "/api/auth/login")
+                    .permitAll()
+                    // .anyRequest().hasRole("user")
+                    //        .anyRequest().authenticated()
+                    .anyRequest()
+                    .permitAll())
+        .formLogin((form) -> form.loginPage("/login").permitAll())
+        .logout((logout) -> logout.permitAll())
+        .csrf()
+        .disable();
+    return http.build();
+  }
 }

@@ -4,10 +4,9 @@ import com.example.cards.entities.Account;
 import com.example.cards.entities.User;
 import com.example.cards.entities.UserAccount;
 import com.example.cards.entities.UserAccountKey;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserAccountRepository  extends JpaRepository<UserAccount, UserAccountKey> {
 
