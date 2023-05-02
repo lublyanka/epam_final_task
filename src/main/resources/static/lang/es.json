@@ -5,6 +5,8 @@
   "dash-title": "Panel",
   "profile-title": "Perfil",
   "reg-title" : "Inscripción",
+  "accounts-title": "Cuentas",
+  "users-title": "Usuarios",
   "name": "Nombre",
   "surname": "Apellido",
   "middlename": "Segundo nombre",
@@ -23,6 +25,7 @@
   "logout": "Salir",
   "number": "Numero",
   "c-balance": "Saldo actual",
+  "account": "Cuenta",
   "status": "Estatus",
   "sum": "Summa",
   "desc": "Descripción",
@@ -39,5 +42,14 @@
   "unblock": "Desbloquear",
   "block": "Bloquear",
   "refill": "Recargar",
-  "refillsum" : "Suma para recargar"
+  "refillsum" : "Suma para recargar",
+  "address": "Dirección",
+  "chooseOption": "Elige opción",
+  "send": "Enviar",
+  "agree": "Me acuerdo con todo",
+  "birthDate": "Fecha de nacimiento",
+  "payment": "Pago",
+  "requestSent": "Solicitud enviada",
+  "lastlogin" : "Ultima entrada",
+  "user": "Usuario"
 }

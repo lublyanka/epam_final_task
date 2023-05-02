@@ -1,18 +1,23 @@
+document.addEventListener('DOMContentLoaded', function () {
+  var elems = document.querySelectorAll('.datepicker');
+  var options = localStorage.language === "es" ? getDatepickerOptions('es') : getDatepickerOptions('en');
+  var instances = M.Datepicker.init(elems, options);
+});
+
 async function registerUser() {
   var url = "/api/auth/registration";
-  var name = document.getElementById("name").value;
-  var surname = document.getElementById("surname").value;
-  var email = document.getElementById("email").value;
-  var password = document.getElementById("password").value;
-  var phone = document.getElementById("phone").value;
-  var data = {
-    name: name,
-    surname: surname,
-    password: password,
-    email: email,
-    password: password,
-    phone: phone
+  const { name, surname, middlename, email, password, phone, birthDate } = document.getElementById("registration-form");
+  let timestamp = transformDataToTimestamp(birthDate.value);
+  const data = {
+    name: name.value,
+    surname: surname.value,
+    middlename: middlename.value,
+    email: email.value,
+    password: password.value,
+    phone: phone.value,
+    birthDate: timestamp
   };
+
 
   const response = await fetch(url, {
     method: 'POST',
@@ -23,13 +28,11 @@ async function registerUser() {
   });
 
   if (response.status === 200) {
-    M.toast({html: 'Successfully registered!', displayLength: 2000});
+    M.toast({ html: 'Successfully registered!', displayLength: 2000 });
     setTimeout(() => {
       window.location.href = "/login";
     }, "2000");
   } else {
-    const text = await response.text();
-    console.log(text);
-    document.getElementById('response-message').innerText = text;
+    insertPlainErrorMessage(response);
   }
 }

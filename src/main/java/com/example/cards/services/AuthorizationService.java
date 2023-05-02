@@ -2,13 +2,19 @@ package com.example.cards.services;
 
 import com.example.cards.JwtTokenUtil;
 import com.example.cards.entities.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthorizationService {
   @Autowired UserService userService;
+
+  @Qualifier("passwordEncoder")
+  private final PasswordEncoder passwordEncoder ;
 
   @Autowired private JwtTokenUtil jwtTokenUtil;
 
@@ -26,8 +32,7 @@ public class AuthorizationService {
   }
 
   private boolean isPasswordMatch(String password, User user) {
-    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
-    return encoder.matches(password, user.getPassword());
+    return passwordEncoder.matches(password, user.getPassword());
   }
 
   private String getToken(User user) {

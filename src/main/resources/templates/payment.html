@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n-key="payment">Payment</title>
+    <div th:replace="fragments/head.html"></div>
+    <script src="/js/payment.js" type="text/javascript" defer></script>
+</head>
+<body>
+<div th:replace="~{fragments/base::navbar}"></div>
+<main>
+    <div class="container">
+        <div class="row payment">
+            <div class="col s12">
+                <div class="col s12 valign-wrapper">
+                    <div class="col s12">
+                        <h3 ><span data-i18n-key="payment">Payment </span>
+                            <span> № </span>
+                            <span id="number"></span></h3>
+                    </div>
+                    <div class="right">
+                        <span id="status" class="grey-text"></span>
+                    </div>
+                </div>
+                <div class="col s12">
+                    <div class="col s2">
+                        <span data-i18n-key="account">Account</span>
+                        <span> : </span>
+                        <span id="account"></span>
+                    </div>
+                    <div data-i18n-key="lastChange" class="col s9 right-align blue-grey-text text-darken-1"></div>
+                    <div class="right-align blue-grey-text text-darken-1" id="updatedOn"></div>
+                </div>
+                <div class="col s12">
+                    <div class="col s2">
+                        <span data-i18n-key="sum">Sum</span>
+                        <span> : </span>
+                        <span id="sum" class="blue-text text-darken-4"></span>
+                    </div>
+                </div>
+                <div class="col s12">
+                    <div class="col s10"><h6 id="description"></h6></div>
+                </div>
+                <div class="col s12 valign-wrapper" id="sendPayment">
+                    <div class="col s2"><a data-i18n-key="send"  id="sendPaymentButton"
+                                            class="waves-effect waves-light btn disabled"
+                                            onclick="sendPayment()"><i
+                            class="material-icons right">send</i>Send</a></div>
+                    <div class="col s10"><label id="agreeLabel">
+                        <input type="checkbox" id="agreeCheck"/>
+                        <span data-i18n-key="agree">Agree with everything</span>
+                    </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col s12" id="response-message"></div>
+    </div>
+</main>
+<div th:replace="~{fragments/base::footer}"></div>
+</body>
+</html>

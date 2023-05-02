@@ -4,6 +4,7 @@ import com.example.cards.entities.Account;
 import com.example.cards.entities.User;
 import com.example.cards.entities.UserAccount;
 import com.example.cards.entities.UserAccountKey;
+import com.example.cards.entities.dict.Currency;
 import com.example.cards.repositories.AccountRepository;
 import com.example.cards.repositories.UserAccountRepository;
 import com.example.cards.repositories.dict.CurrencyRepository;
@@ -18,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AccountService {
@@ -35,23 +38,39 @@ public class AccountService {
     User user = userService.getUserByToken(token);
     Optional<Account> accountOptional = accountRepository.findById(accountId);
     if (accountOptional.isPresent()) {
-      Account account = accountOptional.get();
-      Optional<UserAccount> userAccountByUser =
-          userAccountRepository.findByUserAccountKeyUserIdAndUserAccountKeyAccountId(user, account);
-      if (userAccountByUser.isPresent()) {
+      if (user.isAdmin()) {
         return accountOptional;
+      } else {
+        Account account = accountOptional.get();
+        Optional<UserAccount> userAccountByUser =
+            userAccountRepository.findByUserAccountKeyUserIdAndUserAccountKeyAccountId(
+                user, account);
+        if (userAccountByUser.isPresent()) {
+          return accountOptional;
+        }
       }
     }
     return Optional.empty();
   }
 
-  public Page<Account>getAllUserAccounts(
-      String sortBy, String sortOrder, int page, int size, String token) {
+  public Page<Account> getAllUserAccounts(
+      String status, String sortBy, String sortOrder, int page, int size, String token) {
+
     User user = userService.getUserByToken(token);
-    Page<Account> pageResult =
-        accountRepository.findByUserIdWithPagination(
-            user,
-            PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy)));
+    Page<Account> pageResult;
+    if (status == null || status.isEmpty()) {
+      pageResult =
+          accountRepository.findAllByUserIdWithPagination(
+              user,
+              PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy)));
+    } else {
+      boolean isBlocked = Boolean.getBoolean(status);
+      pageResult =
+          accountRepository.findAllByUserIdWithPaginationAndStatus(
+              user,
+              isBlocked,
+              PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy)));
+    }
     return pageResult;
   }
 
@@ -64,7 +83,7 @@ public class AccountService {
     }
     Account account = accountOptional.get();
     account.setCurrentBalance(account.getCurrentBalance().add(amount));
-    return Optional.of(accountRepository.save(account));
+    return Optional.of(updateAccount(account));
   }
 
   public Account saveAccount(Account account, String token) {
@@ -73,7 +92,7 @@ public class AccountService {
     accountToSave.setCurrentBalance(BigDecimal.ZERO);
     accountToSave.setCreatedOn(Timestamp.from(Instant.now()));
     accountToSave.setUpdatedOn(Timestamp.from(Instant.now()));
-    accountToSave = accountRepository.save(account);
+    accountToSave = updateAccount(account);
     UserAccountKey userAccountKey = new UserAccountKey(user, accountToSave);
     userAccountRepository.save(new UserAccount(userAccountKey));
     accountRepository.flush();
@@ -81,6 +100,12 @@ public class AccountService {
     return accountToSave;
   }
 
+  @Transactional
+  public Account updateAccount(Account account) {
+    return accountRepository.save(account);
+  }
+
+  @Transactional
   public Optional<Account> block(String token, UUID accountId) {
     Optional<Account> accountOptional = getOptionalAccount(token, accountId);
     if (accountOptional.isPresent()) {
@@ -88,20 +113,7 @@ public class AccountService {
       if (!account.isBlocked()) {
         account.setBlocked(true);
         account.setUpdatedOn(Timestamp.from(Instant.now()));
-        accountRepository.save(account);
-      }
-      return accountOptional;
-    } else return Optional.empty();
-  }
-
-  public Optional<Account> unblock(String token, UUID accountId) {
-    Optional<Account> accountOptional = getOptionalAccount(token, accountId);
-    if (accountOptional.isPresent()) {
-      Account account = accountOptional.get();
-      if (account.isBlocked()) {
-        account.setBlocked(false);
-        account.setUpdatedOn(Timestamp.from(Instant.now()));
-        accountRepository.save(account);
+        updateAccount(account);
       }
       return accountOptional;
     } else return Optional.empty();
@@ -111,9 +123,9 @@ public class AccountService {
     Optional<Account> accountOptional = getOptionalAccount(token, accountId);
     if (accountOptional.isPresent()) {
       Account account = accountOptional.get();
-      if (account.isBlocked()&&!account.isRequested()) {
+      if (account.isBlocked() && !account.isRequested()) {
         account.setRequested(true);
-        accountRepository.save(account);
+        updateAccount(account);
       }
       return accountOptional;
     } else return Optional.empty();
@@ -135,5 +147,29 @@ public class AccountService {
       comparator = comparator.reversed();
     }
     return comparator;
+  }
+
+  public List<Currency> getAllCurrencies() {
+    return currencyRepository.findAll();
+  }
+
+  @PreAuthorize("hasAuthority ('ROLE_ADMIN')")
+  public Page<Account> getAllAccounts(String sortBy, String sortOrder, int page, int size) {
+    return accountRepository.findAll(
+        PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy)));
+  }
+
+  @PreAuthorize("hasAuthority ('ROLE_ADMIN') ")
+  public Optional<Account> unblock(String token, UUID accountId) {
+    Optional<Account> accountOptional = getOptionalAccount(token, accountId);
+    if (accountOptional.isPresent()) {
+      Account account = accountOptional.get();
+      if (account.isBlocked() && account.isRequested()) {
+        account.setBlocked(false);
+        account.setUpdatedOn(Timestamp.from(Instant.now()));
+        updateAccount(account);
+      }
+      return accountOptional;
+    } else return Optional.empty();
   }
 }

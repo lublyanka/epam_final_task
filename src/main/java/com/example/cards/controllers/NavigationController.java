@@ -52,8 +52,24 @@ public class NavigationController {
         return "profile";
     }
 
-    @GetMapping("/500")
-    public String get500() {
+    @GetMapping("/users")
+    public String getUsersPage() {
+        return "users";
+    }
+
+    @RequestMapping(value="/users/{userId}")
+    public String getUserPage() {
+        return "user";
+    }
+
+    @GetMapping("/500test")
+    public String get500test() {
         return new ResponseEntity<String>("500", null, 500).getStatusCode().toString();
     }
+
+    @GetMapping("/Error500")
+    public String get500() {
+        return "/error/500";
+    }
+
 }

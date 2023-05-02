@@ -24,9 +24,7 @@ async function login() {
             window.location.href = "/dashboard";
           }, "2000");
     } else {
-      const text = await response.text();
-      console.log(text);
-      document.getElementById('response-message').innerText = text;
+      await insertPlainErrorMessage(response);
     }
   }
   else {

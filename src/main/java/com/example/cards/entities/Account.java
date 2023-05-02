@@ -28,7 +28,7 @@ public class Account {
     @Getter
     @Setter
     private String currencyCode;
-    @Column(name="available_balance", columnDefinition = "decimal(10,2) default 0.0")
+    @Column(name="available_balance", columnDefinition = "decimal(10,2)")
     @Getter
     @Setter
     private BigDecimal currentBalance;

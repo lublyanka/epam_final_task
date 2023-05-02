@@ -1,25 +1,18 @@
+var accountJSONData;
+
 async function loadAccounts(url) {
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': localStorage.token
-    },
-  })
+  const response = await getGetResponse(url);
   if (response.status === 200) {
-    var json = await response.json();
-    const data = JSON.stringify(json);
-    var jsonData = JSON.parse(data);
+    accountJSONData = await getJSONData(response);
     var table = document.getElementById("accounts");
     table.removeAttribute("style");
     var ul = document.getElementById("no-accounts");
-    ul.setAttribute("style", "display:none");
-    insertAccounts(jsonData);
-    activatePagination(jsonData);
+    hideElement(ul);
+    insertAccounts(accountJSONData);
+    activatePagination(accountJSONData);
   }
-  if (response.status === 500)
-  {
-    window.location.href = "/500";
+  if (response.status === 500) {
+    window.location.href = "/Error500";
   }
 
   function insertAccounts(jsonData) {
@@ -34,15 +27,12 @@ async function loadAccounts(url) {
       var number = item.number; // get the account number
 
       // create the link element
-      let link = document.createElement("a");
-      link.href = "/account/" + id; // set the href of the link to the account id
-      link.innerText = number; // set the text of the link to the account number
-
+      let link = createAccountLink(id, number); // set the text of the link to the account number
       // add the link to the account array
       account.push(link);
       account.push(item.name);
       account.push(item.currentBalance + " " + item.currency);
-      account.push((item.blocked == false) ? 'active' : 'blocked');
+      account.push((item.blocked === false) ? 'active' : 'blocked');
 
       // Loop through the values and create table cells
       account.forEach((item) => {
@@ -66,3 +56,29 @@ function activatePagination(jsonData) {
     generatePagination(currentPage + 1, totalPages, 'loadAccounts', '/api/account/all?size=10', container);
   }
 };
+
+async function loadAccountsWithStatus(url) {
+  const response = await getGetResponse(url);
+  if (response.status === 200) {
+    accountJSONData = await getJSONData(response);
+    // var ul = document.getElementById("no-accounts");
+    // ul.setAttribute("style", "display:none");
+    insertAccountsSelector(accountJSONData);
+  }
+}
+
+function insertAccountsSelector(jsonData) {
+  var select = document.getElementById("account");
+  jsonData.content.forEach((item) => {
+    let option = document.createElement("option");
+    let b = document.createElement("b");
+    b.innerHTML = item.number;
+    let div = document.createElement("div");
+    div.setAttribute("class", "left truncate valign-wrapper");
+    div.appendChild(b);
+    option.innerText = "(" + item.name+ ")";
+    option.appendChild(div);
+    option.setAttribute("value", item.id)
+    select.appendChild(option)
+  });
+}

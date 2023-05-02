@@ -24,9 +24,6 @@ public class User implements UserDetails, Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  /*   @Column(name = "login", length = 15, nullable = false, unique = true)
-  private String login;*/
-
   @Column(name = "password", nullable = false)
   private String password;
 
@@ -72,6 +69,11 @@ public class User implements UserDetails, Serializable {
   @Setter
   private Timestamp lastLogin;
 
+  @Column()
+  @Getter
+  @Setter
+  private Timestamp birthDate;
+
   @Column(name = "role", length = 10)
   @Getter
   @Setter
@@ -80,12 +82,13 @@ public class User implements UserDetails, Serializable {
   @Column(name = "isblocked", columnDefinition = "boolean default false")
   private boolean isBlocked;
 
-  @OneToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "user_add_id")
-  private UserAddress userAddress;
+  @Getter
+  @Setter
+  @Column
+  private String address;
 
-  @OneToMany(cascade = CascadeType.ALL)
-  private List<UserDocument> userDocuments = new ArrayList<>();
+/*  @OneToMany(cascade = CascadeType.ALL)
+  private List<UserDocument> userDocuments = new ArrayList<>();*/
 
   public Long getId() {
     return id;
@@ -139,21 +142,13 @@ public class User implements UserDetails, Serializable {
     isBlocked = blocked;
   }
 
-  public UserAddress getUserAddress() {
-    return userAddress;
-  }
-
-  public void setUserAddress(UserAddress userAddress) {
-    this.userAddress = userAddress;
-  }
-
-  public List<UserDocument> getUserDocuments() {
+/*   public List<UserDocument> getUserDocuments() {
     return userDocuments;
   }
 
   public void setUserDocuments(List<UserDocument> userDocuments) {
     this.userDocuments = userDocuments;
-  }
+  }*/
 
   @Override
   public boolean equals(Object obj) {
@@ -165,5 +160,9 @@ public class User implements UserDetails, Serializable {
     }
 
     return Objects.equals(this.getId(), user.getId());
+  }
+
+  public boolean isAdmin() {
+    return this.role.equals("ADMIN");
   }
 }

@@ -5,6 +5,8 @@
   "dash-title": "Dashboard",
   "profile-title": "Profile",
   "reg-title" : "Registration",
+  "accounts-title": "Accounts",
+  "users-title": "Users",
   "name": "Name",
   "surname": "Surname",
   "middlename": "Middlename",
@@ -23,6 +25,8 @@
   "logout": "Logout",
   "number": "Number",
   "c-balance": "Current Balance",
+  "account": "Account",
+  "payment": "Payment",
   "status": "Status",
   "sum": "Sum",
   "desc": "Description",
@@ -39,5 +43,13 @@
   "unblock": "Unblock",
   "block": "Block",
   "refill": "Refill",
-  "refillsum" : "Sum to refill"
+  "refillsum" : "Sum to refill",
+  "address": "Address",
+  "chooseOption": "Choose option",
+  "send": "Send",
+  "agree": "Agree with everything",
+  "birthDate": "Date of birth",
+  "requestSent": "Request sent",
+  "lastlogin" : "Last login",
+  "user": "User"
 }

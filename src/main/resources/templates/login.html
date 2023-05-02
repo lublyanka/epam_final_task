@@ -9,7 +9,8 @@
     <script src="/js/login.js" type="text/javascript"></script>
 </head>
 <body>
-<div th:replace="fragments/header"></div>
+<div th:replace="~{fragments/base::navbar}"></div>
+<div id="response-message"></div>
 <main>
     <div class="container container-log">
         <div class="screen row">
@@ -51,7 +52,6 @@
                         Inscribir
                         <i class="material-icons right">chevron_right</i>
                     </button>
-                    <div id="response-message"></div>
                 </div>
             </div>
             <div class="screen__background">
@@ -63,7 +63,7 @@
         </div>
     </div>
 </main>
-<div th:replace="fragments/footer"></div>
+<div th:replace="~{fragments/base::footer}"></div>
 <div th:replace="fragments/button.html"> </div>
 </body>
 

@@ -1,3 +1,4 @@
+/*
 package com.example.cards.entities;
 
 import jakarta.persistence.*;
@@ -71,4 +72,4 @@ public class UserDocument {
         this.userId = userId;
     }
 
-}
+}*/

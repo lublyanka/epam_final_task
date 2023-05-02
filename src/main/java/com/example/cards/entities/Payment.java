@@ -2,7 +2,6 @@ package com.example.cards.entities;
 
 import com.example.cards.enums.PaymentStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -30,7 +29,7 @@ public class Payment {
 
   @Getter
   @Setter
-  @Column(name = "amount", nullable = false)
+  @Column(name = "amount",  columnDefinition = "decimal(10,2)", nullable = false)
   private BigDecimal amount;
 
   @Getter
@@ -39,7 +38,7 @@ public class Payment {
   private String description;
 
   @JsonProperty("currency")
-  @Column(columnDefinition = "character(3)")
+  @Column(columnDefinition = "character(3)", nullable = false)
   @Getter
   @Setter
   private String currencyCode;
@@ -49,19 +48,21 @@ public class Payment {
   @Setter
   private String number;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   @Getter
   @Setter
+  @JsonIgnore
   private User user;
 
   @Setter
-  @JsonIgnore
+  @Getter
+ // @JsonIgnore
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "account_id", referencedColumnName = "id")
   private Account account;
 
-  @JsonInclude() @Transient @Getter @Setter private UUID accountId;
+  //@JsonInclude() @Transient @Getter @Setter private UUID accountId;
 
   @Column(name = "created_on", nullable = false)
   @CreationTimestamp
@@ -75,8 +76,4 @@ public class Payment {
   @Setter
   private Timestamp updatedOn;
 
-  @JsonIgnore
-  public Account getAccount() {
-    return account;
-  }
 }

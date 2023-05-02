@@ -27,15 +27,18 @@ public class PaymentRequest {
     private String description;
     @Getter
     @Setter
-    private String currencyCode;
+    private String currency;
+    @Getter
+    @Setter
+    private String number;
     @Getter
     @Setter
     private Long userId;
 
     public boolean isValid() {
-        return this.accountId != null &&
+        return this.accountId != null  &&
+                this.number != null &&
                 this.amount != null &&
-                this.amount.compareTo(BigDecimal.ZERO) > 0 &&
-                currencyRepository.existsById(this.getCurrencyCode());
+                this.amount.compareTo(BigDecimal.ZERO) > 0;
     }
 }

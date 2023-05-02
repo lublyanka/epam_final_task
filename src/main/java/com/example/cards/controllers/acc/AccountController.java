@@ -4,8 +4,10 @@ import static com.example.cards.enums.Responses.*;
 
 import com.example.cards.entities.Account;
 import com.example.cards.entities.CreditCard;
+import com.example.cards.entities.Payment;
 import com.example.cards.services.AccountService;
 import com.example.cards.services.CreditCardService;
+import com.example.cards.services.PaymentService;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -22,16 +24,19 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
 
   @Autowired private AccountService accountService;
+  @Autowired private PaymentService paymentService;
   @Autowired private CreditCardService creditCardService;
 
   @GetMapping("/all")
   public ResponseEntity<?> loadUserAccounts(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+      @RequestParam(required = false) String isBlocked,
       @RequestParam(required = false, defaultValue = "number") String sortBy,
       @RequestParam(required = false, defaultValue = "asc") String sortOrder,
-      @RequestParam(required = false, defaultValue = "0")int page,
+      @RequestParam(required = false, defaultValue = "0") int page,
       @RequestParam(required = false, defaultValue = "10") int size) {
-    Page<Account> accounts = accountService.getAllUserAccounts(sortBy, sortOrder, page, size, token);
+    Page<Account> accounts =
+        accountService.getAllUserAccounts(isBlocked, sortBy, sortOrder, page, size, token);
     if (!(accounts.isEmpty())) return ResponseEntity.ok(accounts);
     else return ResponseEntity.noContent().build();
   }
@@ -109,6 +114,25 @@ public class AccountController {
     } else return ACCOUNT_DOES_NOT_EXIST;
   }
 
+  @GetMapping("/{accountId}/payments")
+  public ResponseEntity<?> loadAccountPayments(
+      @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+      @RequestParam(required = false, defaultValue = "number") String sortBy,
+      @RequestParam(required = false, defaultValue = "asc") String sortOrder,
+      @RequestParam(required = false, defaultValue = "0") int page,
+      @RequestParam(required = false, defaultValue = "10") int size,
+      @PathVariable UUID accountId) {
+    Optional<Account> accountOptional = accountService.getOptionalAccount(token, accountId);
+    if (accountOptional.isPresent()) {
+      Page<Payment> payments =
+          paymentService.getAllAccountPayments(
+              sortBy, sortOrder, page, size, accountOptional.get());
+      if (!(payments.isEmpty())) return ResponseEntity.ok(payments);
+      else return ResponseEntity.noContent().build();
+    }
+    return ACCOUNT_DOES_NOT_EXIST;
+  }
+
   @PostMapping("/{accountId}/refill")
   public ResponseEntity<?> replenishAccount(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
@@ -128,7 +152,7 @@ public class AccountController {
     }
   }
 
-  @PostMapping("/create")
+  @PutMapping("/create")
   public ResponseEntity<?> createAccount(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody Account account) {
 
@@ -150,9 +174,6 @@ public class AccountController {
 
     if (!creditCardService.isValidCreditCardNumber(creditCard.getCardNumber()))
       return INVALID_CREDIT_CARD_NUMBER;
-
-    if (!creditCardService.isCreditCardTypePresent(creditCard))
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Card Type does not exist.");
 
     creditCard = creditCardService.saveCreditCard(creditCard, accountOptional.get());
     return ResponseEntity.ok(creditCard);

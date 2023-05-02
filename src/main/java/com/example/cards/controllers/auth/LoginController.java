@@ -1,10 +1,11 @@
 package com.example.cards.controllers.auth;
 
+import static com.example.cards.enums.Responses.INVALID_EMAIL_OR_PASSWORD;
+
 import com.example.cards.requests.LoginRequest;
 import com.example.cards.services.AuthorizationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import static com.example.cards.enums.Responses.INVALID_EMAIL_OR_PASSWORD;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

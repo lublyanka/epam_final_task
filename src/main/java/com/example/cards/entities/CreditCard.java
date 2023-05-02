@@ -17,7 +17,7 @@ public class CreditCard {
     @Setter
     private String cardNumber;
 
-    @Column(columnDefinition = "character(2)")
+    @Column(length = 10)
     @Getter
     @Setter
     private String cardType;

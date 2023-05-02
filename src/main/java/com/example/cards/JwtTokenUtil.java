@@ -1,41 +1,36 @@
 package com.example.cards;
 
 import com.example.cards.entities.User;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.*;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import org.springframework.beans.factory.annotation.Value;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
+@Log
 public class JwtTokenUtil {
 
-  /*@Autowired
-  private Environment env;*/
+  @Qualifier("jwtKey")
+  private final Key jwtSecret;
 
-  private final Key key;
-
-  // @Value("${jwt.secret}")
-  // private String secret;
-  // private String secret =
-  // "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.VFb0qJ1LRg_4ujbZoRMXnVkUgiuKq5KxWqNdbKq_G9Vvz-S1zZa9LPxtHWKa64zDl2ofkT8F6jBt_K4riU-fPg";
-  // private String secret = env.getProperty("jwt.secret");
-
-  public JwtTokenUtil(@Value("${jwt.secret}") String secret) {
+/*  public JwtTokenUtil(@Value("${jwt.secret}") String secret) {
     this.key = Keys.hmacShaKeyFor(secret.getBytes());
-  }
+  }*/
 
   public String generateToken(User user) {
     Map<String, Object> claims = new HashMap<>();
     claims.put("sub", user.getUsername());
-    claims.put("role", user.getAuthorities());
+    claims.put("roles", user.getAuthorities());
     return createToken(claims);
   }
 
@@ -47,7 +42,7 @@ public class JwtTokenUtil {
         .setClaims(claims)
         .setIssuedAt(now)
         .setExpiration(expiration)
-        .signWith(key, SignatureAlgorithm.HS512)
+        .signWith(jwtSecret, SignatureAlgorithm.HS512)
         .compact();
   }
 
@@ -68,12 +63,24 @@ public class JwtTokenUtil {
     return extractClaim(token, Claims::getExpiration);
   }
 
+  public List<String> extractRoles(String token) {
+    return extractClaim(token, x -> {
+      List<?> roles = x.get("roles", List.class);
+      return roles.stream()
+              .filter(role -> role instanceof String)
+              .map(role -> (String) role)
+              .collect(Collectors.toList());
+    });
+  }
+
   public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
     final Claims claims = extractAllClaims(token);
     return claimsResolver.apply(claims);
   }
 
-  private Claims extractAllClaims(String token) {
-    return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+  public Claims extractAllClaims(String token) {
+    return Jwts.parserBuilder().setSigningKey(jwtSecret).build().parseClaimsJws(token).getBody();
   }
+
+
 }
