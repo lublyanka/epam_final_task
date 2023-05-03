@@ -36,6 +36,8 @@ public class PaymentService {
     return paymentRepository.findById(paymentId);
   }
 
+
+
   @Transactional
   public Optional<Payment> getPayment(String token, UUID paymentId) {
     User user = userService.getUserByToken(token);
@@ -59,8 +61,8 @@ public class PaymentService {
       String sortBy, String sortOrder, int page, int size, String token) {
     User user = userService.getUserByToken(token);
     Page<Payment> pageResult =
-        paymentRepository.findAllByUser(
-            user,
+        paymentRepository.findAllByUser_Id(
+            user.getId(),
             PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy)));
     pageResult.forEach(x -> x.setAccount(null));
     return pageResult;

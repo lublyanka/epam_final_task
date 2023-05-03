@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AuthorizationService {
+public class AuthenticationService {
   @Autowired UserService userService;
 
   @Qualifier("passwordEncoder")

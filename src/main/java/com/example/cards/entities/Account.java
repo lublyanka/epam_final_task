@@ -13,6 +13,8 @@ import lombok.Setter;
 public class Account {
 
     @Id
+    @Getter
+    @Setter
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     @Column(name = "name", nullable = false)
@@ -56,8 +58,4 @@ public class Account {
    /* public Account(String currency) {
         this.currencyCode = currency;
     }*/
-
-    public UUID getId() {
-        return id;
-    }
 }

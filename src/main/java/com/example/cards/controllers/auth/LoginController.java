@@ -3,7 +3,7 @@ package com.example.cards.controllers.auth;
 import static com.example.cards.enums.Responses.INVALID_EMAIL_OR_PASSWORD;
 
 import com.example.cards.requests.LoginRequest;
-import com.example.cards.services.AuthorizationService;
+import com.example.cards.services.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class LoginController {
 
 
-  @Autowired private AuthorizationService authorizationService;
+  @Autowired private AuthenticationService authenticationService;
 
   @PostMapping("/login")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -22,7 +22,7 @@ public class LoginController {
     String email = loginRequest.getEmail();
     String password = loginRequest.getPassword();
 
-    String token = authorizationService.checkUserPassword(password, email);
+    String token = authenticationService.checkUserPassword(password, email);
     if (token == null) return INVALID_EMAIL_OR_PASSWORD;
 
     return ResponseEntity.ok(token);

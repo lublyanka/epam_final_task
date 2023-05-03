@@ -29,7 +29,7 @@ public class Payment {
 
   @Getter
   @Setter
-  @Column(name = "amount",  columnDefinition = "decimal(10,2)", nullable = false)
+  @Column(name = "amount", columnDefinition = "decimal(10,2)", nullable = false)
   private BigDecimal amount;
 
   @Getter
@@ -57,12 +57,9 @@ public class Payment {
 
   @Setter
   @Getter
- // @JsonIgnore
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "account_id", referencedColumnName = "id")
   private Account account;
-
-  //@JsonInclude() @Transient @Getter @Setter private UUID accountId;
 
   @Column(name = "created_on", nullable = false)
   @CreationTimestamp
@@ -75,5 +72,4 @@ public class Payment {
   @Getter
   @Setter
   private Timestamp updatedOn;
-
 }

@@ -17,10 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -35,9 +37,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
   private final Key jwtSecret;
 
   private final UserService userDetailsService;
-
-  @Autowired
-  JwtTokenUtil jwtTokenUtil;
+  @Qualifier("securityContextRepository")
+  private final SecurityContextRepository  securityContextRepository;
+  // private final SecurityContextRepository securityContextRepository;
+  // private final AuthenticationManager authenticationManager;
+  private final JwtTokenUtil jwtTokenUtil;
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -46,8 +50,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
       if (StringUtils.hasText(jwt) && !jwtTokenUtil.isTokenExpired(jwt)) {
         Authentication authentication = getAuthentication(jwt);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        log.info("Set authentication athorities to:" + SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
+        var context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authentication);
+        SecurityContextHolder.setContext(context);
+        securityContextRepository.saveContext(context, request, response);
+        //authenticationManager.authenticate(authentication);
+        // securityContextRepository.saveContext(context,  request, response);
+        //SecurityContextHolder.getContext().setAuthentication(authentication);
+        log.info("Set authentication athorities to:" + context.getAuthentication().getAuthorities().toString());
       }
     } catch (SignatureException e) {
       // handle invalid signature

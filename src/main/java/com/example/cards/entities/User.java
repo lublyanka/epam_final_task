@@ -87,6 +87,9 @@ public class User implements UserDetails, Serializable {
   @Column
   private String address;
 
+  @OneToMany(cascade = CascadeType.ALL, mappedBy="user")
+  private List<Payment> payments;
+
 /*  @OneToMany(cascade = CascadeType.ALL)
   private List<UserDocument> userDocuments = new ArrayList<>();*/
 

@@ -23,10 +23,27 @@ repositories {
 extra["snippetsDir"] = file("build/generated-snippets")
 
 dependencies {
+    testImplementation("org.projectlombok:lombok:1.18.26")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(module = "junit")
+        exclude(module = "junit-vintage-engine")
+        //exclude(module = "mockito-core")
+    }
+    testImplementation("org.junit.jupiter:junit-jupiter:5.4.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+    testImplementation("org.springframework.security:spring-security-test")
+
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+
     compileOnly("org.projectlombok:lombok")
+
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+
     runtimeOnly("org.postgresql:postgresql")
+
     annotationProcessor("org.projectlombok:lombok")
+
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-rest")
     implementation("org.springframework.boot:spring-boot-starter-mail")
@@ -42,15 +59,11 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.13.0")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
     implementation("com.google.googlejavaformat:google-java-format:1.15.0") //requirements from Iryna Afanasieva
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
-    testImplementation("org.springframework.security:spring-security-test")
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
 }
-
 //tasks.processResources {
 //   val profile = project.properties["profile"]
 //  val replaceTokens: MutableMap<String, String> = profile?.let { filter_tokens[it] }?.toMutableMap() ?: filter_tokens["default"].toMutableMap()

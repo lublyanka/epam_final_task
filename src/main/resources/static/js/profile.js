@@ -31,7 +31,7 @@ async function loadProfile(url) {
   }
 }
 
-function insertFields(obj) {
+function insertFields(jsonData) {
   const fields = [
     { id: "name", prop: "name" },
     { id: "surname", prop: "surname" },
@@ -50,7 +50,7 @@ function insertFields(obj) {
   ];
 
   fields.forEach(field => {
-    let value = obj;
+    let value = jsonData;
     const props = Array.isArray(field.prop) ? field.prop : [field.prop];
     for (const prop of props) {
       if (value === null) {
@@ -69,6 +69,13 @@ function insertFields(obj) {
       }
     }
   });
+  if (isUserAdmin(decodedToken)){
+    if(!jsonData.enabled) {
+      unblockUserButton.removeAttribute("style");
+      hideElement(blockUserButton);
+    }
+  }
+
 }
 
 function getRoleName(role) {

@@ -1,19 +1,29 @@
 package com.example.cards.configs;
 
 import com.example.cards.filters.JwtTokenFilter;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.HttpRequestResponseHolder;
+import org.springframework.security.web.context.SecurityContextRepository;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
-  @Autowired private JwtTokenFilter jwtTokenFilter;
+  private final JwtTokenFilter jwtTokenFilter;
+  @Qualifier("securityContextRepository")
+  private final SecurityContextRepository securityContextRepository;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -31,13 +41,14 @@ public class WebSecurityConfig {
         .disable()
         .sessionManagement(
             (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .securityContext(x -> x.securityContextRepository(securityContextRepository))
         .authorizeHttpRequests(
             (requests) ->
                 requests
                     // .anyRequest().hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
-                    // .requestMatchers( "/api/admin/**")
-                    //  .hasAuthority("ROLE_ADMIN")
-                    // .authenticated()
+                    /*.requestMatchers( "/api/admin/**")
+                    .hasAuthority("ROLE_ADMIN")
+                    // .authenticated()*/
                     .requestMatchers(
                         "/*",
                         "/js/**",

@@ -59,20 +59,20 @@ function insertAccount(jsonData) {
   });
   var element = document.getElementById("c-balance");
   element.innerHTML = jsonData.currentBalance + " " + jsonData.currency;
-  if (jsonData.blocked === true) {
+  if (jsonData.blocked) {
     var elem = unblockAccountButton;
     elem.removeAttribute("style");
     elem = blockAccountButton;
     hideElement(elem);;
 
-    if (jsonData.requested === true && !isUserAdmin(decodedToken)) {
+    if (jsonData.requested && !isUserAdmin(decodedToken)) {
       elem = unblockAccountButton.firstElementChild.firstElementChild;
       elem.getAttribute("class");
       elem.setAttribute("class", elem.getAttribute("class") + " disabled");
       elem.firstElementChild.innerHTML = "access_time";
       document.getElementById("requestSent").removeAttribute("style");
     }
-    if (jsonData.requested === true)
+    if (jsonData.requested)
       document.getElementById("requestSent").removeAttribute("style");
   }
 }

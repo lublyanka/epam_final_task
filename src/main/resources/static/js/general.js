@@ -59,7 +59,7 @@ async function getJSONData(response) {
 function transformTimestampToData(timestamp, withTime) {
     let date = new Date(timestamp);
     let formattedDate;
-    if (withTime === "true")
+    if (withTime)
         formattedDate = date.toLocaleDateString('en-GB') + " " + date.toLocaleTimeString('en-GB');
     else
         formattedDate = date.toLocaleDateString('en-GB');

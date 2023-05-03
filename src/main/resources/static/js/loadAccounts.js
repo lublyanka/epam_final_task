@@ -32,7 +32,7 @@ async function loadAccounts(url) {
       account.push(link);
       account.push(item.name);
       account.push(item.currentBalance + " " + item.currency);
-      account.push((item.blocked === false) ? 'active' : 'blocked');
+      account.push((item.blocked) ? 'blocked' : 'active');
 
       // Loop through the values and create table cells
       account.forEach((item) => {
@@ -76,7 +76,7 @@ function insertAccountsSelector(jsonData) {
     let div = document.createElement("div");
     div.setAttribute("class", "left truncate valign-wrapper");
     div.appendChild(b);
-    option.innerText = "(" + item.name+ ")";
+    option.innerText = "(" + item.name + ")";
     option.appendChild(div);
     option.setAttribute("value", item.id)
     select.appendChild(option)
