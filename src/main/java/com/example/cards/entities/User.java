@@ -5,20 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users", schema = "public")
-public class User implements UserDetails, Serializable {
+public class User implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,10 +64,7 @@ public class User implements UserDetails, Serializable {
   @Setter
   private Timestamp lastLogin;
 
-  @Column()
-  @Getter
-  @Setter
-  private Timestamp birthDate;
+  @Column() @Getter @Setter private Timestamp birthDate;
 
   @Column(name = "role", length = 10)
   @Getter
@@ -80,29 +72,20 @@ public class User implements UserDetails, Serializable {
   private String role;
 
   @Column(name = "isblocked", columnDefinition = "boolean default false")
-  private boolean isBlocked;
-
   @Getter
   @Setter
-  @Column
-  private String address;
+  private boolean isBlocked;
 
-  @OneToMany(cascade = CascadeType.ALL, mappedBy="user")
+  @Getter @Setter @Column private String address;
+
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
   private List<Payment> payments;
 
-/*  @OneToMany(cascade = CascadeType.ALL)
+  /*  @OneToMany(cascade = CascadeType.ALL)
   private List<UserDocument> userDocuments = new ArrayList<>();*/
 
   public Long getId() {
     return id;
-  }
-
-  @JsonIgnore
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    List<GrantedAuthority> authorities = new ArrayList<>();
-    authorities.add(new SimpleGrantedAuthority("ROLE_" + getRole()));
-    return authorities;
   }
 
   @JsonIgnore
@@ -115,37 +98,7 @@ public class User implements UserDetails, Serializable {
     this.password = password;
   }
 
-  @Override
-  public String getUsername() {
-    return this.email;
-  }
-
-  @Override
-  public boolean isAccountNonExpired() {
-    return false;
-  }
-
-  @Override
-  public boolean isAccountNonLocked() {
-    return !this.isBlocked;
-  }
-
-  @Override
-  public boolean isCredentialsNonExpired() {
-    return false;
-  }
-
-  @Override
-  public boolean isEnabled() {
-    return !this.isBlocked;
-  }
-
-  @JsonIgnore
-  public void setBlocked(Boolean blocked) {
-    isBlocked = blocked;
-  }
-
-/*   public List<UserDocument> getUserDocuments() {
+  /*   public List<UserDocument> getUserDocuments() {
     return userDocuments;
   }
 

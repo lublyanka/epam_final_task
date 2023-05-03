@@ -1,6 +1,7 @@
 package com.example.cards.services;
 
 import com.example.cards.JwtTokenUtil;
+import com.example.cards.MyUserPrincipal;
 import com.example.cards.entities.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,8 @@ public class AuthenticationService {
   }
 
   private String getToken(User user) {
-    String token = jwtTokenUtil.generateToken(user);
+    //String token = jwtTokenUtil.generateToken(user);
+    String token = jwtTokenUtil.generateJwtToken(new MyUserPrincipal(user));
     userService.updateUserLastLogin(user);
     return token;
   }

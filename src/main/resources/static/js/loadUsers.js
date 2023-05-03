@@ -34,7 +34,7 @@ function insertUsers(jsonData) {
         user.push(item.email);
         user.push(item.role);
         user.push(item.lastLogin != null ? transformTimestampToData(item.lastLogin, "true") : "");
-        user.push((item.enabled) ? 'active' : 'blocked');
+        user.push((item.blocked) ? 'blocked' : 'active');
 
         // Loop through the values and create table cells
         user.forEach((item) => {

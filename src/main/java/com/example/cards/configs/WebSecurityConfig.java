@@ -46,9 +46,9 @@ public class WebSecurityConfig {
             (requests) ->
                 requests
                     // .anyRequest().hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
-                    /*.requestMatchers( "/api/admin/**")
+                    .requestMatchers( "/api/admin/**")
                     .hasAuthority("ROLE_ADMIN")
-                    // .authenticated()*/
+                    // .authenticated()
                     .requestMatchers(
                         "/*",
                         "/js/**",

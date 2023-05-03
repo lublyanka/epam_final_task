@@ -1,6 +1,5 @@
 package com.example.cards;
 
-import com.example.cards.entities.User;
 import io.jsonwebtoken.*;
 import java.security.Key;
 import java.util.Date;
@@ -20,28 +19,20 @@ import org.springframework.stereotype.Component;
 @Log
 public class JwtTokenUtil {
 
+  public static final int TOKEN_VALIDITY = 1000 * 60 * 60 * 10; // 10 hours
+
   @Qualifier("jwtKey")
   private final Key jwtSecret;
 
-/*  public JwtTokenUtil(@Value("${jwt.secret}") String secret) {
-    this.key = Keys.hmacShaKeyFor(secret.getBytes());
-  }*/
-
-  public String generateToken(User user) {
+  public String generateJwtToken(UserDetails userDetails) {
     Map<String, Object> claims = new HashMap<>();
-    claims.put("sub", user.getUsername());
-    claims.put("roles", user.getAuthorities());
-    return createToken(claims);
-  }
-
-  private String createToken(Map<String, Object> claims) {
+    claims.put("roles", userDetails.getAuthorities());
     Date now = new Date();
-    Date expiration = new Date(now.getTime() + 1000 * 60 * 60 * 10); // 10 hours
-
     return Jwts.builder()
         .setClaims(claims)
+        .setSubject(userDetails.getUsername())
         .setIssuedAt(now)
-        .setExpiration(expiration)
+        .setExpiration(new Date(now.getTime() + TOKEN_VALIDITY))
         .signWith(jwtSecret, SignatureAlgorithm.HS512)
         .compact();
   }
@@ -64,13 +55,15 @@ public class JwtTokenUtil {
   }
 
   public List<String> extractRoles(String token) {
-    return extractClaim(token, x -> {
-      List<?> roles = x.get("roles", List.class);
-      return roles.stream()
+    return extractClaim(
+        token,
+        x -> {
+          List<?> roles = x.get("roles", List.class);
+          return roles.stream()
               .filter(role -> role instanceof String)
               .map(role -> (String) role)
               .collect(Collectors.toList());
-    });
+        });
   }
 
   public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -81,6 +74,4 @@ public class JwtTokenUtil {
   public Claims extractAllClaims(String token) {
     return Jwts.parserBuilder().setSigningKey(jwtSecret).build().parseClaimsJws(token).getBody();
   }
-
-
 }

@@ -86,7 +86,7 @@ public class UserService {
 
     if (userOptional.isPresent()) {
       User user = userOptional.get();
-      if (user.isEnabled()) {
+      if (!user.isBlocked()) {
         user.setBlocked(true);
         user.setUpdatedOn(Timestamp.from(Instant.now()));
         userRepository.save(user);
@@ -103,7 +103,7 @@ public class UserService {
 
     if (userOptional.isPresent()) {
       User user = userOptional.get();
-      if (!user.isEnabled()) {
+      if (user.isBlocked()) {
         user.setBlocked(false);
         user.setUpdatedOn(Timestamp.from(Instant.now()));
         userRepository.save(user);

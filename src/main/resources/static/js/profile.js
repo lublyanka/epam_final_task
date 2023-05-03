@@ -70,7 +70,7 @@ function insertFields(jsonData) {
     }
   });
   if (isUserAdmin(decodedToken)){
-    if(!jsonData.enabled) {
+    if(jsonData.blocked) {
       unblockUserButton.removeAttribute("style");
       hideElement(blockUserButton);
     }
