@@ -52,6 +52,6 @@ async function addAccount() {
     }, "2000");
     loadAccounts(urlAccounts);
   } else {
-    await insertPlainErrorMessage(response);
+    await insertTestErrorMessageFromResponse(response);
   }
 }

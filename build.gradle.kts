@@ -44,6 +44,7 @@ dependencies {
 
     annotationProcessor("org.projectlombok:lombok")
 
+    implementation("org.springframework.boot:spring-boot-starter-parent:3.0.5")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-rest")
     implementation("org.springframework.boot:spring-boot-starter-mail")
@@ -64,17 +65,12 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
-//tasks.processResources {
-//   val profile = project.properties["profile"]
-//  val replaceTokens: MutableMap<String, String> = profile?.let { filter_tokens[it] }?.toMutableMap() ?: filter_tokens["default"].toMutableMap()
 
-//   exclude("**/*.ttf")
-
-// from("src/main/resources") {
-//   filter(FilteringResource { ReplaceTokens(it.inputStream().reader().readText(), tokens = replaceTokens) })
-// }
-
-// from("src/main/resources") {
-//    include("**/*.ttf")
-//}
-//}
+/*
+sourceSets {
+    main {
+        resources {
+            srcDirs("src/main/resources")
+        }
+    }
+}*/

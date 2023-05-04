@@ -67,8 +67,7 @@ function insertAccount(jsonData) {
 
     if (jsonData.requested && !isUserAdmin(decodedToken)) {
       elem = unblockAccountButton.firstElementChild.firstElementChild;
-      elem.getAttribute("class");
-      elem.setAttribute("class", elem.getAttribute("class") + " disabled");
+      elem.classList.add(" disabled");
       elem.firstElementChild.innerHTML = "access_time";
       document.getElementById("requestSent").removeAttribute("style");
     }
@@ -138,7 +137,7 @@ async function addCard() {
     M.Modal.getInstance(document.getElementById('modal1')).close()
     loadCards(urlAccount + "/cards");
   } else {
-    await insertPlainErrorMessage(response);
+    await insertTestErrorMessageFromResponse(response);
   }
 }
 
@@ -157,7 +156,7 @@ async function blockAccount() {
     unblockAccountButton.removeAttribute("style");
     hideElement(blockAccountButton);
   } else {
-    insertPlainErrorMessage(response);
+    insertTestErrorMessageFromResponse(response);
   }
 }
 
@@ -172,7 +171,7 @@ async function unblockAccount() {
       blockAccountButton.removeAttribute("style");
       hideElement(unblockAccountButton)
     } else {
-      insertPlainErrorMessage(response);
+      insertTestErrorMessageFromResponse(response);
     }
   }
   else {
@@ -182,9 +181,9 @@ async function unblockAccount() {
       else
         M.toast({ html: 'Account unblocked request is submitted.', displayLength: 3000 });
       let element = document.getElementById("unblockAccount").firstElementChild.firstElementChild;
-      element.setAttribute("class", element.getAttribute("class") + " disabled");
+      element.classList.add(" disabled");
     } else {
-      insertPlainErrorMessage(response);
+      insertTestErrorMessageFromResponse(response);
     }
   }
 }

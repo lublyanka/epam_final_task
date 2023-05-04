@@ -1,6 +1,6 @@
 var languageGlobal = localStorage.language;
 
-let options = {
+let dropDownOptions = {
     alignment: 'left',
     autoFocus: true,
     constrainWidth: true,
@@ -23,9 +23,7 @@ let translations = {};
 
 document.addEventListener('DOMContentLoaded', function () {
     var elems = document.querySelectorAll('.dropdown-trigger');
-    /* var options = new Map;
-    options.set('alignment','right'); */
-    var instances = M.Dropdown.init(elems, options);
+    var instances = M.Dropdown.init(elems, dropDownOptions);
     if (!languageGlobal != null)
         setLocale(languageGlobal);
 });
@@ -46,7 +44,7 @@ async function setLocale(language) {
         document.querySelectorAll(show).forEach(function (node) {
             node.style.display = 'unset';
         });
-        languageGlobal = language;
+        localStorage.language = language;
         const newTranslations =
             await fetchTranslationsFor(language);
         translations = newTranslations;
@@ -80,9 +78,10 @@ function translateElement(element) {
         element.setAttribute("placeholder", translation);
     else {
         element.innerHTML = "";
-        if (!(Object.keys(children).length === 0)){
-            for(let i = 0; i < Object.keys(children).length; i++)
-                element.appendChild(children[i]);}
+        if (!(Object.keys(children).length === 0)) {
+            for (let i = 0; i < Object.keys(children).length; i++)
+                element.appendChild(children[i]);
+        }
         element.appendChild(document.createTextNode(translation));
 
     }
@@ -93,9 +92,6 @@ function getDatepickerOptions(language) {
     var options = {
         format: 'dd.mm.yyyy',
         firstDay: 1,
-        minDate: new Date('1900-01-01T00:00:00'),
-        maxDate: new Date(new Date().setFullYear(new Date().getFullYear() - 14)),
-        yearRange:70,
         i18n: {
             cancel: language === 'en' ? 'Cancel' : 'Annuler',
             clear: language === 'en' ? 'Clear' : 'Effacer',

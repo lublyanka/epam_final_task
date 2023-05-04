@@ -6,6 +6,8 @@ setInterval(function () {
         checkTokenExpiration(token)
 }, intervalTime);
 
+
+//Navbar activation changes
 document.addEventListener('DOMContentLoaded', function () {
 
     if (localStorage.token != null) {
@@ -27,6 +29,8 @@ document.addEventListener('DOMContentLoaded', function () {
             M.toast({ html: 'You logged out.', displayLength: 8000 });
     })
 });
+
+//REST functions
 
 async function getGetResponse(url) {
     return await fetch(url, {
@@ -56,30 +60,19 @@ async function getJSONData(response) {
     return jsonData;
 }
 
-function transformTimestampToData(timestamp, withTime) {
-    let date = new Date(timestamp);
-    let formattedDate;
-    if (withTime)
-        formattedDate = date.toLocaleDateString('en-GB') + " " + date.toLocaleTimeString('en-GB');
-    else
-        formattedDate = date.toLocaleDateString('en-GB');
-    return formattedDate;
-}
 
-function transformDataToTimestamp(data) {
-    let myDate = data.split(".");
-    var newTimestamp = new Date(myDate[2], myDate[1], myDate[0]);
-    return newTimestamp.getTime();
-}
+//User validation functions
 
 function isUserAdmin(decodedToken) {
     var roles = decodedToken.roles;
     var isAdmin = false;
     roles.forEach((x) => {
-        if (x.authority == "ROLE_ADMIN") isAdmin=  true; 
+        if (x.authority == "ROLE_ADMIN") isAdmin = true;
     });
     return isAdmin;
 }
+
+//Token checker functions
 
 function isTokenExpired(token) {
     const decodedToken = getDecodedToken(token);
@@ -109,8 +102,32 @@ function checkTokenExpiration(token) {
     }
 }
 
-async function insertPlainErrorMessage(response) {
+// Data transforming functions
+
+function transformTimestampToData(timestamp, withTime) {
+    let date = new Date(timestamp);
+    let formattedDate;
+    if (withTime)
+        formattedDate = date.toLocaleDateString('en-GB') + " " + date.toLocaleTimeString('en-GB');
+    else
+        formattedDate = date.toLocaleDateString('en-GB');
+    return formattedDate;
+}
+
+function transformDataToTimestamp(data) {
+    let myDate = data.split(".");
+    var newTimestamp = new Date(myDate[2], myDate[1], myDate[0]);
+    return newTimestamp.getTime();
+}
+
+//Functions changing HTML 
+
+async function insertTestErrorMessageFromResponse(response) {
     const text = await response.text();
+    insertErrorMessage(text);
+}
+
+function insertErrorMessage(text) {
     let errorElement = document.getElementById('response-message');
     errorElement.innerText = text;
     errorElement.classList.add("card-panel");
@@ -120,11 +137,23 @@ async function insertPlainErrorMessage(response) {
 
 function hideElement(elem) {
     elem.setAttribute("style", "display:none");
-  }
+}
 
-  function createAccountLink(id, number) {
+function createAccountLink(id, number) {
     let link = document.createElement("a");
     link.href = "/account/" + id; // set the href of the link to the account id
     link.innerText = number; // set the text of the link to the account number
     return link;
-  }
+}
+
+function makeInputFieldValid(element) {
+    element.classList.remove("invalid");
+    element.classList.add("valid");
+
+}
+
+function makeInputFieldInvalid(element, dataErrorText) {
+    element.classList.add("invalid");
+    element.classList.remove("valid");
+    element.nextElementSibling.setAttribute("data-error", dataErrorText);
+}

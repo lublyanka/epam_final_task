@@ -39,7 +39,7 @@ select.addEventListener("change", () => {
     }
   });
   currencyElement.value = currency;
-  currencyElement.labels[0].setAttribute("class", "active");
+  currencyElement.labels[0].classList.add("active");
 });
 
 
@@ -70,6 +70,6 @@ async function addPayment() {
     loadPayments(urlPayments);
     M.Modal.getInstance(document.getElementById("addPayment")).close();
   } else {
-    await insertPlainErrorMessage(response);
+    await insertTestErrorMessageFromResponse(response);
   }
 }

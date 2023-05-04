@@ -51,5 +51,12 @@
   "payment": "Pago",
   "requestSent": "Solicitud enviada",
   "lastlogin" : "Ultima entrada",
-  "user": "Usuario"
+  "user": "Usuario",
+  "fieldsNotFilled" : "Complete todos los huecos",
+  "fieldRequiredError": "Campo obligatorio",
+  "onlyTextError":"Debe contener solo letras",
+  "onlyNumbersError": "Debe contener solo números",
+  "onlyNumbersError5-20": "Debe contener solo números de 5 a 20 symbols",
+  "dateFormatError" : "Debe ser dd.mm.yyyy",
+  "passwordFormatError": "Debe tener al menos 8 caracteres, contener al menos una letra minúscula, una letra mayúscula y un número"
 }

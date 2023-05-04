@@ -1,5 +1,6 @@
 package com.example.cards;
 
+import static org.mockito.Mockito.mock;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.util.AssertionErrors.assertTrue;
 
@@ -13,6 +14,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -24,13 +26,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
-@ActiveProfiles("test")
+// @SpringBootTest
+// @ActiveProfiles("test")
 public class CreditCardServiceTest {
-
-  @Autowired private CreditCardService creditCardService;
-  @MockBean private CurrencyRepository currencyRepository;
-  @MockBean private CreditCardRepository creditCardRepository;
+  private final CurrencyRepository currencyRepository = mock(CurrencyRepository.class);
+  private final CreditCardRepository creditCardRepository = mock(CreditCardRepository.class);
+  private final CreditCardService creditCardService = new CreditCardService(creditCardRepository, currencyRepository);
 
   private static Collection<Object[]> provideCardNumbers() {
     return Arrays.asList(
@@ -108,16 +109,16 @@ public class CreditCardServiceTest {
     Assertions.assertEquals(account.getId(), result.get().getAccountId());
   }
 
-  @TestConfiguration
-  class CreditCardServiceTestContextConfiguration {
-
-    @MockBean private CreditCardRepository creditCardRepository;
-
-    @MockBean private CurrencyRepository currencyRepository;
-
-    @Bean
-    public CreditCardService creditCardService() {
-      return new CreditCardService();
-    }
-  }
+//  @TestConfiguration
+//  class CreditCardServiceTestContextConfiguration {
+//
+//    @MockBean private CreditCardRepository creditCardRepository;
+//
+//    @MockBean private CurrencyRepository currencyRepository;
+//
+//    @Bean
+//    public CreditCardService creditCardService() {
+//      return new CreditCardService();
+//    }
+//  }
 }

@@ -74,7 +74,7 @@ function insertAccountsSelector(jsonData) {
     let b = document.createElement("b");
     b.innerHTML = item.number;
     let div = document.createElement("div");
-    div.setAttribute("class", "left truncate valign-wrapper");
+    div.classList.add("left truncate valign-wrapper");
     div.appendChild(b);
     option.innerText = "(" + item.name + ")";
     option.appendChild(div);

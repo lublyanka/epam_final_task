@@ -43,7 +43,7 @@ function insertPayment(jsonData) {
   if (jsonData.status === "SENT") {
     hideElement(sendPaymentDiv);
     var elem = document.getElementById("status");
-    elem.setAttribute("class", "blue-text text-darken-4")
+    elem.classList.add("blue-text text-darken-4")
   }
 
   if (isUserAdmin(decodedToken)) {
@@ -66,7 +66,7 @@ async function sendPayment() {
       M.toast({ html: 'Payment sent!', displayLength: 3000 });
   }
   else {
-    await insertPlainErrorMessage(response);
+    await insertTestErrorMessageFromResponse(response);
   }
 }
 

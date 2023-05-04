@@ -61,7 +61,7 @@ function insertFields(jsonData) {
     if (value != null) {
       const element = document.getElementById(field.id);
       element.setAttribute("value", value);
-      element.labels[0].setAttribute("class", "active");
+      element.labels[0].classList.add( "active");
       if (field.transform) {
         if (field.withTime)
           element.setAttribute("value", field.transform(value, field.withTime));
@@ -111,7 +111,7 @@ async function blockUser() {
       unblockUserButton.removeAttribute("style");
       hideElement(blockUserButton);
     } else {
-      insertPlainErrorMessage(response);
+      insertTestErrorMessageFromResponse(response);
     }
   }
 }
@@ -127,7 +127,7 @@ async function unblockUser() {
       blockUserButton.removeAttribute("style");
       hideElement(unblockUserButton)
     } else {
-      insertPlainErrorMessage(response);
+      insertTestErrorMessageFromResponse(response);
     }
   }
 }

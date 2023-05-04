@@ -51,5 +51,12 @@
   "birthDate": "Date of birth",
   "requestSent": "Request sent",
   "lastlogin" : "Last login",
-  "user": "User"
+  "user": "User",
+  "fieldsNotFilled" : "Please fill out all fields.",
+  "fieldRequiredError": "Required field",
+  "onlyTextError":"Must contain only letters",
+  "onlyNumbersError": "Must contain only numbers",
+  "onlyNumbersError5-20": "Must contain only numbers from 5 to 20 characters",
+  "dateFormatError" : "Must be dd.mm.yyyy",
+  "passwordFormatError": "Must be at least 8 characters long, contain at least one lower case letter, one uppercase letter and one number"
 }

@@ -24,11 +24,11 @@ async function login() {
             window.location.href = "/dashboard";
           }, "2000");
     } else {
-      await insertPlainErrorMessage(response);
+      await insertTestErrorMessageFromResponse(response);
     }
   }
   else {
-    document.getElementById('response-message').innerText = "Please fill in both fields.";
+    insertErrorMessage(translations["fieldsNotFilled"]);
     return;
   };
 };
