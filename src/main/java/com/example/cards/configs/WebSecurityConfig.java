@@ -18,16 +18,12 @@ import org.springframework.security.web.context.SecurityContextRepository;
 public class WebSecurityConfig {
   private final JwtTokenFilter jwtTokenFilter;
 
-
   /*
-   * For these reasons,
-   * the SecurityContextPersistenceFilter has been deprecated to be replaced with the SecurityContextHolderFilter.
    * In Spring Security 6, the default behavior is that the SecurityContextHolderFilter will only read the SecurityContext from SecurityContextRepository
    *  and populate it in the SecurityContextHolder. Users now must explicitly save the SecurityContext with the SecurityContextRepository if they
    *  want the SecurityContext to persist between requests. This removes ambiguity and improves performance by only requiring writing
    * to the SecurityContextRepository (i.e. HttpSession) when it is necessary.
    * */
-
 
   @Qualifier("securityContextRepository")
   private final SecurityContextRepository securityContextRepository;
@@ -55,7 +51,10 @@ public class WebSecurityConfig {
                         "/api/auth/login",
                         "/account/*",
                         "/payment/*",
-                        "/users/*")
+                        "/users/*",
+                        "swagger-ui/**",
+                        "/v3/api-docs",
+                        "/v3/api-docs/**")
                     .permitAll()
                     .anyRequest()
                     .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER"));

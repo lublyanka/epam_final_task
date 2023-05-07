@@ -17,6 +17,7 @@
                     <h3><span data-i18n-key="account">Account </span>
                         <span> № </span>
                         <span id="number"></span></h3>
+                    <hr>
                 </div>
                 <div class="valign-wrapper right" id="blockAccount">
                     <h3><a data-i18n-key="block" class="waves-effect waves-light btn modal-trigger orange darken-1"
@@ -28,7 +29,9 @@
                            href="#unblock">
                         <i class="material-icons right">send</i>Unblock</a></h3>
                 </div>
-                <div data-i18n-key="requestSent" id="requestSent" class="col s12 orange darken-1 right-align" style="display:none">Request sent</div>
+                <div data-i18n-key="requestSent" id="requestSent" class="col s12 orange darken-1 right-align"
+                     style="display:none">Request sent
+                </div>
 
 
                 <div class="col s9">
@@ -85,6 +88,8 @@
 </body>
 
 <!-- Modal Structure -->
+<!--<div th:replace="~{fragments/modals::create_payment_modal}"></div>-->
+
 <div id="modal1" class="modal">
     <div class="modal-content">
         <h4 data-i18n-key="addCard">Add card</h4>
@@ -94,29 +99,31 @@
                     <div class="input-field col s12">
                         <label data-i18n-key="name" for="cardTitleReg">Name</label>
                         <input class="validate" data-length="255" id="cardTitleReg" name="cardTitleReg" type="text"
-                               required>
+                               required onchange="check()">
                         <span class="helper-text" data-error=""></span>
                     </div>
                     <div class="input-field col s6">
                         <label data-i18n-key="number" for="cardNumberReg">Number</label>
                         <input class="validate" data-length="30" id="cardNumberReg" name="cardNumberReg" type="text"
-                               required>
+                               required onchange="check()">
                         <span class="helper-text" data-error=""></span>
                     </div>
                     <div class="input-field col s2">
                         <label data-i18n-key="cardType" for="cardTypeReg">Card Type</label>
                         <input class="validate" data-length="10" id="cardTypeReg" name="cardTypeReg" type="text"
-                               required>
+                               required onchange="check()">
                         <span class="helper-text" data-error=""></span>
                     </div>
                     <div class="input-field col s1">
                         <label data-i18n-key="month" for="monthReg">Month</label>
-                        <input class="validate" data-length="2" id="monthReg" name="monthReg" type="text" required>
+                        <input class="validate" data-length="2" id="monthReg" name="monthReg" type="text"
+                               required onchange="check()">
                         <span class="helper-text" data-error=""></span>
                     </div>
                     <div class="input-field col s1">
                         <label data-i18n-key="year" for="yearReg">Year</label>
-                        <input class="validate" data-length="4" id="yearReg" name="yearReg" type="text" required>
+                        <input class="validate" data-length="4" id="yearReg" name="yearReg" type="text"
+                               required onchange="check()">
                         <span class="helper-text" data-error=""></span>
                     </div>
                     <div class="input-field col s6">
@@ -129,7 +136,8 @@
             </div>
             <div class="modal-footer">
                 <div class="col s8" id="response-message"></div>
-                <a href="#!" id="saveButton" data-i18n-key="save" class="waves-effect waves-green btn" onclick="addCard()">Save</a>
+                <a href="#!" id="saveButton" data-i18n-key="save" class="waves-effect waves-green btn"
+                   onclick="addCard()">Save</a>
                 <a href="#!" data-i18n-key="cancel" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
             </div>
         </div>

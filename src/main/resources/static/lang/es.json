@@ -58,8 +58,11 @@
   "fieldRequiredError": "Campo obligatorio",
   "notCurrencyError": "Código de moneda invalido",
   "onlyTextError": "Debe contener solo letras",
+  "wrongCardTypeError": "Debe contener solo letras de 3 a 10 symbols",
   "onlyNumbersError": "Debe contener solo números",
   "onlyNumbersError5-20": "Debe contener solo números de 5 a 20 symbols",
+  "wrongYearError": "Debe contener año completo",
+  "wrongMonthError": "Debe contener mes completo",
   "dateFormatError": "Debe ser dd.mm.yyyy",
   "passwordFormatError": "Debe tener al menos 8 caracteres, contener al menos una letra minúscula, una letra mayúscula y un número",
   "sumNumberFormatError" : "Debe ser en 123.45 formato"

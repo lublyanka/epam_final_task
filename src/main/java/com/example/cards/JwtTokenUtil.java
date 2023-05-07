@@ -2,6 +2,7 @@ package com.example.cards;
 
 import io.jsonwebtoken.*;
 import java.security.Key;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -9,17 +10,15 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-@Log
 public class JwtTokenUtil {
 
-  public static final int TOKEN_VALIDITY = 1000 * 60 * 60 * 10; // 10 hours
+  public static final int TOKEN_VALIDITY_MS = 1000 * 60 * 60 * 10; // 10 hours
 
   @Qualifier("jwtKey")
   private final Key jwtSecret;
@@ -27,12 +26,12 @@ public class JwtTokenUtil {
   public String generateJwtToken(UserDetails userDetails) {
     Map<String, Object> claims = new HashMap<>();
     claims.put("roles", userDetails.getAuthorities());
-    Date now = new Date();
+    Instant instantNow = Instant.now();
     return Jwts.builder()
         .setClaims(claims)
         .setSubject(userDetails.getUsername())
-        .setIssuedAt(now)
-        .setExpiration(new Date(now.getTime() + TOKEN_VALIDITY))
+        .setIssuedAt(new Date(instantNow.toEpochMilli()))
+        .setExpiration(new Date(instantNow.toEpochMilli() + TOKEN_VALIDITY_MS))
         .signWith(jwtSecret, SignatureAlgorithm.HS512)
         .compact();
   }

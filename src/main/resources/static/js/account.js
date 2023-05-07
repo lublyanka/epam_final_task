@@ -12,7 +12,7 @@ let unblockAccountButton;
 let collapsibleRefill;
 let cardActionsDiv;
 let addCardDiv;
-
+let addPaymentButton;
 
 document.addEventListener('DOMContentLoaded', function () {
   decodedToken = getDecodedToken(localStorage.token);
@@ -21,20 +21,26 @@ document.addEventListener('DOMContentLoaded', function () {
   collapsibleRefill = document.getElementById("collapsible");
   cardActionsDiv = document.getElementById("card-actions");
   addCardDiv = document.getElementById("addCard")
+  addPaymentButton = document.getElementById("addPaymentButton");
   loadAccount(urlAccount);
   loadCards(urlCard);
   loadPayments(urlPayments)
+  hideElement(addPaymentButton);
 
   var elems = document.querySelectorAll('.modal');
   var modals = M.Modal.init(elems);
   elems = document.querySelectorAll('.collapsible');
   var collapsibles = M.Collapsible.init(elems);
 
+  // setTimeout(() => {
+  //   elems = document.querySelectorAll('select');
+  //   var selects = M.FormSelect.init(elems);
+  // }, "1000");
+
   if (isUserAdmin(decodedToken)) {
     hideElement(collapsibleRefill);
     hideElement(cardActionsDiv);
     hideElement(addCardDiv);
-    hideElement(addPaymentButton);
     //urlBlock = `/api/admin/accounts/${accountId}/block`;
     urlUnblock = `/api/admin/accounts/${accountId}/unblock`;
     urlPayments = `/api/admin/accounts/${accountId}/payments`;

@@ -10,7 +10,7 @@ async function loadCurrencies() {
 }
 
 function insertCurrency(jsonData) {
-    var select = document.getElementById("currency");
+    var select = document.getElementById("currencySelect");
     jsonData.forEach((item) => {
         let option = document.createElement("option");
         option.innerText = item.name;

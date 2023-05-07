@@ -1,7 +1,7 @@
 package com.example.cards.services;
 
 import com.example.cards.JwtTokenUtil;
-import com.example.cards.MyUserPrincipal;
+import com.example.cards.UserPrincipal;
 import com.example.cards.entities.User;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class AuthenticationService {
   }
 
   private String getToken(User user) {
-    String token = jwtTokenUtil.generateJwtToken(new MyUserPrincipal(user));
+    String token = jwtTokenUtil.generateJwtToken(new UserPrincipal(user));
     userService.updateUserLastLogin(user);
     return token;
   }

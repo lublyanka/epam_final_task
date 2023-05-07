@@ -1,6 +1,6 @@
 package com.example.cards.services;
 
-import com.example.cards.MyUserPrincipal;
+import com.example.cards.UserPrincipal;
 import com.example.cards.entities.User;
 import com.example.cards.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,6 @@ public class JwtUserDetailsService implements UserDetailsService {
     if (user == null) {
       throw new UsernameNotFoundException(username);
     }
-    return new MyUserPrincipal(user);
+    return new UserPrincipal(user);
   }
 }

@@ -26,7 +26,7 @@ async function addAccount() {
   const addAccountUrl = "/api/account/create";
   var name = document.getElementById("accountName").value;
   var number = document.getElementById("number").value;
-  var currency = document.getElementById("currency").value;
+  var currency = document.getElementById("currencySelect").value;
   var data = {
     name: name,
     number: number,
@@ -50,7 +50,7 @@ async function addAccount() {
 }
 
 function check() {
-  const { accountName, number, currency } = document.getElementById("account-creation");
+  const { accountName, number, currencySelect } = document.getElementById("account-creation");
 
   function isValidTextString(str) {
     // Allow letters, spaces, apostrophes, and hyphens, as well as Cyrillic and Spanish characters
@@ -59,7 +59,7 @@ function check() {
 
   const isValidName = isValidTextString(accountName.value);
   const isValidNumber = /^\d{5,20}$/.test(number.value);
-  const isValidCurrency = /^[A-Z]{3}$/.test(currency.value);
+  const isValidCurrency = /^[A-Z]{3}$/.test(currencySelect.value);
 
 
   if (!accountName.value) {
@@ -80,13 +80,13 @@ function check() {
     makeInputFieldValid(number);
   }
 
-  if (!currency.value) {
-    makeInputFieldInvalid(currency, translations["fieldRequiredError"]);
+  if (!currencySelect.value) {
+    makeInputFieldInvalid(currencySelect, translations["fieldRequiredError"]);
   } else if (!isValidCurrency) {
-    makeInputFieldInvalid(currency, translations["notCurrencyError"]);
+    makeInputFieldInvalid(currencySelect, translations["notCurrencyError"]);
   }
   else {
-    makeInputFieldValid(currency);
+    makeInputFieldValid(currencySelect);
   }
 
   const submitButton = document.getElementById('saveButton');

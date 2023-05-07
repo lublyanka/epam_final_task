@@ -25,6 +25,9 @@ The system administrator has the rights:
 - blocking / unblocking one of the user's accounts.
 
 
+#### Used color scheme
+https://coolors.co/palette/8ecae6-219ebc-023047-ffb703-fb8500
+
 ## Configuration
 ### Add environmental variables for [application.properties]
 ```
