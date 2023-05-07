@@ -5,7 +5,6 @@ import static com.example.cards.enums.Responses.USER_NOT_FOUND;
 
 import com.example.cards.entities.User;
 import com.example.cards.services.UserService;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

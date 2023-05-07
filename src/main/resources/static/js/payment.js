@@ -43,7 +43,8 @@ function insertPayment(jsonData) {
   if (jsonData.status === "SENT") {
     hideElement(sendPaymentDiv);
     var elem = document.getElementById("status");
-    elem.classList.add("blue-text text-darken-4")
+    elem.classList.add("blue-text");
+    elem.classList.add("text-darken-4");
   }
 
   if (isUserAdmin(decodedToken)) {

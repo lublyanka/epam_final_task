@@ -1,0 +1,29 @@
+<ul  th:fragment="collapsible_refill_account" id="collapsible" class="collapsible col s2">
+    <li>
+        <div data-i18n-key="refill" class="collapsible-header waves-effect waves-light"><i
+                class="material-icons">attach_money</i>Refill
+        </div>
+        <div class="collapsible-body">
+            <div class="row">
+                <div class="input-field col s12">
+                    <label data-i18n-key="refillsum" for="refillsum">Sum to refill</label>
+                    <input class="validate" data-length="10" id="refillsum" name="refillsum"
+                           type="text"
+                           required>
+                </div>
+                <div class="col s12">
+                    <a href="#!" data-i18n-key="refill" class="waves-effect waves-green btn"
+                       onclick="refill()">Refill</a>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
+
+<div th:fragment="currency_selector" class=" input-field col s3">
+    <select id="currency" name="currency" required="required" onchange="check()">
+        <option data-i18n-key="chooseOption" value="" disabled selected>Choose option</option>
+    </select>
+    <label data-i18n-key="currency" for="currency">Currency</label>
+    <span class="red-text" style="line-height: 1.5; font-size: 12px;"></span>
+</div>

@@ -12,6 +12,14 @@ import lombok.Setter;
 @Table(name = "accounts", schema = "public")
 public class Account {
 
+    @Column(name = "isblocked", columnDefinition = "boolean default false")
+    @Getter
+    @Setter
+    boolean isBlocked;
+    @Column(name = "isrequested", columnDefinition = "boolean default false")
+    @Getter
+    @Setter
+    boolean isRequested;
     @Id
     @Getter
     @Setter
@@ -42,20 +50,8 @@ public class Account {
     @Getter
     @Setter
     private Timestamp updatedOn;
-    @Column(name = "isblocked", columnDefinition = "boolean default false")
-    @Getter
-    @Setter
-    boolean isBlocked;
-    @Column(name = "isrequested", columnDefinition = "boolean default false")
-    @Getter
-    @Setter
-    boolean isRequested;
-
 
     public Account() {
     }
-
-   /* public Account(String currency) {
-        this.currencyCode = currency;
-    }*/
+    
 }

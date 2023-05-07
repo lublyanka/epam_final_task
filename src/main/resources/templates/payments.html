@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Payments</title>
+    <title data-i18n-key="payments-title">Payments</title>
     <div th:replace="~{fragments/head.html}"></div>
 
     <script src="/js/payments.js" type="text/javascript" defer></script>
@@ -16,43 +16,8 @@
     <div class="container">
         <div class="row">
             <div class="col s12">
-                <h4></h4>
-                <h4 class="col s9" lang="en"><span>Payments</span></h4>
-                <h4 class="col s9" lang="es"><span>Pagos</span></h4>
-                <h4 class="valign-wrapper right">
-                    <a data-i18n-key="addPayment" id="addPaymentButton" class="waves-effect waves-light btn modal-trigger" href="#addPayment"><i
-                            class="material-icons right">add_box</i>Create payment</a>
-                </h4>
 
-
-                <ul id="no-payments" class="col s12">
-                    <li lang="en">No payments available.</li>
-                    <li lang="es">No hay pagos disponibles.</li>
-                </ul>
-
-                <!-- list of accounts goes here -->
-                <table id="payments" class="striped" style="display:none">
-                    <thead>
-                    <tr>
-                        <th id="numberH">
-                            <a data-i18n-key="number" class="waves-effect waves-teal btn-flat">
-                                Number <i class="material-icons right">arrow_downward</i></a>
-                        </th>
-                        <th id="sumH"><a data-i18n-key="sum" class="waves-effect waves-teal btn-flat">
-                            Sum <i
-                                class="material-icons right blue-grey-text text-lighten-4">arrow_downward</i></a>
-                        </th>
-                        <th id="descH"><a data-i18n-key="desc" class="waves-effect waves-teal btn-flat">
-                            Description</a>
-                        </th>
-                        <th data-i18n-key="date">Date<i
-                                class="material-icons right blue-grey-text text-lighten-4">arrow_downward</i></th>
-                        <th id="statusH" data-i18n-key="status">Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                <div th:replace="~{fragments/tables::payments_table}"></div>
                 <div id="pagination"></div>
             </div>
         </div>
@@ -66,35 +31,39 @@
         <h4 data-i18n-key="addPayment">Create payment</h4>
         <div class="row">
             <div class="col s12">
-                <form>
+                <form id="payment-creation">
                     <div class="input-field col s12">
-                        <select class="validate" id="account" name="account" required>
+                        <select class="validate" id="account" name="account" required onchange="check()">
                             <option data-i18n-key="chooseOption" value="" disabled selected>Choose option</option>
                         </select>
                         <label data-i18n-key="account" for="account">Account</label>
                     </div>
                     <div class="input-field col s6">
                         <label data-i18n-key="number" for="number">Number</label>
-                        <input class="validate" data-length="255" id="number" name="number" type="text" required>
+                        <input data-length="255" id="number" name="number" type="number" required onchange="check()">
+                        <span class="helper-text" data-error=""></span>
                     </div>
                     <div class="input-field col s4">
                         <label data-i18n-key="sum" for="sum">Sum</label>
-                        <input class="validate" data-length="255" id="sum" name="sum" type="text" required>
+                        <input data-length="255" id="sum" name="sum" type="text" required onchange="check()">
+                        <span class="helper-text" data-error=""></span>
                     </div>
                     <div class="input-field col s2">
                         <label data-i18n-key="currency" for="currency">Currency</label>
-                        <input class="validate" data-length="255" id="currency" name="currency" type="text" required disabled>
+                        <input data-length="255" id="currency" name="currency" type="text" required disabled>
+                        <span class="helper-text" data-error=""></span>
                     </div>
                     <div class="input-field col s6">
-                        <label data-i18n-key="desc" for="desc">Decription</label>
-                        <input class="validate" data-length="255" id="desc" name="desc" type="text" required>
+                        <label data-i18n-key="desc" for="desc">Description</label>
+                        <input class="validate" data-length="255" id="desc" name="desc" type="text" onchange="check()">
+                        <span class="helper-text" data-error=""></span>
                     </div>
                 </form>
             </div>
         </div>
         <div class="col s12" id="response-message"></div>
         <div class="modal-footer">
-            <a href="#!" data-i18n-key="save" class="waves-effect waves-green btn"
+            <a href="#!" data-i18n-key="save" class="waves-effect waves-green btn" id="saveButton"
                onclick="addPayment()">Save</a>
             <a href="#!" data-i18n-key="cancel" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
         </div>

@@ -9,7 +9,6 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,9 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
   @Qualifier("passwordEncoder")
   private final PasswordEncoder passwordEncoder;
-
-  @Autowired private UserRepository userRepository;
-  @Autowired private JwtTokenUtil jwtTokenUtil;
+  private final UserRepository userRepository;
+  private final JwtTokenUtil jwtTokenUtil;
 
   public Page<User> getAllUsers(String sortBy, String sortOrder, int page, int size) {
     return userRepository.findAll(
@@ -46,55 +44,6 @@ public class UserService {
 
   public User getUserByTokenWithCountry(String token) {
     return userRepository.findByEmail(jwtTokenUtil.extractUsername(token));
-  }
-
-  public Optional<?> getValidationUserError(User user) {
-    if (user.getEmail() == null || user.getEmail().isEmpty()) {
-      return Optional.of(EMAIL_IS_EMPTY);
-    }
-    if (user.getPassword() == null || user.getPassword().isEmpty()) {
-      return Optional.of(PASSWORD_IS_EMPTY);
-    }
-    if (user.getSurname() == null
-        || user.getSurname().isEmpty()
-        || user.getName() == null
-        || user.getName().isEmpty()) {
-      return Optional.of(NAME_IS_EMPTY);
-    }
-
-    if (isTextStringInvalid(user.getName())) {
-      return Optional.of(NAME_IS_INVALID);
-    }
-
-    if (isTextStringInvalid(user.getSurname())) {
-      return Optional.of(SURNAME_IS_INVALID);
-    }
-
-    //Allow only digits, from 5 to 20 characters length
-    if (!user.getPhone().matches("^\\d{5,20}$")) {
-      return Optional.of(PHONE_IS_INVALID);
-    }
-
-    // Allow password not less than 8 character with  at least one digit, one uppercase letter, only in Latin
-    if (!user.getPassword().matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$")) {
-      return Optional.of(PASSWORD_IS_INVALID);
-    }
-
-    if (!user.getEmail().matches("^[\\w-+.]+@([\\w-]+.)+[\\w-]{2,4}$")) {
-      return Optional.of(EMAIL_IS_INVALID);
-    }
-
-    // TODO add check Data: more than 14 years old
-
-    // TODO add check Data format
-
-    return Optional.empty();
-  }
-
-  private boolean isTextStringInvalid(String str) {
-    // Allow letters, spaces, apostrophes, and hyphens, as well as Cyrillic and Spanish characters
-    return !str.matches(
-        "[a-zA-Z\\u00C0-\\u024F\\u0400-\\u04FF\\u0500-\\u052F\\u1E00-\\u1EFF\\s'’\\-]+");
   }
 
   @Transactional
@@ -179,5 +128,54 @@ public class UserService {
     user.setLastLogin(Timestamp.from(Instant.now()));
     userRepository.save(user);
     userRepository.flush();
+  }
+
+  public Optional<?> getValidationUserError(User user) {
+    if (user.getEmail() == null || user.getEmail().isEmpty()) {
+      return Optional.of(EMAIL_IS_EMPTY);
+    }
+    if (user.getPassword() == null || user.getPassword().isEmpty()) {
+      return Optional.of(PASSWORD_IS_EMPTY);
+    }
+    if (user.getSurname() == null
+            || user.getSurname().isEmpty()
+            || user.getName() == null
+            || user.getName().isEmpty()) {
+      return Optional.of(NAME_IS_EMPTY);
+    }
+
+    if (isTextStringInvalid(user.getName())) {
+      return Optional.of(NAME_IS_INVALID);
+    }
+
+    if (isTextStringInvalid(user.getSurname())) {
+      return Optional.of(SURNAME_IS_INVALID);
+    }
+
+    //Allow only digits, from 5 to 20 characters length
+    if (!user.getPhone().matches("^\\d{5,20}$")) {
+      return Optional.of(PHONE_IS_INVALID);
+    }
+
+    // Allow password not less than 8 character with  at least one digit, one uppercase letter, only in Latin
+    if (!user.getPassword().matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$")) {
+      return Optional.of(PASSWORD_IS_INVALID);
+    }
+
+    if (!user.getEmail().matches("^[\\w-+.]+@([\\w-]+.)+[\\w-]{2,4}$")) {
+      return Optional.of(EMAIL_IS_INVALID);
+    }
+
+    // TODO add check Data: more than 14 years old
+
+    // TODO add check Data format
+
+    return Optional.empty();
+  }
+
+  private boolean isTextStringInvalid(String str) {
+    // Allow letters, spaces, apostrophes, and hyphens, as well as Cyrillic and Spanish characters
+    return !str.matches(
+            "[a-zA-Z\\u00C0-\\u024F\\u0400-\\u04FF\\u0500-\\u052F\\u1E00-\\u1EFF\\s'’\\-]+");
   }
 }

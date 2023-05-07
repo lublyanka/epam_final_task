@@ -5,10 +5,15 @@ const urlAccountsAdminDash = "/api/admin/accounts/all?page=0&size=3";
 const urlPaymentsAdminDash = "/api/admin/payments/all?page=0&size=3";
 const urlUsersDash = "/api/admin/users/all?page=0&size=3";
 
+const addPaymentButton = document.getElementById("addPaymentButton");
 
 document.addEventListener('DOMContentLoaded', function () {
   loadProfile();
-  var decodedToken=  getDecodedToken(localStorage.token)
+  addShowAllLink("users");
+  addShowAllLink("payments");
+  hideElement(addPaymentButton);
+
+  var decodedToken = getDecodedToken(localStorage.token)
   if (isUserAdmin(decodedToken)) {
     loadAccounts(urlAccountsAdminDash);
     loadPayments(urlPaymentsAdminDash);

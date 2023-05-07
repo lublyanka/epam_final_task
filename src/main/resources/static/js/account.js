@@ -26,14 +26,15 @@ document.addEventListener('DOMContentLoaded', function () {
   loadPayments(urlPayments)
 
   var elems = document.querySelectorAll('.modal');
-  var modals = M.Modal.init(elems, options);
+  var modals = M.Modal.init(elems);
   elems = document.querySelectorAll('.collapsible');
-  var collapsibles = M.Collapsible.init(elems, options);
+  var collapsibles = M.Collapsible.init(elems);
 
   if (isUserAdmin(decodedToken)) {
     hideElement(collapsibleRefill);
     hideElement(cardActionsDiv);
     hideElement(addCardDiv);
+    hideElement(addPaymentButton);
     //urlBlock = `/api/admin/accounts/${accountId}/block`;
     urlUnblock = `/api/admin/accounts/${accountId}/unblock`;
     urlPayments = `/api/admin/accounts/${accountId}/payments`;
@@ -77,7 +78,7 @@ function insertAccount(jsonData) {
 }
 
 async function loadCards(url) {
-  const response = await await getGetResponse(url);
+  const response = await getGetResponse(url);
   if (response.status === 200) {
     var jsonData = await getJSONData(response);
     document.getElementById("cards").removeAttribute("style");

@@ -10,10 +10,7 @@ async function loadAccounts(url) {
     hideElement(ul);
     insertAccounts(accountJSONData);
     activatePagination(accountJSONData);
-  }
-  if (response.status === 500) {
-    window.location.href = "/Error500";
-  }
+  } else  insertTestErrorMessageFromResponse(response)
 
   function insertAccounts(jsonData) {
 
@@ -74,7 +71,9 @@ function insertAccountsSelector(jsonData) {
     let b = document.createElement("b");
     b.innerHTML = item.number;
     let div = document.createElement("div");
-    div.classList.add("left truncate valign-wrapper");
+    div.classList.add("left");
+    div.classList.add("truncate");
+    div.classList.add("valign-wrapper");
     div.appendChild(b);
     option.innerText = "(" + item.name + ")";
     option.appendChild(div);

@@ -12,10 +12,10 @@ document.addEventListener('DOMContentLoaded', function () {
     loadAccounts(urlAccounts);
     loadCurrencies();
     var elems = document.querySelectorAll('.modal');
-    var modals = M.Modal.init(elems, options);
+    var modals = M.Modal.init(elems);
     setTimeout(() => {
       elems = document.querySelectorAll('select');
-      var selects = M.FormSelect.init(elems, options);
+      var selects = M.FormSelect.init(elems);
     }, "1000");
   }
 });
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
 async function addAccount() {
 
   const addAccountUrl = "/api/account/create";
-  var name = document.getElementById("name").value;
+  var name = document.getElementById("accountName").value;
   var number = document.getElementById("number").value;
   var currency = document.getElementById("currency").value;
   var data = {
@@ -33,14 +33,7 @@ async function addAccount() {
     currency: currency,
   };
 
-  const response = await fetch(addAccountUrl, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': localStorage.token
-    },
-    body: JSON.stringify(data)
-  });
+  const response = getPutResponse(addAccountUrl, JSON.stringify(data));
 
   if (response.status === 200) {
     if (language === "es")
@@ -54,4 +47,50 @@ async function addAccount() {
   } else {
     await insertTestErrorMessageFromResponse(response);
   }
+}
+
+function check() {
+  const { accountName, number, currency } = document.getElementById("account-creation");
+
+  function isValidTextString(str) {
+    // Allow letters, spaces, apostrophes, and hyphens, as well as Cyrillic and Spanish characters
+    return String(str).match("^[a-zA-Z\\u00C0-\\u024F\\u0400-\\u04FF\\u0500-\\u052F\\u1E00-\\u1EFF\\s'’\\-]+$") != null;
+  }
+
+  const isValidName = isValidTextString(accountName.value);
+  const isValidNumber = /^\d{5,20}$/.test(number.value);
+  const isValidCurrency = /^[A-Z]{3}$/.test(currency.value);
+
+
+  if (!accountName.value) {
+    makeInputFieldInvalid(accountName, translations["fieldRequiredError"]);
+  } else if (!isValidName) {
+    makeInputFieldInvalid(accountName, translations["onlyTextError"]);
+  }
+  else {
+    makeInputFieldValid(accountName);
+  }
+
+  if (!number.value) {
+    makeInputFieldInvalid(number, translations["fieldRequiredError"]);
+  } else if (!isValidNumber) {
+    makeInputFieldInvalid(number, translations["onlyNumbersError5-20"]);
+  }
+  else {
+    makeInputFieldValid(number);
+  }
+
+  if (!currency.value) {
+    makeInputFieldInvalid(currency, translations["fieldRequiredError"]);
+  } else if (!isValidCurrency) {
+    makeInputFieldInvalid(currency, translations["notCurrencyError"]);
+  }
+  else {
+    makeInputFieldValid(currency);
+  }
+
+  const submitButton = document.getElementById('saveButton');
+  if (!(isValidName && isValidNumber && isValidCurrency))
+    submitButton.classList.add("disabled");
+  else submitButton.classList.remove("disabled");
 }

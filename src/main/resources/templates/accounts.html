@@ -65,26 +65,25 @@
         <h4 data-i18n-key="addAccount">Add account</h4>
         <div class="row">
             <div class="col s12">
-                <form>
+                <form id="account-creation">
                     <div class="input-field col s6">
-                        <label data-i18n-key="name" for="name">Name</label>
-                        <input class="validate" data-length="255" id="name" name="name" type="text" required>
+                        <label data-i18n-key="name" for="accountName">Name</label>
+                        <input class="" data-length="255" id="accountName" name="accountName" type="text" required="required"
+                               onchange="check()">
+                        <span class="helper-text" data-error=""></span>
                     </div>
-                    <div class="input-field col s6">
+                    <div class=" input-field col s6">
                         <label data-i18n-key="number" for="number">Number</label>
-                        <input class="validate" data-length="255" id="number" name="number" type="text" required>
+                        <input class="" data-length="255" id="number" name="number" type="text"
+                               required="required" onchange="check()">
+                        <span class="helper-text" data-error=""></span>
                     </div>
-                    <div class="input-field col s3">
-                        <select class="validate" id="currency" name="currency" required>
-                            <option data-i18n-key="chooseOption" value="" disabled selected>Choose option</option>
-                        </select>
-                        <label data-i18n-key="currency" for="currency">Currency</label>
-                    </div>
+                    <div th:replace="~{fragments/modals::currency_selector}"></div>
                 </form>
             </div>
             <div class="modal-footer">
                 <div class="col s8" id="response-message"></div>
-                <a href="#!" data-i18n-key="save" class="modal-close waves-effect waves-green btn"
+                <a href="#!" data-i18n-key="save" class="modal-close waves-effect waves-green btn" id="saveButton"
                    onclick="addAccount()">Save</a>
                 <a href="#!" data-i18n-key="cancel" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
             </div>

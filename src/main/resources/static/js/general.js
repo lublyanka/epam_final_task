@@ -123,6 +123,11 @@ function transformDataToTimestamp(data) {
 //Functions changing HTML 
 
 async function insertTestErrorMessageFromResponse(response) {
+    if (response.status === 500) {
+        window.location.href = "/Error500";
+        return;
+    }
+
     const text = await response.text();
     insertErrorMessage(text);
 }
@@ -147,13 +152,48 @@ function createAccountLink(id, number) {
 }
 
 function makeInputFieldValid(element) {
-    element.classList.remove("invalid");
-    element.classList.add("valid");
-
+    if (element.nodeName === "SELECT") {
+        let helper = element.parentElement.nextElementSibling.nextElementSibling
+        helper.innerHTML = ""
+    } else {
+        element.classList.remove("invalid");
+        element.classList.add("valid");
+    }
 }
 
 function makeInputFieldInvalid(element, dataErrorText) {
-    element.classList.add("invalid");
-    element.classList.remove("valid");
-    element.nextElementSibling.setAttribute("data-error", dataErrorText);
+    if (element.nodeName === "SELECT") {
+        let helper = element.parentElement.nextElementSibling.nextElementSibling
+        helper.innerHTML = dataErrorText;
+    }
+    else {
+        element.classList.add("invalid");
+        element.classList.remove("valid");
+        element.nextElementSibling.setAttribute("data-error", dataErrorText);
+    }
 }
+
+function addShowAllLink(keyLink) {
+    var usersBlock = document.getElementById(keyLink);
+    var h4links = usersBlock.getElementsByTagName("h4");
+    Array.prototype.forEach.call(h4links, elem => {
+      let link = document.createElement("a");
+      link.href = `/${keyLink}`;
+      link.setAttribute("data-i18n-key", "showAll");
+      //link.innerText ; 
+      elem.appendChild(link);
+    });
+  }
+
+  function registerRequestInterceptor() {
+    window.addEventListener('load', function () {
+      navigator
+        .serviceWorker
+        .register('js/request-interceptor.js')
+        .then(function (registration) {
+          console.log('Service worker registered with scope: ', registration.scope);
+        }, function (err) {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+    });
+  }

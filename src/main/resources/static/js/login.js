@@ -23,7 +23,8 @@ async function login() {
       setTimeout(() => {
             window.location.href = "/dashboard";
           }, "2000");
-    } else {
+    }     
+    else {
       await insertTestErrorMessageFromResponse(response);
     }
   }

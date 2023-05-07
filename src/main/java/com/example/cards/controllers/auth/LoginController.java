@@ -1,15 +1,14 @@
 package com.example.cards.controllers.auth;
 
+import static com.example.cards.enums.Responses.*;
+
 import com.example.cards.requests.LoginRequest;
 import com.example.cards.services.AuthenticationService;
 import jakarta.validation.Valid;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
-
-import static com.example.cards.enums.Responses.*;
 
 @RestController
 @RequestMapping("/api/auth")

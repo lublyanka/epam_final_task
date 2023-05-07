@@ -2,16 +2,13 @@ async function loadPayments(url) {
     const response = await getGetResponse(url);
     if (response.status === 200) {
         var jsonData = await getJSONData(response);
-        var table = document.getElementById("payments");
+        var table = document.getElementById("paymentsTable");
         table.removeAttribute("style");
         var ul = document.getElementById("no-payments");
         hideElement(ul);
         insertPayments(jsonData);
         activatePagination(jsonData);
-    }
-    if (response.status === 500) {
-        window.location.href = "/Error500";
-    }
+    } else insertTestErrorMessageFromResponse(response);
 
     function insertPayments(jsonData) {
 
@@ -32,8 +29,8 @@ async function loadPayments(url) {
             payment.push(link);
 
             payment.push(item.amount + " " + item.currency);
-            payment.push(item.description);
             payment.push(transformTimestampToData(item.updatedOn, "true"));
+            payment.push(item.description);
             payment.push(item.status);
 
             // Loop through the values and create table cells

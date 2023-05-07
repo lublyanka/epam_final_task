@@ -1,13 +1,10 @@
 package com.example.cards;
 
 import lombok.extern.apachecommons.CommonsLog;
-import lombok.extern.log4j.Log4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.StandardEnvironment;
-
-import java.util.Arrays;
 
 @SpringBootApplication
 @CommonsLog

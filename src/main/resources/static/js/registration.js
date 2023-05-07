@@ -49,7 +49,7 @@ function check() {
 
   function isValidTextString(str) {
     // Allow letters, spaces, apostrophes, and hyphens, as well as Cyrillic and Spanish characters
-    return String(str).match("[a-zA-Z\\u00C0-\\u024F\\u0400-\\u04FF\\u0500-\\u052F\\u1E00-\\u1EFF\\s'’\\-]+");
+    return String(str).match("^[a-zA-Z\\u00C0-\\u024F\\u0400-\\u04FF\\u0500-\\u052F\\u1E00-\\u1EFF\\s'’\\-]+$");
   }
 
   const passPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
@@ -78,6 +78,10 @@ function check() {
   }
   else {
     makeInputFieldValid(surname);
+  }
+
+  if (!email.value) {
+    makeInputFieldInvalid(email, translations["fieldRequiredError"]);
   }
 
   if (!password.value) {

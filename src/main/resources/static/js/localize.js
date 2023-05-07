@@ -1,4 +1,8 @@
-var languageGlobal = localStorage.language;
+var languageGlobal = localStorage.language || "en";;
+
+// Gets filled with active locale translations
+let translations = [];
+loadTraslations(languageGlobal);
 
 let dropDownOptions = {
     alignment: 'left',
@@ -17,16 +21,21 @@ let dropDownOptions = {
     onItemClick: null
 };
 
-// Gets filled with active locale translations
-let translations = {};
 
 
 document.addEventListener('DOMContentLoaded', function () {
     var elems = document.querySelectorAll('.dropdown-trigger');
     var instances = M.Dropdown.init(elems, dropDownOptions);
+    
     if (!languageGlobal != null)
         setLocale(languageGlobal);
+
 });
+
+async function loadTraslations(language) {
+    const newTranslations = await fetchTranslationsFor(language);
+    translations = newTranslations;
+}
 
 // Load translations for the given locale and translate
 // the page to this locale
@@ -45,9 +54,7 @@ async function setLocale(language) {
             node.style.display = 'unset';
         });
         localStorage.language = language;
-        const newTranslations =
-            await fetchTranslationsFor(language);
-        translations = newTranslations;
+        await loadTraslations(language);
         translatePage();
     }
 }

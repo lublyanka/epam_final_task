@@ -18,12 +18,10 @@ document.addEventListener('DOMContentLoaded', function () {
     loadPayments(urlPayments);
     loadAccountsWithStatus(urlAccounts);
     var elems = document.querySelectorAll('.modal');
-    var instances = M.Modal.init(elems, options);
-    // elems = document.querySelectorAll('.collapsible');
-    // var collapsibles = M.Collapsible.init(elems, options);
+    var instances = M.Modal.init(elems);
     setTimeout(() => {
       elems = document.querySelectorAll('select');
-      var selects = M.FormSelect.init(elems, options);
+      var selects = M.FormSelect.init(elems);
     }, "1000");
   }
 });
@@ -69,7 +67,60 @@ async function addPayment() {
     }, "2000");
     loadPayments(urlPayments);
     M.Modal.getInstance(document.getElementById("addPayment")).close();
+    //document.getElementById("payment-creation").reset();
   } else {
     await insertTestErrorMessageFromResponse(response);
   }
+}
+
+
+function check() {
+  const { account, sum, number, currency } = document.getElementById("payment-creation");
+
+  var isValidSum = /\d{1,8}\.{0,1}\d{1,2}$/.test(sum.value);
+  var isValidNumber = /^\d{5,20}$/.test(number.value);
+  var isAccountSelected = account.value
+
+  if (!sum.value) {
+    makeInputFieldInvalid(sum, translations["fieldRequiredError"]);
+  } else if (!isValidSum) {
+    makeInputFieldInvalid(sum, translations["sumNumberFormatError"]);
+  }
+  else {
+    makeInputFieldValid(sum);
+  }
+
+
+
+  if (!number.value) {
+    makeInputFieldInvalid(number, translations["fieldRequiredError"]);
+  } else if (!isValidNumber) {
+    makeInputFieldInvalid(number, translations["onlyNumbersError5-20"]);
+  }
+  else {
+    makeInputFieldValid(number);
+  }
+
+  setTimeout(() => {
+    var isValidCurrency = /^[A-Z]{3}$/.test(currency.value);
+    if (!currency.value) {
+      makeInputFieldInvalid(currency, translations["fieldRequiredError"]);
+    } else if (!isValidCurrency) {
+      makeInputFieldInvalid(currency, translations["notCurrencyError"]);
+    }
+    else {
+      makeInputFieldValid(currency);
+    }
+
+    const submitButton = document.getElementById('saveButton');
+    if (!(isAccountSelected && isValidNumber && isValidSum && isValidCurrency))
+      submitButton.classList.add("disabled");
+    else submitButton.classList.remove("disabled");
+
+  }, "400");
+
+
+
+
+
 }

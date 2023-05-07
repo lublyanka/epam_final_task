@@ -7,31 +7,22 @@ import static org.springframework.test.util.AssertionErrors.assertTrue;
 import com.example.cards.entities.Account;
 import com.example.cards.entities.CreditCard;
 import com.example.cards.repositories.CreditCardRepository;
-import com.example.cards.repositories.dict.CurrencyRepository;
 import com.example.cards.services.CreditCardService;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.ActiveProfiles;
 
-// @SpringBootTest
-// @ActiveProfiles("test")
 public class CreditCardServiceTest {
-  private final CurrencyRepository currencyRepository = mock(CurrencyRepository.class);
+  //private final CurrencyRepository currencyRepository = mock(CurrencyRepository.class);
   private final CreditCardRepository creditCardRepository = mock(CreditCardRepository.class);
-  private final CreditCardService creditCardService = new CreditCardService(creditCardRepository, currencyRepository);
+ // private final CreditCardService creditCardService = new CreditCardService(creditCardRepository, currencyRepository);
+ private final CreditCardService creditCardService = new CreditCardService(creditCardRepository);
 
   private static Collection<Object[]> provideCardNumbers() {
     return Arrays.asList(
@@ -58,17 +49,14 @@ public class CreditCardServiceTest {
 
   @Test
   public void testGetCreditCardReturnsEmptyOptionalWhenCreditCardNotFound() {
-    // Arrange
     String cardNumber = "1234567890123456";
     Account account = new Account();
     account.setId(UUID.randomUUID());
 
     Mockito.when(creditCardRepository.findById(cardNumber)).thenReturn(Optional.empty());
 
-    // Act
     Optional<CreditCard> result = creditCardService.getCreditCard(cardNumber, account);
 
-    // Assert
     assertTrue("Result should be empty", result.isEmpty());
   }
 

@@ -10,7 +10,7 @@ let unblockUserButton;
 
 document.addEventListener('DOMContentLoaded', function () {
   decodedToken = getDecodedToken(localStorage.token);
-  if (isUserAdmin(decodedToken))
+  if (isUserAdmin(decodedToken)&& window.location.pathname.split("/")[1] === "users")
     loadProfile(urlUser);
   else
     loadProfile(urlProfile);

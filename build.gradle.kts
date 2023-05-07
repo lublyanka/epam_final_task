@@ -27,6 +27,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(module = "junit")
         exclude(module = "junit-vintage-engine")
+        exclude(group="com.android")
         //exclude(module = "mockito-core")
     }
     testImplementation("org.junit.jupiter:junit-jupiter:5.4.2")
@@ -44,16 +45,22 @@ dependencies {
 
     annotationProcessor("org.projectlombok:lombok")
 
-    implementation("org.springframework.boot:spring-boot-starter-parent:3.0.5")
+    implementation("org.springframework.boot:spring-boot-starter-parent:3.0.5"){
+        exclude(group="com.android")
+        exclude(group="org.glassfish")
+        exclude(group="com.google")
+    }
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-rest")
-    implementation("org.springframework.boot:spring-boot-starter-mail")
+    //implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-web-services")
-    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
+    //implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-web"){
+        exclude(group="io.micrometer")
+    }
+    //implementation("org.springframework.boot:spring-boot-starter-web-services")
+    //implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
     implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
