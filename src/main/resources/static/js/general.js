@@ -32,13 +32,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
 //REST functions
 
-async function getGetResponse(url) {
+async function getGetResponse(url, body) {
     return await fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': localStorage.token
-        }
+        },
+        body: body
+    });
+}
+
+async function getPostResponse(url, bodyData) {
+    return await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.token
+        },
+        body: JSON.stringify(bodyData)
     });
 }
 
@@ -61,7 +73,7 @@ async function getJSONData(response) {
 }
 
 
-//User validation functions
+//Validation functions
 
 function isUserAdmin(decodedToken) {
     var roles = decodedToken.roles;
@@ -70,6 +82,25 @@ function isUserAdmin(decodedToken) {
         if (x.authority == "ROLE_ADMIN") isAdmin = true;
     });
     return isAdmin;
+}
+
+async function isValidCreditCardNumber(cardNumber){
+var urlCardValidation = "/api/card/isValid"
+
+    var response = await fetch(urlCardValidation, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.token
+        },
+        body: cardNumber
+    });
+    if (response.status === 200) {
+        var isValid = await response.text();
+        if (isValid === "true")
+            return true
+    }
+    return false;
 }
 
 //Token checker functions
@@ -177,23 +208,23 @@ function addShowAllLink(keyLink) {
     var usersBlock = document.getElementById(keyLink);
     var h4links = usersBlock.getElementsByTagName("h4");
     Array.prototype.forEach.call(h4links, elem => {
-      let link = document.createElement("a");
-      link.href = `/${keyLink}`;
-      link.setAttribute("data-i18n-key", "showAll");
-      //link.innerText ; 
-      elem.appendChild(link);
+        let link = document.createElement("a");
+        link.href = `/${keyLink}`;
+        link.setAttribute("data-i18n-key", "showAll");
+        //link.innerText ; 
+        elem.appendChild(link);
     });
-  }
+}
 
-  function registerRequestInterceptor() {
+function registerRequestInterceptor() {
     window.addEventListener('load', function () {
-      navigator
-        .serviceWorker
-        .register('js/request-interceptor.js')
-        .then(function (registration) {
-          console.log('Service worker registered with scope: ', registration.scope);
-        }, function (err) {
-          console.log('ServiceWorker registration failed: ', err);
-        });
+        navigator
+            .serviceWorker
+            .register('js/request-interceptor.js')
+            .then(function (registration) {
+                console.log('Service worker registered with scope: ', registration.scope);
+            }, function (err) {
+                console.log('ServiceWorker registration failed: ', err);
+            });
     });
-  }
+}

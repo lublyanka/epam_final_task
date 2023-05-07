@@ -220,3 +220,81 @@ async function refill() {
     M.toast({ html: text, displayLength: 3000 });
   }
 }
+
+
+async function check() {
+  const { cardTitleReg, cardNumberReg, cardTypeReg, monthReg, yearReg, cardHolderReg } = document.getElementById("card-creation");
+
+  function isValidTextString(str) {
+    // Allow letters, spaces, apostrophes, and hyphens, as well as Cyrillic and Spanish characters
+    return String(str).match("^[a-zA-Z\\u00C0-\\u024F\\u0400-\\u04FF\\u0500-\\u052F\\u1E00-\\u1EFF\\s'’\\- ]+$") != null;
+  }
+
+  const isValidName = isValidTextString(cardTitleReg.value);
+  const isValidHolder = isValidTextString(cardHolderReg.value);
+  const isValidMonth = /^\d{2}$/.test(monthReg.value);
+  const isValidYear = /^\d{4}$/.test(yearReg.value);
+  const isValidCardType = /^[a-zA-Z]{3,10}$/.test(cardTypeReg.value);
+  var isValidCreditCard = await isValidCreditCardNumber(cardNumberReg.value);
+
+
+  if (!cardTitleReg.value) {
+    makeInputFieldInvalid(cardTitleReg, translations["fieldRequiredError"]);
+  } else if (!isValidName) {
+    makeInputFieldInvalid(cardTitleReg, translations["onlyTextError"]);
+  }
+  else {
+    makeInputFieldValid(cardTitleReg);
+  }
+
+  if (!cardHolderReg.value) {
+    makeInputFieldInvalid(cardHolderReg, translations["fieldRequiredError"]);
+  } else if (!isValidHolder) {
+    makeInputFieldInvalid(cardHolderReg, translations["onlyTextError"]);
+  }
+  else {
+    makeInputFieldValid(cardHolderReg);
+  }
+
+
+  if (!cardNumberReg.value) {
+    makeInputFieldInvalid(cardNumberReg, translations["fieldRequiredError"]);
+  } else if (!isValidCreditCard) {
+    makeInputFieldInvalid(cardNumberReg, translations["wrongCreditCardFormat"]);
+  }
+  else {
+    makeInputFieldValid(cardNumberReg);
+  }
+
+  if (!cardTypeReg.value) {
+    makeInputFieldInvalid(cardTypeReg, translations["fieldRequiredError"]);
+  } else if (!isValidCardType) {
+    makeInputFieldInvalid(cardTypeReg, translations["wrongCardTypeError"]);
+  }
+  else {
+    makeInputFieldValid(cardTypeReg);
+  }
+
+  if (!monthReg.value) {
+    makeInputFieldInvalid(monthReg, translations["fieldRequiredError"]);
+  } else if (!isValidMonth) {
+    makeInputFieldInvalid(monthReg, translations["wrongMonthError"]);
+  }
+  else {
+    makeInputFieldValid(monthReg);
+  }
+
+  if (!yearReg.value) {
+    makeInputFieldInvalid(yearReg, translations["fieldRequiredError"]);
+  } else if (!isValidYear) {
+    makeInputFieldInvalid(yearReg, translations["wrongYearError"]);
+  }
+  else {
+    makeInputFieldValid(yearReg);
+  }
+
+  const submitButton = document.getElementById('saveButton');
+  if (!(isValidName && isValidHolder && isValidCreditCard && isValidMonth && isValidYear && isValidCardType))
+    submitButton.classList.add("disabled");
+  else submitButton.classList.remove("disabled");
+}

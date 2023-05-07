@@ -95,41 +95,41 @@
         <h4 data-i18n-key="addCard">Add card</h4>
         <div class="row">
             <div class="col s12">
-                <form>
+                <form id="card-creation">
                     <div class="input-field col s12">
                         <label data-i18n-key="name" for="cardTitleReg">Name</label>
-                        <input class="validate" data-length="255" id="cardTitleReg" name="cardTitleReg" type="text"
+                        <input class="" data-length="255" id="cardTitleReg" name="cardTitleReg" type="text"
                                required onchange="check()">
                         <span class="helper-text" data-error=""></span>
                     </div>
                     <div class="input-field col s6">
                         <label data-i18n-key="number" for="cardNumberReg">Number</label>
-                        <input class="validate" data-length="30" id="cardNumberReg" name="cardNumberReg" type="text"
+                        <input class="" data-length="30" id="cardNumberReg" name="cardNumberReg" type="text"
                                required onchange="check()">
                         <span class="helper-text" data-error=""></span>
                     </div>
                     <div class="input-field col s2">
                         <label data-i18n-key="cardType" for="cardTypeReg">Card Type</label>
-                        <input class="validate" data-length="10" id="cardTypeReg" name="cardTypeReg" type="text"
+                        <input class="" data-length="10" id="cardTypeReg" name="cardTypeReg" type="text"
                                required onchange="check()">
                         <span class="helper-text" data-error=""></span>
                     </div>
                     <div class="input-field col s1">
                         <label data-i18n-key="month" for="monthReg">Month</label>
-                        <input class="validate" data-length="2" id="monthReg" name="monthReg" type="text"
+                        <input class="" data-length="2" id="monthReg" name="monthReg" type="text"
                                required onchange="check()">
                         <span class="helper-text" data-error=""></span>
                     </div>
                     <div class="input-field col s1">
                         <label data-i18n-key="year" for="yearReg">Year</label>
-                        <input class="validate" data-length="4" id="yearReg" name="yearReg" type="text"
+                        <input class="" data-length="4" id="yearReg" name="yearReg" type="text"
                                required onchange="check()">
                         <span class="helper-text" data-error=""></span>
                     </div>
                     <div class="input-field col s6">
                         <label data-i18n-key="cardHolder" for="cardHolderReg">Card holder</label>
                         <input class="" data-length="255" id="cardHolderReg" name="cardHolderReg" type="text"
-                               required>
+                               required onchange="check()">
                         <span class="helper-text" data-error=""></span>
                     </div>
                 </form>
