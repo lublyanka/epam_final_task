@@ -12,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.SecurityContextRepository;
 
+/** The Web security config. */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -28,6 +29,13 @@ public class WebSecurityConfig {
   @Qualifier("securityContextRepository")
   private final SecurityContextRepository securityContextRepository;
 
+  /**
+   * Security filter chain.
+   *
+   * @param http the http
+   * @return the security filter chain
+   * @throws Exception the exception
+   */
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 

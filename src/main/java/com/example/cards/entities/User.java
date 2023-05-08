@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
+/** The User entity table. */
 @Entity
 @Table(name = "users", schema = "public")
 public class User implements Serializable {
@@ -84,15 +85,30 @@ public class User implements Serializable {
   /*  @OneToMany(cascade = CascadeType.ALL)
   private List<UserDocument> userDocuments = new ArrayList<>();*/
 
+  /**
+   * Gets id.
+   *
+   * @return the id
+   */
   public Long getId() {
     return id;
   }
 
+  /**
+   * Gets password.
+   *
+   * @return the password
+   */
   @JsonIgnore
   public String getPassword() {
     return this.password;
   }
 
+  /**
+   * Sets password.
+   *
+   * @param password the password
+   */
   @JsonProperty
   public void setPassword(String password) {
     this.password = password;
@@ -106,6 +122,15 @@ public class User implements Serializable {
     this.userDocuments = userDocuments;
   }*/
 
+  /**
+   * Is user an admin.
+   *
+   * @return the boolean
+   */
+  public boolean isAdmin() {
+    return this.role.equals("ADMIN");
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (obj == this) {
@@ -116,9 +141,5 @@ public class User implements Serializable {
     }
 
     return Objects.equals(this.getId(), user.getId());
-  }
-
-  public boolean isAdmin() {
-    return this.role.equals("ADMIN");
   }
 }

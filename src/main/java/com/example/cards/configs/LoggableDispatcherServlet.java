@@ -1,4 +1,4 @@
-package com.example.cards;
+package com.example.cards.configs;
 
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,9 +16,9 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.springframework.web.util.WebUtils;
 
+/** The Loggable dispatcher servlet. */
 @CommonsLog
 public class LoggableDispatcherServlet extends DispatcherServlet {
-
 
     @Override
     protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {

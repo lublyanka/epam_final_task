@@ -12,12 +12,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/** The Registration controller. */
 @RestController
 @RequestMapping("/api/auth")
 public class RegistrationController {
 
   @Autowired private UserService userService;
 
+  /**
+   * Register user response entity.
+   *
+   * @param user the user
+   * @return the response entity
+   */
   @PostMapping("/registration")
   public ResponseEntity<?> registerUser(@RequestBody User user) {
 

@@ -105,7 +105,7 @@ function insertCards(jsonData) {
 }
 
 async function addCard() {
-  const addCardUrl = "/api/account/addCard";
+  const addCardUrl = "/api/card/addCard";
   var cardNumber = document.getElementById("cardNumberReg").value;
   var cardType = document.getElementById("cardTypeReg").value;
   var month = document.getElementById("monthReg").value;
@@ -124,14 +124,8 @@ async function addCard() {
     cardTitle: cardTitle
   };
 
-  const response = await fetch(addCardUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': localStorage.token
-    },
-    body: JSON.stringify(data)
-  });
+
+    const response = await getPostResponse(addCardUrl, data);
 
   if (response.status === 200) {
     if (localStorage.language === "es")
@@ -235,7 +229,7 @@ async function check() {
   const isValidMonth = /^\d{2}$/.test(monthReg.value);
   const isValidYear = /^\d{4}$/.test(yearReg.value);
   const isValidCardType = /^[a-zA-Z]{3,10}$/.test(cardTypeReg.value);
-  var isValidCreditCard = await isValidCreditCardNumber(cardNumberReg.value);
+  var isValidCreditCard = cardNumberReg.value ? await isValidCreditCardNumber(cardNumberReg.value) : false;
 
 
   if (!cardTitleReg.value) {

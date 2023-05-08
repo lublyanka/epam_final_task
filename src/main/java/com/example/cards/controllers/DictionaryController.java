@@ -8,16 +8,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/** The Dictionary controller. */
 @RestController
 @RequestMapping("/api/dict")
-public class DictController {
+public class DictionaryController {
 
-    @Autowired
-    AccountService accountService;
+  @Autowired AccountService accountService;
 
-    //dict
-    @GetMapping("/currencies")
-    public List<Currency> getAllCurrencies() {
-        return accountService.getAllCurrencies();
-    }
+  /**
+   * Gets all currencies.
+   *
+   * @return the all currencies
+   */
+  @GetMapping("/currencies")
+  public List<Currency> getAllCurrencies() {
+    return accountService.getAllCurrencies();
+  }
 }

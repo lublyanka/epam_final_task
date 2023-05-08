@@ -24,6 +24,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/** The Payment service. */
 @Service
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer"})
 public class PaymentService {
@@ -32,12 +33,23 @@ public class PaymentService {
   @Autowired private AccountRepository accountRepository;
   @Autowired private UserService userService;
 
+  /**
+   * Gets payment by id.
+   *
+   * @param paymentId the payment id
+   * @return the payment
+   */
   public Optional<Payment> getById(UUID paymentId) {
     return paymentRepository.findById(paymentId);
   }
 
-
-
+  /**
+   * Gets payment.
+   *
+   * @param token the JWT token
+   * @param paymentId the payment id
+   * @return the payment
+   */
   @Transactional
   public Optional<Payment> getPayment(String token, UUID paymentId) {
     User user = userService.getUserByToken(token);
@@ -57,6 +69,16 @@ public class PaymentService {
     return Optional.empty();
   }
 
+  /**
+   * Gets all user payments.
+   *
+   * @param sortBy the sort by
+   * @param sortOrder the sort order
+   * @param page the page
+   * @param size the size of page
+   * @param token the JWT token
+   * @return the all user payments
+   */
   public Page<Payment> getAllUserPayments(
       String sortBy, String sortOrder, int page, int size, String token) {
     User user = userService.getUserByToken(token);
@@ -69,6 +91,16 @@ public class PaymentService {
     // paymentList.stream().sorted(getComparator(sortBy, sortOrder)).toList();
   }
 
+  /**
+   * Gets all account payments.
+   *
+   * @param sortBy the sort by
+   * @param sortOrder the sort order
+   * @param page the page
+   * @param size the size of page
+   * @param account the account
+   * @return the all account payments
+   */
   public Page<Payment> getAllAccountPayments(
       String sortBy, String sortOrder, int page, int size, Account account) {
     Page<Payment> pageResult =
@@ -80,6 +112,14 @@ public class PaymentService {
     // paymentList.stream().sorted(getComparator(sortBy, sortOrder)).toList();
   }
 
+  /**
+   * Save payment optional.
+   *
+   * @param paymentRequest the payment request
+   * @param token the JWT token
+   * @param account the account
+   * @return the payment
+   */
   public Optional<Payment> savePayment(
       PaymentRequest paymentRequest, String token, Account account) {
     if (isPaymentSumPositive(paymentRequest.getAmount(), account)) {
@@ -101,6 +141,13 @@ public class PaymentService {
     return Optional.empty();
   }
 
+  /**
+   * Send payment optional.
+   *
+   * @param token the JWT token
+   * @param paymentId the payment id
+   * @return the payment
+   */
   public Optional<?> sendPayment(String token, UUID paymentId) {
     User user = userService.getUserByToken(token);
     Optional<Payment> paymentOptional = getById(paymentId);
@@ -127,10 +174,24 @@ public class PaymentService {
     return Optional.empty();
   }
 
+  /**
+   * Is payment sum positive.
+   *
+   * @param sum the sum
+   * @param account the account
+   * @return the boolean
+   */
   public boolean isPaymentSumPositive(BigDecimal sum, Account account) {
     return account.getCurrentBalance().compareTo(sum) > 0;
   }
 
+  /**
+   * Gets comparator.
+   *
+   * @param sortBy the sort by
+   * @param sortOrder the sort order
+   * @return the comparator
+   */
   public Comparator<Payment> getComparator(String sortBy, String sortOrder) {
     Comparator<Payment> comparator =
         switch (sortBy) {
@@ -144,6 +205,15 @@ public class PaymentService {
     return comparator;
   }
 
+  /**
+   * Gets all payments.
+   *
+   * @param sortBy the sort by
+   * @param sortOrder the sort order
+   * @param page the page
+   * @param size the size of page
+   * @return the all payments
+   */
   @PreAuthorize("hasAuthority ('ROLE_ADMIN') ")
   public Page<Payment> getAllPayments(String sortBy, String sortOrder, int page, int size) {
     return paymentRepository.findAll(

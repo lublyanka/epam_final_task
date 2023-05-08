@@ -6,19 +6,21 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+/** The User account cross-table entity. */
 @Entity
-
 @Table(name = "user_accounts", schema = "public")
 public class UserAccount {
-    @EmbeddedId
-    @Getter
-    @Setter
-    private UserAccountKey userAccountKey;
+  @EmbeddedId @Getter @Setter private UserAccountKey userAccountKey;
 
-    public UserAccount(UserAccountKey userAccountKey) {
-        this.userAccountKey = userAccountKey;
-    }
+  /**
+   * Instantiates a new User account.
+   *
+   * @param userAccountKey the user account key
+   */
+  public UserAccount(UserAccountKey userAccountKey) {
+    this.userAccountKey = userAccountKey;
+  }
 
-    public UserAccount() {
-    }
+  /** Instantiates a new User account. */
+  public UserAccount() {}
 }

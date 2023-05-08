@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+/** The Admin controller. */
 @RestController
 @RequestMapping("/api/admin")
 @PreAuthorize("hasAuthority ('ROLE_ADMIN') ")
@@ -32,6 +33,17 @@ public class AdminController {
 
   @Autowired UserService userService;
 
+  /**
+   * Load accounts response entity.
+   *
+   * @param token the JWT token
+   * @param isBlocked whether the account is blocked
+   * @param sortBy the sort by
+   * @param sortOrder the sort order
+   * @param page the page
+   * @param size the size of page
+   * @return the response entity
+   */
   @GetMapping("/accounts/all")
   public ResponseEntity<?> loadAccounts(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
@@ -45,6 +57,17 @@ public class AdminController {
     else return ResponseEntity.noContent().build();
   }
 
+  /**
+   * Load payments response entity.
+   *
+   * @param token the JWT token
+   * @param isBlocked whether the account is blocked
+   * @param sortBy the sort by
+   * @param sortOrder the sort order
+   * @param page the page
+   * @param size the size of page
+   * @return the response entity
+   */
   @GetMapping("/payments/all")
   public ResponseEntity<?> loadPayments(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
@@ -58,6 +81,13 @@ public class AdminController {
     else return ResponseEntity.noContent().build();
   }
 
+  /**
+   * Unblock account response entity.
+   *
+   * @param token the JWT token
+   * @param accountId the account id
+   * @return the response entity
+   */
   @PutMapping("/accounts/{accountId}/unblock")
   public ResponseEntity<?> unblockAccount(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable UUID accountId) {
@@ -70,6 +100,16 @@ public class AdminController {
     }
   }
 
+  /**
+   * Load users response entity.
+   *
+   * @param token the JWT token
+   * @param sortBy the sort by
+   * @param sortOrder the sort order
+   * @param page the page
+   * @param size the size of page
+   * @return the response entity
+   */
   @GetMapping("/users/all")
   public ResponseEntity<?> loadUsers(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
@@ -82,16 +122,31 @@ public class AdminController {
     else return ResponseEntity.noContent().build();
   }
 
+  /**
+   * Load user by id response entity.
+   *
+   * @param token the JWT token
+   * @param userId the user id
+   * @return the response entity
+   */
   @GetMapping("/users/{userId}")
-  public ResponseEntity<?> loadUserById(  @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long userId) {
+  public ResponseEntity<?> loadUserById(
+      @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long userId) {
     Optional<User> user = userService.getUserById(userId);
     if (!(user.isEmpty())) return ResponseEntity.ok(user);
     else return ResponseEntity.notFound().build();
   }
 
+  /**
+   * Block user response entity.
+   *
+   * @param token the JWT token
+   * @param userId the user id
+   * @return the response entity
+   */
   @PutMapping("/users/{userId}/block")
   public ResponseEntity<?> blockUser(
-          @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long userId) {
+      @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long userId) {
 
     Optional<User> userOptional = userService.block(userId);
 
@@ -102,9 +157,16 @@ public class AdminController {
     }
   }
 
+  /**
+   * Unblock user response entity.
+   *
+   * @param token the JWT token
+   * @param userId the user id
+   * @return the response entity
+   */
   @PutMapping("/users/{userId}/unblock")
   public ResponseEntity<?> unblockUser(
-          @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long userId) {
+      @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long userId) {
 
     Optional<User> userOptional = userService.unblock(userId);
 

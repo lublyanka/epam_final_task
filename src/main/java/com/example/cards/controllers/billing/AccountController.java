@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/** The Account controller. */
 @RestController
 @RequestMapping("/api/account")
 public class AccountController {
@@ -27,6 +28,17 @@ public class AccountController {
   @Autowired private PaymentService paymentService;
   @Autowired private CreditCardService creditCardService;
 
+  /**
+   * Load user accounts response entity.
+   *
+   * @param token the JWT token
+   * @param isBlocked the is blocked
+   * @param sortBy the sort by
+   * @param sortOrder the sort order
+   * @param page the page
+   * @param size the size of page
+   * @return the response entity
+   */
   @GetMapping("/all")
   public ResponseEntity<?> loadUserAccounts(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
@@ -41,6 +53,13 @@ public class AccountController {
     else return ResponseEntity.noContent().build();
   }
 
+  /**
+   * Load account by id response entity.
+   *
+   * @param token the JWT token
+   * @param accountId the account id
+   * @return the response entity
+   */
   @GetMapping("/{accountId}")
   public ResponseEntity<?> loadAccountById(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable UUID accountId) {
@@ -51,6 +70,13 @@ public class AccountController {
     return ACCOUNT_DOES_NOT_EXIST;
   }
 
+  /**
+   * Block account response entity.
+   *
+   * @param token the JWY token
+   * @param accountId the account id
+   * @return the response entity
+   */
   @PutMapping("/{accountId}/block")
   public ResponseEntity<?> blockAccount(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable UUID accountId) {
@@ -64,7 +90,13 @@ public class AccountController {
     }
   }
 
-  // TODO rewrite to block request
+  /**
+   * Unblock account response entity.
+   *
+   * @param token the JWT token
+   * @param accountId the account id
+   * @return the response entity
+   */
   @PutMapping("/{accountId}/unblock")
   public ResponseEntity<?> unblockAccount(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable UUID accountId) {
@@ -77,6 +109,13 @@ public class AccountController {
     }
   }
 
+  /**
+   * Load account credit cards response entity.
+   *
+   * @param token the JWT token
+   * @param accountId the account id
+   * @return the response entity
+   */
   @GetMapping("/{accountId}/cards")
   public ResponseEntity<?> loadAccountCreditCards(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable UUID accountId) {
@@ -95,6 +134,14 @@ public class AccountController {
     return ACCOUNT_DOES_NOT_EXIST;
   }
 
+  /**
+   * Load credit card response entity.
+   *
+   * @param token the JWT token
+   * @param accountId the account id
+   * @param cardNumber the card number
+   * @return the response entity
+   */
   @GetMapping("/{accountId}/{cardNumber}")
   public ResponseEntity<?> loadCreditCard(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
@@ -114,6 +161,17 @@ public class AccountController {
     } else return ACCOUNT_DOES_NOT_EXIST;
   }
 
+  /**
+   * Load account payments response entity.
+   *
+   * @param token the JWT token
+   * @param sortBy the sort by
+   * @param sortOrder the sort order
+   * @param page the page
+   * @param size the size of page
+   * @param accountId the account id
+   * @return the response entity
+   */
   @GetMapping("/{accountId}/payments")
   public ResponseEntity<?> loadAccountPayments(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
@@ -133,6 +191,14 @@ public class AccountController {
     return ACCOUNT_DOES_NOT_EXIST;
   }
 
+  /**
+   * Replenish account response entity.
+   *
+   * @param token the JWT token
+   * @param accountId the account id
+   * @param amountStr the amount to refill in String format
+   * @return the response entity
+   */
   @PostMapping("/{accountId}/refill")
   public ResponseEntity<?> replenishAccount(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
@@ -152,6 +218,13 @@ public class AccountController {
     }
   }
 
+  /**
+   * Create account response entity.
+   *
+   * @param token the JWT token
+   * @param account the account
+   * @return the response entity
+   */
   @PutMapping("/create")
   public ResponseEntity<?> createAccount(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody Account account) {
@@ -160,22 +233,5 @@ public class AccountController {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Currency code does not exist.");
 
     return ResponseEntity.ok(accountService.saveAccount(account, token));
-  }
-
-  @PostMapping("/addCard")
-  public ResponseEntity<?> addCreditCard(
-      @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody CreditCard creditCard) {
-    Optional<Account> accountOptional =
-        accountService.getOptionalAccount(token, creditCard.getAccountId());
-
-    if (accountOptional.isEmpty()) {
-      return ACCOUNT_DOES_NOT_EXIST;
-    }
-
-    if (!creditCardService.isValidCreditCardNumber(creditCard.getCardNumber()))
-      return INVALID_CREDIT_CARD_NUMBER;
-
-    creditCard = creditCardService.saveCreditCard(creditCard, accountOptional.get());
-    return ResponseEntity.ok(creditCard);
   }
 }

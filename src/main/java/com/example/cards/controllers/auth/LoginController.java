@@ -10,21 +10,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/** The Login controller. */
 @RestController
 @RequestMapping("/api/auth")
 public class LoginController {
 
-
   @Autowired private AuthenticationService authenticationService;
 
+  /**
+   * Authenticate user response entity.
+   *
+   * @param loginRequest the login request with email and password
+   * @return the response entity
+   */
   @PostMapping("/login")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
     String email = loginRequest.getEmail();
     String password = loginRequest.getPassword();
 
-    if (authenticationService.isRequestEmpty(email, password))
-        return REQUIRED_FIELDS_ARE_EMPTY;
+    if (authenticationService.isRequestEmpty(email, password)) return REQUIRED_FIELDS_ARE_EMPTY;
 
     Optional<?> user = authenticationService.isUserValid(password, email);
     if (user.isEmpty()) return INVALID_EMAIL_OR_PASSWORD;
@@ -34,6 +39,4 @@ public class LoginController {
 
     return ResponseEntity.ok(token);
   }
-
-
 }

@@ -8,14 +8,19 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/** The Credit card service. */
 @Service
 @RequiredArgsConstructor
 public class CreditCardService {
 
   private final CreditCardRepository creditCardRepository;
 
-  //private final CurrencyRepository currencyRepository;
-
+  /**
+   * Gets credit cards.
+   *
+   * @param account the account
+   * @return the credit cards
+   */
   public List<CreditCard> getCreditCards(Account account) {
     List<CreditCard> creditCards = creditCardRepository.findAllByAccount(account);
     // TODO here should be another way of doing it. maybe initialize it in constructor??
@@ -28,6 +33,13 @@ public class CreditCardService {
     return creditCards;
   }
 
+  /**
+   * Gets credit card.
+   *
+   * @param cardNumber the card number
+   * @param account the account
+   * @return the credit card
+   */
   public Optional<CreditCard> getCreditCard(String cardNumber, Account account) {
     Optional<CreditCard> creditCardOptional = creditCardRepository.findById(cardNumber);
     if (creditCardOptional.isPresent()) {
@@ -41,6 +53,13 @@ public class CreditCardService {
     return Optional.empty();
   }
 
+  /**
+   * Save credit card.
+   *
+   * @param creditCard the credit card
+   * @param account the account
+   * @return the credit card
+   */
   public CreditCard saveCreditCard(CreditCard creditCard, Account account) {
     creditCard.setAccount(account);
     creditCard.setCardHolder(creditCard.getCardHolder().strip());
@@ -51,6 +70,12 @@ public class CreditCardService {
     return creditCardSaved;
   }
 
+  /**
+   * Is valid credit card number.
+   *
+   * @param creditCardNumber the credit card number
+   * @return the boolean
+   */
   public boolean isValidCreditCardNumber(String creditCardNumber) {
     // Strip any whitespace or dashes from the credit card number
     String strippedCreditCardNumber = creditCardNumber.replaceAll("[\\s-]+", "");

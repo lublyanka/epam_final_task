@@ -1,26 +1,29 @@
 package com.example.cards.requests;
 
-import com.example.cards.repositories.UserRepository;
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.beans.factory.annotation.Autowired;
 
+/** The type Login request. */
 public class LoginRequest {
 
-    @Autowired
-    private UserRepository userRepository;
+  @NotBlank private String email;
 
-    @NotBlank
-    private String email;
+  @NotBlank private String password;
 
-    @NotBlank
-    private String password;
+  /**
+   * Gets email.
+   *
+   * @return the email
+   */
+  public String getEmail() {
+    return email;
+  }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
+  /**
+   * Gets password.
+   *
+   * @return the password
+   */
+  public String getPassword() {
+    return password;
+  }
 }

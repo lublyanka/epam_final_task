@@ -7,6 +7,9 @@ import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * The Credit card entity table.
+ */
 @Entity
 @Table(name = "credit_cards", schema = "public")
 public class CreditCard {
@@ -54,8 +57,13 @@ public class CreditCard {
     @Setter
     private UUID accountId;
 
-    @JsonIgnore
-    public Account getAccount() {
+  /**
+   * Gets account.
+   *
+   * @return the account
+   */
+  @JsonIgnore
+  public Account getAccount() {
         return account;
     }
 

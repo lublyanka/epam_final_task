@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
+/** The Payment entity table. */
 @Entity
 @Table(name = "payments", schema = "public")
 public class Payment {

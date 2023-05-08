@@ -2,7 +2,7 @@ package com.example.cards.services;
 
 import static com.example.cards.enums.Responses.*;
 
-import com.example.cards.JwtTokenUtil;
+import com.example.cards.utils.JwtTokenUtil;
 import com.example.cards.entities.User;
 import com.example.cards.repositories.UserRepository;
 import java.sql.Timestamp;
