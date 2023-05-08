@@ -1,3 +1,4 @@
+/*
 package com.example.cards.entities;
 
 import jakarta.persistence.*;
@@ -40,3 +41,4 @@ public class Invoice {
     }
 
 }
+*/

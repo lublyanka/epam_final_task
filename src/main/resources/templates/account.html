@@ -2,65 +2,48 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title id="account-title"></title>
-    <div th:replace="fragments/head.html"></div>
+    <title data-i18n-key="account">Account</title>
+    <div th:replace="~{fragments/head.html}"></div>
     <script src="/js/account.js" type="text/javascript"></script>
+    <script src="/js/loadPayments.js" type="text/javascript"></script>
 </head>
 <body>
-<div th:replace="fragments/header"></div>
+<div th:replace="~{fragments/base::navbar}"></div>
 <main>
     <div class="container">
         <div class="row account">
             <div class="col s12">
-                <div class="col s12">
-                    <div class="col s9">
-                        <h3 id="number"></h3>
-
-                    </div>
-                    <div class="valign-wrapper right" id="blockAccount">
-                        <h3><a data-i18n-key="block" class="waves-effect waves-light btn modal-trigger orange darken-1"
-                               href="#block"><i
-                                class="material-icons right">block</i>Block</a></h3>
-                    </div>
-                    <div class="valign-wrapper right" id="unblockAccount" style="display:none">
-                        <h3><a data-i18n-key="unblock" class="waves-effect waves-light btn darken-1"
-                               onclick="unblockAccount()"><i
-                                class="material-icons right">send</i>Unblock</a></h3>
-                    </div>
+                <div class="col s10">
+                    <h3><span data-i18n-key="account">Account </span>
+                        <span> № </span>
+                        <span id="number"></span></h3>
+                    <hr>
                 </div>
-                <div class="col s12">
-                    <div class="col s2">
-                        <span id="c-balance" class="blue-text text-darken-4"></span>
-                    </div>
-                    <div data-i18n-key="lastChange" class="col s9 right-align blue-grey-text text-darken-1"></div>
-                    <div class="col s1 right-align blue-grey-text text-darken-1" id="updatedOn"></div>
+                <div class="valign-wrapper right" id="blockAccount">
+                    <h3><a data-i18n-key="block" class="waves-effect waves-light btn modal-trigger orange darken-1"
+                           href="#block">
+                        <i class="material-icons right">block</i>Block</a></h3>
                 </div>
-                <div class="col s12">
-                    <div class="col s10"><h6 id="name"></h6></div>
+                <div class="valign-wrapper right" id="unblockAccount" style="display:none">
+                    <h3><a data-i18n-key="unblock" class="waves-effect waves-light btn modal-trigger darken-1"
+                           href="#unblock">
+                        <i class="material-icons right">send</i>Unblock</a></h3>
+                </div>
+                <div data-i18n-key="requestSent" id="requestSent" class="col s12 orange darken-1 right-align"
+                     style="display:none">Request sent
+                </div>
 
 
-                    <ul id="collapsible" class="collapsible col s2">
-                        <li>
-                            <div data-i18n-key="refill" class="collapsible-header waves-effect waves-light"><i
-                                    class="material-icons">attach_money</i>Refill
-                            </div>
-                            <div class="collapsible-body">
-                                <div class="row">
-                                    <div class="input-field col s12">
-                                        <label data-i18n-key="refillsum" for="refillsum">Sum to refill</label>
-                                        <input class="validate" data-length="10" id="refillsum" name="refillsum"
-                                               type="text"
-                                               required>
-                                    </div>
-                                    <div class="col s12">
-                                        <a href="#!" data-i18n-key="refill" class="waves-effect waves-green btn"
-                                           onclick="refill()">Refill</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                <div class="col s9">
+                    <span data-i18n-key="c-balance">Current balance</span>
+                    <span> : </span>
+                    <span id="c-balance" class="blue-text text-darken-4"></span>
                 </div>
+                <span data-i18n-key="lastChange" class="col s3 right-align blue-grey-text text-darken-1"></span>
+                <span class="right right-align blue-grey-text text-darken-1" id="updatedOn"></span>
+                <div class="col s10"><h6 id="name"></h6></div>
+
+                <div th:replace="~{fragments/modals::collapsible_refill_account}">></div>
             </div>
         </div>
 
@@ -84,11 +67,11 @@
                             <div class="card-content white-text">
                                 <span class="card-title" id="cardTitle"></span>
                                 <div id="cardType" class="col s12 right-align"></div>
-                                <div id="cardNumber" class="col s10"></div>
+                                <div id="cardNumber" class="col s9"></div>
                                 <div id="dueDate" class="col s2 right-align"></div>
                                 <div id="cardHolder"></div>
                             </div>
-                            <div class="card-action">
+                            <div class="card-action" id="card-actions" style="display:none">
                                 <a href="#">Edit</a>
                                 <a class="modal-trigger" href="#modal1">Replace</a>
                             </div>
@@ -97,51 +80,64 @@
                 </div>
             </div>
         </div>
+
+        <div th:replace="~{fragments/tables::payments_table}">></div>
     </div>
 </main>
-<div th:replace="fragments/footer"></div>
+<div th:replace="~{fragments/base::footer}"></div>
 </body>
 
 <!-- Modal Structure -->
+<!--<div th:replace="~{fragments/modals::create_payment_modal}"></div>-->
+
 <div id="modal1" class="modal">
     <div class="modal-content">
         <h4 data-i18n-key="addCard">Add card</h4>
         <div class="row">
             <div class="col s12">
-                <form>
+                <form id="card-creation">
                     <div class="input-field col s12">
                         <label data-i18n-key="name" for="cardTitleReg">Name</label>
-                        <input class="validate" data-length="255" id="cardTitleReg" name="cardTitleReg" type="text"
-                               required>
+                        <input class="" data-length="255" id="cardTitleReg" name="cardTitleReg" type="text"
+                               required onchange="check()">
+                        <span class="helper-text" data-error=""></span>
                     </div>
                     <div class="input-field col s6">
                         <label data-i18n-key="number" for="cardNumberReg">Number</label>
-                        <input class="validate" data-length="255" id="cardNumberReg" name="cardNumberReg" type="text"
-                               required>
+                        <input class="" data-length="30" id="cardNumberReg" name="cardNumberReg" type="text"
+                               required onchange="check()">
+                        <span class="helper-text" data-error=""></span>
                     </div>
                     <div class="input-field col s2">
                         <label data-i18n-key="cardType" for="cardTypeReg">Card Type</label>
-                        <input class="validate" data-length="3" id="cardTypeReg" name="cardTypeReg" type="text"
-                               required>
+                        <input class="" data-length="10" id="cardTypeReg" name="cardTypeReg" type="text"
+                               required onchange="check()">
+                        <span class="helper-text" data-error=""></span>
                     </div>
                     <div class="input-field col s1">
                         <label data-i18n-key="month" for="monthReg">Month</label>
-                        <input class="validate" data-length="2" id="monthReg" name="monthReg" type="text" required>
+                        <input class="" data-length="2" id="monthReg" name="monthReg" type="text"
+                               required onchange="check()">
+                        <span class="helper-text" data-error=""></span>
                     </div>
                     <div class="input-field col s1">
                         <label data-i18n-key="year" for="yearReg">Year</label>
-                        <input class="validate" data-length="4" id="yearReg" name="yearReg" type="text" required>
+                        <input class="" data-length="4" id="yearReg" name="yearReg" type="text"
+                               required onchange="check()">
+                        <span class="helper-text" data-error=""></span>
                     </div>
                     <div class="input-field col s6">
-                        <label data-i18n-key="cardHolder" for="cardHolderReg">Number</label>
-                        <input class="validate" data-length="255" id="cardHolderReg" name="cardHolderReg" type="text"
-                               required>
+                        <label data-i18n-key="cardHolder" for="cardHolderReg">Card holder</label>
+                        <input class="" data-length="255" id="cardHolderReg" name="cardHolderReg" type="text"
+                               required onchange="check()">
+                        <span class="helper-text" data-error=""></span>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <div class="col s8" id="response-message"></div>
-                <a href="#!" data-i18n-key="save" class="waves-effect waves-green btn" onclick="addCard()">Save</a>
+                <a href="#!" id="saveButton" data-i18n-key="save" class="waves-effect waves-green btn"
+                   onclick="addCard()">Save</a>
                 <a href="#!" data-i18n-key="cancel" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
             </div>
         </div>
@@ -154,6 +150,18 @@
         <p lang="es">¿Estás seguro de que quieres bloquear esta cuenta?</p>
         <div class="modal-footer">
             <a href="#!" data-i18n-key="block" class="waves-effect waves-green btn" onclick="blockAccount()">Block</a>
+            <a href="#!" data-i18n-key="cancel" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
+        </div>
+    </div>
+</div>
+
+<div id="unblock" class="modal">
+    <div class="modal-content">
+        <p lang="en">Are you sure, you want to unblock this account?</p>
+        <p lang="es">¿Estás seguro de que quieres desbloquear esta cuenta?</p>
+        <div class="modal-footer">
+            <a href="#!" data-i18n-key="unblock" class="modal-close waves-effect waves-green btn"
+               onclick="unblockAccount()">Unblock</a>
             <a href="#!" data-i18n-key="cancel" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
         </div>
     </div>

@@ -8,13 +8,15 @@ async function login() {
   };
 
   if (username && password) {
-    const response = await fetch(url, {
+    //await getPostResponse(url,data);
+    const response = await
+    fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
-    })
+    });
 
     if (response.status===200) {
       const token = await response.text();
@@ -23,14 +25,13 @@ async function login() {
       setTimeout(() => {
             window.location.href = "/dashboard";
           }, "2000");
-    } else {
-      const text = await response.text();
-      console.log(text);
-      document.getElementById('response-message').innerText = text;
+    }     
+    else {
+      await insertTestErrorMessageFromResponse(response);
     }
   }
   else {
-    document.getElementById('response-message').innerText = "Please fill in both fields.";
+    insertErrorMessage(translations["fieldsNotFilled"]);
     return;
   };
 };

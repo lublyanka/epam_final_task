@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Blue Card Vault</title>
-    <div th:replace="fragments/head.html"> </div>
+    <div th:replace="~{fragments/head.html}"> </div>
 </head>
 <body>
-<div th:replace="fragments/header"></div>
+<div th:replace="~{fragments/base::navbar}"></div>
 <main>
     <div class="img-container">
     <img alt="home_banner" class="responsive-img main-banner" src="images/home_banner.png">
@@ -20,6 +20,6 @@
     </button>
     </div>
 </main>
-<div th:replace="fragments/footer"></div>
+<div th:replace="~{fragments/base::footer}"></div>
 </body>
 </html>

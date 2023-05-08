@@ -67,7 +67,7 @@ function swapMessage() {
 
 // We need to make sure that the element at the passed index has a width set so we can use transitions
 function checkWidthSet(index, message) {
-  if (false == messageElements[index].style.width) {
+  if (false === messageElements[index].style.width) {
     messageElements[index].style.width = `${messageElements[index].clientWidth}px`;
   }
 }
@@ -75,7 +75,7 @@ function checkWidthSet(index, message) {
 // Return a new index to swap message in. Should not be the same as the last message type swapped
 function getNewSwapIndex() {
   let newMessageIndex = Math.floor(Math.random() * messages.length);
-  while (lastMessageType == newMessageIndex) {
+  while (lastMessageType === newMessageIndex) {
     newMessageIndex = Math.floor(Math.random() * messages.length);
   }
   return newMessageIndex;
@@ -89,7 +89,7 @@ function getNewMessage(toSwapIndex) {
   let newMessageIndex = Math.floor(Math.random() * messagesArray.length);
   let newMessage      = messagesArray[newMessageIndex];
   // let's make sure they aren't the same as the message already there
-  while (newMessage == previousMessage) {
+  while (newMessage === previousMessage) {
     newMessageIndex = Math.floor(Math.random() * messagesArray.length);
     newMessage      = messagesArray[newMessageIndex];
   }

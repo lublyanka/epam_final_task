@@ -5,27 +5,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
+/** The User entity table. */
 @Entity
 @Table(name = "users", schema = "public")
-public class User implements UserDetails, Serializable {
+public class User implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-  /*   @Column(name = "login", length = 15, nullable = false, unique = true)
-  private String login;*/
 
   @Column(name = "password", nullable = false)
   private String password;
@@ -72,87 +65,70 @@ public class User implements UserDetails, Serializable {
   @Setter
   private Timestamp lastLogin;
 
+  @Column() @Getter @Setter private Timestamp birthDate;
+
   @Column(name = "role", length = 10)
   @Getter
   @Setter
   private String role;
 
   @Column(name = "isblocked", columnDefinition = "boolean default false")
+  @Getter
+  @Setter
   private boolean isBlocked;
 
-  @OneToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "user_add_id")
-  private UserAddress userAddress;
+  @Getter @Setter @Column private String address;
 
-  @OneToMany(cascade = CascadeType.ALL)
-  private List<UserDocument> userDocuments = new ArrayList<>();
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+  private List<Payment> payments;
 
+  /*  @OneToMany(cascade = CascadeType.ALL)
+  private List<UserDocument> userDocuments = new ArrayList<>();*/
+
+  /**
+   * Gets id.
+   *
+   * @return the id
+   */
   public Long getId() {
     return id;
   }
 
-  @JsonIgnore
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    List<GrantedAuthority> authorities = new ArrayList<>();
-    authorities.add(new SimpleGrantedAuthority("ROLE_" + getRole()));
-    return authorities;
-  }
-
+  /**
+   * Gets password.
+   *
+   * @return the password
+   */
   @JsonIgnore
   public String getPassword() {
     return this.password;
   }
 
+  /**
+   * Sets password.
+   *
+   * @param password the password
+   */
   @JsonProperty
   public void setPassword(String password) {
     this.password = password;
   }
 
-  @Override
-  public String getUsername() {
-    return this.email;
-  }
-
-  @Override
-  public boolean isAccountNonExpired() {
-    return false;
-  }
-
-  @Override
-  public boolean isAccountNonLocked() {
-    return !this.isBlocked;
-  }
-
-  @Override
-  public boolean isCredentialsNonExpired() {
-    return false;
-  }
-
-  @Override
-  public boolean isEnabled() {
-    return !this.isBlocked;
-  }
-
-  @JsonIgnore
-  public void setBlocked(Boolean blocked) {
-    isBlocked = blocked;
-  }
-
-  public UserAddress getUserAddress() {
-    return userAddress;
-  }
-
-  public void setUserAddress(UserAddress userAddress) {
-    this.userAddress = userAddress;
-  }
-
-  public List<UserDocument> getUserDocuments() {
+  /*   public List<UserDocument> getUserDocuments() {
     return userDocuments;
   }
 
   public void setUserDocuments(List<UserDocument> userDocuments) {
     this.userDocuments = userDocuments;
+  }*/
+
+  /**
+   * Is user an admin.
+   *
+   * @return the boolean
+   */
+  public boolean isAdmin() {
+    return this.role.equals("ADMIN");
   }
 
   @Override

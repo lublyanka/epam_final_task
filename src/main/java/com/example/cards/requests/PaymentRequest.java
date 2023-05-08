@@ -8,34 +8,28 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/** The type Payment request. */
 public class PaymentRequest {
 
-    @Autowired
-    private CurrencyRepository currencyRepository;
+  @Autowired private CurrencyRepository currencyRepository;
 
-    @Getter
-    @Setter
-    private UUID accountId;
-    @Getter
-    @Setter
-    private PaymentStatus status;
-    @Getter
-    @Setter
-    private BigDecimal amount;
-    @Getter
-    @Setter
-    private String description;
-    @Getter
-    @Setter
-    private String currencyCode;
-    @Getter
-    @Setter
-    private Long userId;
+  @Getter @Setter private UUID accountId;
+  @Getter @Setter private PaymentStatus status;
+  @Getter @Setter private BigDecimal amount;
+  @Getter @Setter private String description;
+  @Getter @Setter private String currency;
+  @Getter @Setter private String number;
+  @Getter @Setter private Long userId;
 
-    public boolean isValid() {
-        return this.accountId != null &&
-                this.amount != null &&
-                this.amount.compareTo(BigDecimal.ZERO) > 0 &&
-                currencyRepository.existsById(this.getCurrencyCode());
-    }
+  /**
+   * Is payment valid.
+   *
+   * @return the boolean
+   */
+  public boolean isValid() {
+    return this.accountId != null
+        && this.number != null
+        && this.amount != null
+        && this.amount.compareTo(BigDecimal.ZERO) > 0;
+  }
 }

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>404 Not Found</title>
-    <div th:replace="fragments/head.html"></div>
+    <div th:replace="~{fragments/head.html}"></div>
     <link href="/static/css/404.css" rel="stylesheet" th:href="@{/css/404.css}" type="text/css">
 </head>
 <body>
-<div th:replace="fragments/header"></div>
+<div th:replace="~{fragments/base::navbar}"></div>
 <div  class="body">
 <div class="bubble"></div>
 <div class="bubble"></div>
@@ -26,7 +26,7 @@
 </div>
 </div>
 
-<div th:replace="fragments/footer"></div>
+<div th:replace="~{fragments/base::footer}"></div>
 </body>
 <!--add to head or not
 <link href='https://fonts.googleapis.com/css?family=Nunito:400,700' rel='stylesheet' type='text/css'>

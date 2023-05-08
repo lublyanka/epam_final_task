@@ -4,27 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <title data-i18n-key="login-title">Login</title>
-    <div th:replace="fragments/head.html"> </div>
+    <div th:replace="~{fragments/head.html}"> </div>
     <link href="/static/css/login.css" rel="stylesheet" th:href="@{/css/login.css}" type="text/css">
     <script src="/js/login.js" type="text/javascript"></script>
 </head>
 <body>
-<div th:replace="fragments/header"></div>
+<div th:replace="~{fragments/base::navbar}"></div>
 <main>
     <div class="container container-log">
         <div class="screen row">
             <div class="screen__content col s3">
-                <form class="login" method="post" th:action="@{/api/auth/login}">
+                <form class="login" target="_self" autocomplete="on">
                     <div class="input-field">
                         <i class="material-icons prefix">person_outline</i>
                         <label data-i18n-key="email" for="username">Email</label>
-                        <input id="username" name="username" type="text">
+                        <input id="username" name="username" type="email" class="validate" required="required">
                     </div>
                     <div class="input-field">
                         <i class="material-icons prefix">lock_outline</i>
                         <label data-i18n-key="password" for="password">Password</label>
-                        <input  id="password" name="password"
-                               type="password">
+                        <input  id="password" name="password" type="password" class="validate" required="required">
                     </div>
                     <button lang="en" class="btn-small waves-effect waves-light" name="action" onclick="login()" type="submit">
                         Log In
@@ -51,7 +50,6 @@
                         Inscribir
                         <i class="material-icons right">chevron_right</i>
                     </button>
-                    <div id="response-message"></div>
                 </div>
             </div>
             <div class="screen__background">
@@ -61,10 +59,11 @@
                 <span class="screen__background__shape screen__background__shape1"></span>
             </div>
         </div>
+        <div id="response-message"></div>
     </div>
 </main>
-<div th:replace="fragments/footer"></div>
-<div th:replace="fragments/button.html"> </div>
+<div th:replace="~{fragments/base::footer}"></div>
+<div th:replace="~{fragments/button.html}"> </div>
 </body>
 
 

@@ -3,48 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <title data-i18n-key="reg-title">Registration</title>
-    <div th:replace="fragments/head.html"></div>
+    <div th:replace="~{fragments/head.html}"></div>
     <script defer src="js/registration.js"></script>
 </head>
 <body>
-<div th:replace="fragments/header"></div>
+<div th:replace="~{fragments/base::navbar}"></div>
 <main>
     <div class="row">
         <form class="col s6 offset-s3" id="registration-form">
             <h2 lang="en">Registration Form</h2>
             <h2 lang="es">Formulario de inscripción</h2>
-            <div class="input-field col s12">
-                <label data-i18n-key="name" for="name">Name</label>
-                <input class="validate" id="name" name="name" required type="text"><br>
+            <div class="input-field col s6">
+                <label data-i18n-key="name" for="firstname">Name</label>
+                <input class="" data-length="255" required="required" id="firstname" name="firstname" type="text"
+                       onchange="check()">
+                <span class="helper-text" data-error=""></span>
             </div>
-            <div class="input-field col s12">
+            <div class="input-field col s6">
                 <label data-i18n-key="surname" for="surname">Surname</label>
-                <input class="validate" id="surname" name="surname" required type="text"><br>
+                <input class="" data-length="255" required="required" id="surname" name="surname" type="text"
+                       onchange="check()">
+                <span class="helper-text" data-error=""></span>
             </div>
-            <div class="input-field col s12">
+            <div class="input-field col s6">
                 <label data-i18n-key="email" for="email">Email</label>
-                <input class="validate" id="email" name="email" required type="email"><br>
+                <input class="validate" data-length="255" required="required" id="email" name="email" type="email"
+                       onchange="check()">
+                <span class="helper-text" data-error=""></span>
             </div>
-            <div class="input-field col s12" >
+            <div class="input-field col s6">
                 <label data-i18n-key="password" for="password">Password</label>
-                <input class="validate" id="password" name="password" required type="password"><br>
+                <input class="" required="required" id="password" name="password" type="text"
+                       onchange="check()">
+                <span class="helper-text" data-error=""></span>
             </div>
-            <div class="input-field col s12">
+            <div class="input-field col s6">
+                <label data-i18n-key="birthDate" for="birthDate">Date of birth</label>
+                <input class="validate datepicker" required="required" id="birthDate" name="birthDate" type="text"
+                       onchange="check()">
+                <span class="helper-text" data-error=""></span>
+            </div>
+            <div class="input-field col s6">
                 <label data-i18n-key="phone" for="phone">Phone Number</label>
-                <input class="validate" id="phone" name="phone" required type="tel"><br>
+                <input class="validate" data-length="20" required="required" id="phone" name="phone" type="tel"
+                       onchange="check()">
+                <span class="helper-text" data-error=""></span>
             </div>
             <div class="col s3">
-                <button data-i18n-key="register" class="btn waves-effect waves-light" name="action" type="submit"
+                <button data-i18n-key="register" class="btn waves-effect waves-light" name="register"
+                        id="registerButton" type="submit"
                         onclick="registerUser()">Register
                     <i class="material-icons right">send</i>
                 </button>
             </div>
-            <div class="col s9" id="response-message"></div>
-        </form>
 
+        </form>
+        <div class="col s6 offset-s3" id="response-message"></div>
     </div>
 </main>
-<div th:replace="fragments/footer"></div>
-<div th:replace="fragments/button.html"></div>
+<div th:replace="~{fragments/base::footer}"></div>
+<div th:replace="~{fragments/button.html}"></div>
 </body>
 </html>

@@ -25,23 +25,14 @@ The system administrator has the rights:
 - blocking / unblocking one of the user's accounts.
 
 
+#### Used color scheme
+https://coolors.co/palette/8ecae6-219ebc-023047-ffb703-fb8500
+
 ## Configuration
-### Add [application.properties]
+### Add environmental variables for [application.properties]
 ```
-server.port=8080
-
-jwt.secret= *put here real jwt.token*
-
-spring.datasource.url=jdbc:postgresql: *put here real db host+name*
-spring.datasource.driverClassName=org.postgresql.Driver
-spring.datasource.username= *put here real db user*
-spring.datasource.password= *put here real db pass*
-
-spring.postgres.console.enabled=true
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-spring.jpa.hibernate.type_contributors=org.hibernate.type.contributor.BasicTypeContributor
-
-
-org.springframework.web.filter.CommonsRequestLoggingFilter=DEBUG
+ENV_DB_URL
+ENV_DB_USER
+ENV_JWT
+ENV_DB_PAS
 ```

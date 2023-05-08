@@ -1,45 +1,96 @@
 const urlAccounts = "/api/account/all";
+const urlAccountsAdmin = "/api/admin/accounts/all";
 
 
 document.addEventListener('DOMContentLoaded', function () {
-  loadAccounts(urlAccounts);
-  var elems = document.querySelectorAll('.modal');
-  var instances = M.Modal.init(elems, options);
+  var decodedToken = getDecodedToken(localStorage.token)
+  if (isUserAdmin(decodedToken)) {
+    loadAccounts(urlAccountsAdmin);
+    hideElement(document.getElementById("addAccountButton"));
+  }
+  else {
+    loadAccounts(urlAccounts);
+    loadCurrencies();
+    var elems = document.querySelectorAll('.modal');
+    var modals = M.Modal.init(elems);
+    setTimeout(() => {
+      elems = document.querySelectorAll('select');
+      var selects = M.FormSelect.init(elems);
+    }, "1000");
+  }
 });
 
 
 async function addAccount() {
 
-  const addAccountUrl="/api/account/create";
-  var name = document.getElementById("name").value;
+  const addAccountUrl = "/api/account/create";
+  var name = document.getElementById("accountName").value;
   var number = document.getElementById("number").value;
-  var currency = document.getElementById("currency").value;
+  var currency = document.getElementById("currencySelect").value;
   var data = {
     name: name,
     number: number,
     currency: currency,
   };
 
-  const response = await fetch(addAccountUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': localStorage.token
-    },
-    body: JSON.stringify(data)
-  });
+  const response = getPutResponse(addAccountUrl, JSON.stringify(data));
 
   if (response.status === 200) {
-    if(localStorage.language=="es")
-    M.toast({html: 'Cuenta añadida!', displayLength: 3000});
+    if (language === "es")
+      M.toast({ html: 'Cuenta añadida!', displayLength: 3000 });
     else
-    M.toast({html: 'Account added!', displayLength: 3000});
+      M.toast({ html: 'Account added!', displayLength: 3000 });
     setTimeout(() => {
       window.location.href = "#!";
     }, "2000");
     loadAccounts(urlAccounts);
   } else {
-    const text = await response.text();
-    document.getElementById('response-message').innerText = text;
+    await insertTestErrorMessageFromResponse(response);
   }
+}
+
+function check() {
+  const { accountName, number, currencySelect } = document.getElementById("account-creation");
+
+  function isValidTextString(str) {
+    // Allow letters, spaces, apostrophes, and hyphens, as well as Cyrillic and Spanish characters
+    return String(str).match("^[a-zA-Z\\u00C0-\\u024F\\u0400-\\u04FF\\u0500-\\u052F\\u1E00-\\u1EFF\\s'’\\-]+$") != null;
+  }
+
+  const isValidName = isValidTextString(accountName.value);
+  const isValidNumber = /^\d{5,20}$/.test(number.value);
+  const isValidCurrency = /^[A-Z]{3}$/.test(currencySelect.value);
+
+
+  if (!accountName.value) {
+    makeInputFieldInvalid(accountName, translations["fieldRequiredError"]);
+  } else if (!isValidName) {
+    makeInputFieldInvalid(accountName, translations["onlyTextError"]);
+  }
+  else {
+    makeInputFieldValid(accountName);
+  }
+
+  if (!number.value) {
+    makeInputFieldInvalid(number, translations["fieldRequiredError"]);
+  } else if (!isValidNumber) {
+    makeInputFieldInvalid(number, translations["onlyNumbersError5-20"]);
+  }
+  else {
+    makeInputFieldValid(number);
+  }
+
+  if (!currencySelect.value) {
+    makeInputFieldInvalid(currencySelect, translations["fieldRequiredError"]);
+  } else if (!isValidCurrency) {
+    makeInputFieldInvalid(currencySelect, translations["notCurrencyError"]);
+  }
+  else {
+    makeInputFieldValid(currencySelect);
+  }
+
+  const submitButton = document.getElementById('saveButton');
+  if (!(isValidName && isValidNumber && isValidCurrency))
+    submitButton.classList.add("disabled");
+  else submitButton.classList.remove("disabled");
 }

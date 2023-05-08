@@ -5,55 +5,136 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/** The type Navigation controller. */
 @Controller
 public class NavigationController {
-    @GetMapping("")
-    public String getIndex() {
-        return "index";
-    }
+  /**
+   * Gets home html page.
+   *
+   * @return the index
+   */
+  @GetMapping("")
+  public String getIndex() {
+    return "index";
+  }
 
-    @GetMapping("/accounts")
-    public String getAccountsPage() {
-        return "accounts";
-    }
+  /**
+   * Gets account html page.
+   *
+   * @return the account page
+   */
+  @RequestMapping(value = "/account/{accountId}")
+  public String getAccountPage() {
+    return "account";
+  }
 
-    @GetMapping("/payments")
-    public String getPaymentsPage() {
-        return "payments";
-    }
+  /**
+   * Gets accounts html page.
+   *
+   * @return the accounts page
+   */
+  @GetMapping("/accounts")
+  public String getAccountsPage() {
+    return "accounts";
+  }
 
-    @RequestMapping(value="/account/{accountId}")
-    public String getAccountPage() {
-        return "account";
-    }
+  /**
+   * Gets dashboard html page.
+   *
+   * @return the dashboard page
+   */
+  @GetMapping("/dashboard")
+  public String getDashboardPage() {
+    return "dashboard";
+  }
 
-    @RequestMapping(value="/payment/{paymentId}")
-    public String getPaymentPage() {
-        return "payment";
-    }
+  /**
+   * Gets login html page.
+   *
+   * @return the login page
+   */
+  @GetMapping("/login")
+  public String getLoginPage() {
+    return "login";
+  }
 
-    @GetMapping("/login")
-    public String getLoginPage() {
-        return "login";
-    }
+  /**
+   * Gets payment html page.
+   *
+   * @return the payment page
+   */
+  @RequestMapping(value = "/payment/{paymentId}")
+  public String getPaymentPage() {
+    return "payment";
+  }
 
-    @GetMapping("/register")
-    public String getRegistrationPage() {
-        return "registration";
-    }
+  /**
+   * Gets payments html page.
+   *
+   * @return the payments page
+   */
+  @GetMapping("/payments")
+  public String getPaymentsPage() {
+    return "payments";
+  }
 
-    @GetMapping("/dashboard")
-    public String getDashboardPage() {
-        return "dashboard";
-    }
+  /**
+   * Gets profile html page.
+   *
+   * @return the profile page
+   */
+  @GetMapping("/profile")
+  public String getProfilePage() {
+    return "profile";
+  }
 
-    @GetMapping("/profile")
-    public String getProfilePage() {
-        return "profile";
-    }
+  /**
+   * Gets registration html page.
+   *
+   * @return the registration page
+   */
+  @GetMapping("/register")
+  public String getRegistrationPage() {
+    return "registration";
+  }
 
-    @GetMapping("/500")
-    public String get500() {
-        return new ResponseEntity<String>("500", null, 500).getStatusCode().toString();
-    }
+  /**
+   * Gets user html page.
+   *
+   * @return the user page
+   */
+  @RequestMapping(value = "/users/{userId}")
+  public String getUserPage() {
+    return "user";
+  }
+
+  /**
+   * Gets users html page.
+   *
+   * @return the users page
+   */
+  @GetMapping("/users")
+  public String getUsersPage() {
+    return "users";
+  }
+
+  /**
+   * Gets 500 test html page.
+   *
+   * @return the 500 test
+   */
+  @GetMapping("/500test")
+  public String get500test() {
+    return new ResponseEntity<String>("500", null, 500).getStatusCode().toString();
+  }
+
+  /**
+   * Gets 500 error html page.
+   *
+   * @return the 500
+   */
+  @GetMapping("/Error500")
+  public String get500() {
+    return "/error/500";
+  }
 }
