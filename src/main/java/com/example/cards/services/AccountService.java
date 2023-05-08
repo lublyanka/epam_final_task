@@ -42,6 +42,7 @@ public class AccountService {
    * @param accountId the account id
    * @return the optional account
    */
+  @Transactional
   public Optional<Account> getOptionalAccount(String token, UUID accountId) {
     User user = userService.getUserByToken(token);
     Optional<Account> accountOptional = accountRepository.findById(accountId);
@@ -72,6 +73,7 @@ public class AccountService {
    * @param token the JWT token
    * @return the all user accounts
    */
+  @Transactional
   public Page<Account> getAllUserAccounts(
       String status, String sortBy, String sortOrder, int page, int size, String token) {
 
@@ -101,6 +103,7 @@ public class AccountService {
    * @param amount the amount for refill
    * @return the optional
    */
+  @Transactional
   public Optional<Account> refillAccount(String token, UUID accountId, BigDecimal amount) {
     Optional<Account> accountOptional = getOptionalAccount(token, accountId);
     if (accountOptional.isEmpty()) return Optional.empty();
@@ -120,6 +123,7 @@ public class AccountService {
    * @param token the JWT token
    * @return the account
    */
+  @Transactional
   public Account saveAccount(Account account, String token) {
     User user = userService.getUserByToken(token);
     Account accountToSave = account;
@@ -140,7 +144,6 @@ public class AccountService {
    * @param account the account to update
    * @return the account
    */
-  @Transactional
   public Account updateAccount(Account account) {
     return accountRepository.save(account);
   }
@@ -173,6 +176,7 @@ public class AccountService {
    * @param accountId the account id
    * @return the optional
    */
+  @Transactional
   public Optional<Account> unblockRequest(String token, UUID accountId) {
     Optional<Account> accountOptional = getOptionalAccount(token, accountId);
     if (accountOptional.isPresent()) {
@@ -247,6 +251,7 @@ public class AccountService {
    * @param accountId the account id
    * @return the optional
    */
+  @Transactional
   @PreAuthorize("hasAuthority ('ROLE_ADMIN')")
   public Optional<Account> unblock(String token, UUID accountId) {
     Optional<Account> accountOptional = getOptionalAccount(token, accountId);

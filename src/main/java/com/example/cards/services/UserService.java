@@ -122,7 +122,6 @@ public class UserService {
     return userRepository.existsByEmail(user.getEmail());
   }
 
-  @Transactional
   public void updateUserLastLogin(User user) {
     user.setUpdatedOn(Timestamp.from(Instant.now()));
     user.setLastLogin(Timestamp.from(Instant.now()));

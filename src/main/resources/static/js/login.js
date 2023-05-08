@@ -8,13 +8,15 @@ async function login() {
   };
 
   if (username && password) {
-    const response = await fetch(url, {
+    //await getPostResponse(url,data);
+    const response = await
+    fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
-    })
+    });
 
     if (response.status===200) {
       const token = await response.text();

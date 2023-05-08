@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /** The Authentication service. */
 @Service
@@ -28,6 +29,7 @@ public class AuthenticationService {
    * @param email the email
    * @return the optional
    */
+  @Transactional
   public Optional<?> isUserValid(String password, String email) {
     User user = userService.getUserByEmail(email);
     if (user == null) {

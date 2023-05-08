@@ -79,6 +79,7 @@ public class PaymentService {
    * @param token the JWT token
    * @return the all user payments
    */
+  @Transactional
   public Page<Payment> getAllUserPayments(
       String sortBy, String sortOrder, int page, int size, String token) {
     User user = userService.getUserByToken(token);
@@ -120,6 +121,7 @@ public class PaymentService {
    * @param account the account
    * @return the payment
    */
+  @Transactional
   public Optional<Payment> savePayment(
       PaymentRequest paymentRequest, String token, Account account) {
     if (isPaymentSumPositive(paymentRequest.getAmount(), account)) {
@@ -148,6 +150,7 @@ public class PaymentService {
    * @param paymentId the payment id
    * @return the payment
    */
+  @Transactional
   public Optional<?> sendPayment(String token, UUID paymentId) {
     User user = userService.getUserByToken(token);
     Optional<Payment> paymentOptional = getById(paymentId);

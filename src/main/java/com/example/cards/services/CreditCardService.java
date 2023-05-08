@@ -45,7 +45,7 @@ public class CreditCardService {
     if (creditCardOptional.isPresent()) {
       CreditCard creditCard = creditCardOptional.get();
       if (account.getId().equals(creditCard.getAccount().getId())) {
-        // TODO
+        // TODO this is strange to do here, but it works
         creditCard.setAccountId(account.getId());
         return Optional.of(creditCard);
       }
