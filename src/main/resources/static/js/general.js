@@ -73,6 +73,14 @@ async function getJSONData(response) {
 }
 
 
+function addSortingToLink(url, sortBy, orderBy) {
+    if (sortBy)
+        url = url + `&sortBy=${sortBy}`;
+    if (orderBy)
+        url = url + `&sortOrder=${orderBy}`;
+    return url;
+}
+
 //Validation functions
 
 function isUserAdmin(decodedToken) {
@@ -84,8 +92,8 @@ function isUserAdmin(decodedToken) {
     return isAdmin;
 }
 
-async function isValidCreditCardNumber(cardNumber){
-var urlCardValidation = "/api/card/isValid"
+async function isValidCreditCardNumber(cardNumber) {
+    var urlCardValidation = "/api/card/isValid"
 
     var response = await fetch(urlCardValidation, {
         method: 'POST',
@@ -171,6 +179,15 @@ function insertErrorMessage(text) {
     errorElement.classList.add("darken");
 }
 
+function activatePagination(jsonData, url, func) {
+    const container = document.getElementById('pagination');
+    if (container != null) {
+        var currentPage = jsonData.number;
+        var totalPages = jsonData.totalPages;
+        generatePagination(currentPage + 1, totalPages, func, url, container);
+    }
+};
+
 function hideElement(elem) {
     elem.setAttribute("style", "display:none");
 }
@@ -216,15 +233,29 @@ function addShowAllLink(keyLink) {
     });
 }
 
-function registerRequestInterceptor() {
-    window.addEventListener('load', function () {
-        navigator
-            .serviceWorker
-            .register('js/request-interceptor.js')
-            .then(function (registration) {
-                console.log('Service worker registered with scope: ', registration.scope);
-            }, function (err) {
-                console.log('ServiceWorker registration failed: ', err);
-            });
+function reloadSortingArrows(sortBy, order, element) {
+    var list = document.getElementsByClassName("sort-arrow");
+
+    Array.prototype.forEach.call(list, elem => {
+        elem.innerHTML = "arrow_downward";
+        elem.classList.add("blue-grey-text");
+        elem.classList.add("text-lighten-4");
     });
+
+    var sortedElem = document.getElementById(sortBy);
+    sortedElem = sortedElem.getElementsByClassName("sort-arrow")[0];
+
+    if (order === "ASC") {
+        sortedElem.innerHTML = "arrow_downward";
+        element.classList.add("asc");
+        element.classList.remove("desc");
+    }
+    else {
+        sortedElem.innerHTML = "arrow_upward";
+        element.classList.add("desc");
+        element.classList.remove("asc");
+    }
+
+    sortedElem.classList.remove("blue-grey-text");
+    sortedElem.classList.remove("text-lighten-4");
 }

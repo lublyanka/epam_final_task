@@ -1,19 +1,19 @@
 var accountJSONData;
 
-async function loadAccounts(url) {
+async function loadAccounts(url, sortBy, orderBy) {
+  url = addSortingToLink(url, sortBy, orderBy);
   const response = await getGetResponse(url);
   if (response.status === 200) {
     accountJSONData = await getJSONData(response);
-    var table = document.getElementById("accounts");
+    var table = document.getElementById("accountsTable");
     table.removeAttribute("style");
     var ul = document.getElementById("no-accounts");
     hideElement(ul);
     insertAccounts(accountJSONData);
-    activatePagination(accountJSONData);
-  } else  insertTestErrorMessageFromResponse(response)
+    activatePagination(accountJSONData, url, 'loadAccounts');
+  } else insertTestErrorMessageFromResponse(response)
 
   function insertAccounts(jsonData) {
-
     table.getElementsByTagName("tbody")[0].innerHTML = '';
     // Loop through the JSON data and create table rows
     jsonData.content.forEach((item) => {
@@ -45,15 +45,6 @@ async function loadAccounts(url) {
   }
 }
 
-function activatePagination(jsonData) {
-  const container = document.getElementById('pagination');
-  if (container != null) {
-    var currentPage = jsonData.number;
-    var totalPages = jsonData.totalPages;
-    generatePagination(currentPage + 1, totalPages, 'loadAccounts', '/api/account/all?size=10', container);
-  }
-};
-
 async function loadAccountsWithStatus(url) {
   const response = await getGetResponse(url);
   if (response.status === 200) {
@@ -75,9 +66,12 @@ function insertAccountsSelector(jsonData) {
     div.classList.add("truncate");
     div.classList.add("valign-wrapper");
     div.appendChild(b);
-    option.innerText = "(" + item.name + ")";
+    option.innerText = `(${item.name})`;
     option.appendChild(div);
     option.setAttribute("value", item.id)
     select.appendChild(option)
   });
+
+  elems = document.querySelectorAll('select');
+  var selects = M.FormSelect.init(elems);
 }

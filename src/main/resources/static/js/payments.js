@@ -19,10 +19,10 @@ document.addEventListener('DOMContentLoaded', function () {
     loadAccountsWithStatus(urlAccounts);
     var elems = document.querySelectorAll('.modal');
     var instances = M.Modal.init(elems);
-    setTimeout(() => {
-      elems = document.querySelectorAll('select');
-      var selects = M.FormSelect.init(elems);
-    }, "1000");
+    // setTimeout(() => {
+    //   elems = document.querySelectorAll('select');
+    //   var selects = M.FormSelect.init(elems);
+    // }, "2000");
   }
 });
 
@@ -116,20 +116,18 @@ function check() {
     else submitButton.classList.remove("disabled");
 
   }, "400");
-
-
 }
 
 function sort(element) {
   var sortByElement = element.parentElement.id;
   var sortByColumn;
   switch (sortByElement) {
-    case 'numberH':
+    case 'paymentNumber':
       sortByColumn = "number";
       break;
-    case 'sumH': sortByColumn = "amount";
+    case 'paymentSum': sortByColumn = "amount";
       break;
-    case 'dateH': sortByColumn = "updatedOn";
+    case 'paymentDate': sortByColumn = "updatedOn";
       break;
   }
 
@@ -142,37 +140,14 @@ function sort(element) {
   var sortBy;
   switch (sortByColumn) {
     case 'number':
-      sortBy = "numberH";
+      sortBy = "paymentNumber";
       break;
-    case 'amount': sortBy = "sumH";
+    case 'amount': sortBy = "paymentSum";
       break;
-    case 'updatedOn': sortBy = "dateH";
+    case 'updatedOn': sortBy = "paymentDate";
       break;
   }
 
-  var list = document.getElementsByClassName("sort-arrow");
-
-  Array.prototype.forEach.call(list, elem => {
-    elem.innerHTML = "arrow_downward";
-    elem.classList.add("blue-grey-text");
-    elem.classList.add("text-lighten-4");
-  });
-
-  var sortedElem = document.getElementById(sortBy);
-  sortedElem = sortedElem.getElementsByClassName("sort-arrow")[0];
-
-  if (order === "ASC") {
-    sortedElem.innerHTML = "arrow_downward";
-    element.classList.add("asc");
-    element.classList.remove("desc")
-  }
-  else {
-    sortedElem.innerHTML = "arrow_upward";
-    element.classList.add("desc");
-    element.classList.remove("asc");
-  }
-
-  sortedElem.classList.remove("blue-grey-text")
-  sortedElem.classList.remove("text-lighten-4")
+  reloadSortingArrows(sortBy, order, element);
 
 }

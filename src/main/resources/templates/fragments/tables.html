@@ -19,11 +19,52 @@
     </div>
 </div>
 
+<div th:fragment="accounts_table" class="row accounts" id="accounts">
+    <div class="col s12">
+        <h4><i class="material-icons">account_balance_wallet</i><span data-i18n-key="accounts-title">Accounts</span>
+            <a data-i18n-key="addAccount" id="addAccountButton"
+               class="waves-effect waves-light btn modal-trigger right" href="#modal1">
+                <i class="material-icons right">add_box</i>Add account</a>
+        </h4>
+
+        <ul id="no-accounts">
+            <li lang="en">No accounts available.</li>
+            <li lang="es">No hay cuentas disponibles.</li>
+        </ul>
+
+        <!-- list of accounts goes here -->
+        <table id="accountsTable" class="striped" style="display:none">
+            <thead>
+            <tr>
+                <th id="accountNumberT">
+                    <a data-i18n-key="number" class="waves-effect waves-teal btn-flat asc"
+                       onclick="javascript:sort(this)">
+                        Number <i class="material-icons right sort-arrow">arrow_downward</i></a>
+                </th>
+                <th id="accountNameT"><a data-i18n-key="name" class="waves-effect waves-teal btn-flat"
+                                        onclick="javascript:sort(this)">
+                    Name <i class="material-icons right sort-arrow blue-grey-text text-lighten-4">arrow_downward</i></a>
+                </th>
+                <th id="accountCurrentBalanceT"><a data-i18n-key="c-balance" class="waves-effect waves-teal btn-flat"
+                                                  onclick="javascript:sort(this)">
+                    Current balance <i
+                        class="material-icons right sort-arrow blue-grey-text text-lighten-4">arrow_downward</i></a>
+                </th>
+                <th id="accountStatusT" data-i18n-key="status">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 <div th:fragment="payments_table" class="row payments" id="payments">
     <div class="col s12">
         <h4><i class="material-icons">payment</i><span data-i18n-key="payments-title">Payments</span>
-            <a data-i18n-key="addPayment" id="addPaymentButton" class="waves-effect waves-light btn modal-trigger right"
-               href="#addPayment"><i class="material-icons right">add_box</i>Crear un pago</a></h4>
+            <a data-i18n-key="addPayment" id="addPaymentButton"
+               class="waves-effect waves-light btn modal-trigger right" href="#addPayment">
+                <i class="material-icons right">add_box</i>Create payment</a></h4>
 
         <ul id="no-payments">
             <li lang="en">No payments available.</li>
@@ -33,25 +74,25 @@
         <table id="paymentsTable" class="striped" style="display:none">
             <thead>
             <tr>
-                <th id="numberH">
+                <th id="paymentNumber">
                     <a class="waves-effect waves-teal btn-flat asc" onclick="javascript:sort(this)">
                         <span data-i18n-key="number"> Number </span>
                         <i class="material-icons right sort-arrow">arrow_downward</i></a>
                 </th>
-                <th id="sumH">
+                <th id="paymentSum">
                     <a class="waves-effect waves-teal btn-flat" onclick="javascript:sort(this)">
                         <span data-i18n-key="sum">Sum </span>
                         <i class="material-icons right sort-arrow blue-grey-text text-lighten-4">arrow_downward</i></a>
                 </th>
-                <th id="dateH"><a class="waves-effect waves-teal btn-flat" onclick="javascript:sort(this)">
+                <th id="paymentDate"><a class="waves-effect waves-teal btn-flat" onclick="javascript:sort(this)">
                     <span data-i18n-key="date">Date</span>
                     <i class="material-icons right sort-arrow blue-grey-text text-lighten-4">arrow_downward</i>
                 </a>
                 </th>
-                <th id="descH">
+                <th id="paymentDescription">
                     <span data-i18n-key="desc">Description</span>
                 </th>
-                <th id="statusH">
+                <th id="paymentStatus">
                     <span data-i18n-key="status">Status</span>
                 </th>
             </tr>

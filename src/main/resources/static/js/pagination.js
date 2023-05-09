@@ -5,6 +5,9 @@ var onSelectPageFunc;
 function generatePagination(currentPage, totalPages, onSelectPageFunc, url, container) {
   this.container = container;
   this.url = url;
+
+//TODO remove page param from URL
+
   this.onSelectPageFunc = onSelectPageFunc;
   let paginationHtml = '';
   if (totalPages <= 1) {

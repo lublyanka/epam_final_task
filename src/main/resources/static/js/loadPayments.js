@@ -8,11 +8,10 @@ async function loadPayments(url, sortBy, orderBy) {
         var ul = document.getElementById("no-payments");
         hideElement(ul);
         insertPayments(jsonData);
-        activatePagination(jsonData, url);
+        activatePagination(jsonData, url, 'loadPayments');
     } else insertTestErrorMessageFromResponse(response);
 
     function insertPayments(jsonData) {
-
         table.getElementsByTagName("tbody")[0].innerHTML = '';
         // Loop through the JSON data and create table rows
         jsonData.content.forEach((item) => {
@@ -47,20 +46,3 @@ async function loadPayments(url, sortBy, orderBy) {
         });
     }
 }
-
-function addSortingToLink(url, sortBy, orderBy) {
-    if (sortBy)
-        url = url + `&sortBy=${sortBy}`;
-    if (orderBy)
-        url = url + `&sortOrder=${orderBy}`;
-    return url;
-}
-
-function activatePagination(jsonData, url) {
-    const container = document.getElementById('pagination');
-    if (container != null) {
-        var currentPage = jsonData.number;
-        var totalPages = jsonData.totalPages;
-        generatePagination(currentPage + 1, totalPages, 'loadPayments', url, container);
-    }
-};

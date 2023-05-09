@@ -16,42 +16,7 @@
     <div class="container">
         <div class="row">
             <div class="col s12">
-                <h4></h4>
-                <h4 class="col s10" lang="en"><span>Accounts</span></h4>
-                <h4 class="col s10" lang="es"><span>Cuentas</span></h4>
-                <h4 class="col s2 valign-wrapper right-align">
-                    <a data-i18n-key="addAccount" id="addAccountButton"
-                       class="waves-effect waves-light btn modal-trigger" href="#modal1"><i
-                            class="material-icons right">add_box</i>Add account</a>
-                </h4>
-
-
-                <ul id="no-accounts" class="col s3">
-                    <li lang="en">No accounts available.</li>
-                    <li lang="es">No hay cuentas disponibles.</li>
-                </ul>
-
-                <!-- list of accounts goes here -->
-                <table id="accounts" class="striped" style="display:none">
-                    <thead>
-                    <tr>
-                        <th id="numberH">
-                            <a data-i18n-key="number" class="waves-effect waves-teal btn-flat">
-                                Number <i class="material-icons right">arrow_downward</i></a>
-                        </th>
-                        <th id="nameH"><a data-i18n-key="name" class="waves-effect waves-teal btn-flat">
-                            Name <i class="material-icons right blue-grey-text text-lighten-4">arrow_downward</i></a>
-                        </th>
-                        <th id="c-balanceH"><a data-i18n-key="c-balance" class="waves-effect waves-teal btn-flat">
-                            Current balance <i
-                                class="material-icons right blue-grey-text text-lighten-4">arrow_downward</i></a>
-                        </th>
-                        <th id="statusH" data-i18n-key="status">Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                <div th:replace="~{fragments/tables::accounts_table}"></div>
                 <div id="pagination"></div>
             </div>
         </div>

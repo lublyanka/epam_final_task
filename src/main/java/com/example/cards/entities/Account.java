@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
@@ -62,4 +63,7 @@ public class Account {
 
   /** Instantiates a new Account. */
   public Account() {}
+
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "account")
+  private List<Payment> payments;
 }

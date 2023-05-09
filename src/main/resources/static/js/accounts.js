@@ -1,9 +1,9 @@
-const urlAccounts = "/api/account/all";
-const urlAccountsAdmin = "/api/admin/accounts/all";
-
+const urlAccounts = "/api/account/all?size=10";
+const urlAccountsAdmin = "/api/admin/accounts/all?size=10";
+var decodedToken;
 
 document.addEventListener('DOMContentLoaded', function () {
-  var decodedToken = getDecodedToken(localStorage.token)
+  decodedToken = getDecodedToken(localStorage.token)
   if (isUserAdmin(decodedToken)) {
     loadAccounts(urlAccountsAdmin);
     hideElement(document.getElementById("addAccountButton"));
@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 async function addAccount() {
-
   const addAccountUrl = "/api/account/create";
   var name = document.getElementById("accountName").value;
   var number = document.getElementById("number").value;
@@ -93,4 +92,38 @@ function check() {
   if (!(isValidName && isValidNumber && isValidCurrency))
     submitButton.classList.add("disabled");
   else submitButton.classList.remove("disabled");
+}
+
+function sort(element) {
+  var sortByElement = element.parentElement.id;
+  var sortByColumn;
+  switch (sortByElement) {
+    case 'accountNumberT':
+      sortByColumn = "number";
+      break;
+    case 'accountNameT': sortByColumn = "name";
+      break;
+    case 'paymentDateT': sortByColumn = "currentBalance";
+      break;
+  }
+
+  var order = element.classList.contains("asc") ? "DESC" : "ASC";
+  if (isUserAdmin(decodedToken))
+    loadAccounts(urlAccountsAdmin, sortByColumn, order);
+  else
+    loadAccounts(urlAccounts, sortByColumn, order);
+
+  var sortBy;
+  switch (sortByColumn) {
+    case 'number':
+      sortBy = "accountNumberT";
+      break;
+    case 'name': sortBy = "accountNameT";
+      break;
+    case 'currentBalance': sortBy = "accountCurrentBalanceT";
+      break;
+  }
+
+  reloadSortingArrows(sortBy, order, element);
+
 }
