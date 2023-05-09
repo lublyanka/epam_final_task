@@ -1,4 +1,5 @@
-async function loadPayments(url) {
+async function loadPayments(url, sortBy, orderBy) {
+    url = addSortingToLink(url, sortBy, orderBy);
     const response = await getGetResponse(url);
     if (response.status === 200) {
         var jsonData = await getJSONData(response);
@@ -7,7 +8,7 @@ async function loadPayments(url) {
         var ul = document.getElementById("no-payments");
         hideElement(ul);
         insertPayments(jsonData);
-        activatePagination(jsonData);
+        activatePagination(jsonData, url);
     } else insertTestErrorMessageFromResponse(response);
 
     function insertPayments(jsonData) {
@@ -47,11 +48,19 @@ async function loadPayments(url) {
     }
 }
 
-function activatePagination(jsonData) {
+function addSortingToLink(url, sortBy, orderBy) {
+    if (sortBy)
+        url = url + `&sortBy=${sortBy}`;
+    if (orderBy)
+        url = url + `&sortOrder=${orderBy}`;
+    return url;
+}
+
+function activatePagination(jsonData, url) {
     const container = document.getElementById('pagination');
     if (container != null) {
         var currentPage = jsonData.number;
         var totalPages = jsonData.totalPages;
-        generatePagination(currentPage + 1, totalPages, 'loadPayments', '/api/payment/all?size=10', container);
+        generatePagination(currentPage + 1, totalPages, 'loadPayments', url, container);
     }
 };

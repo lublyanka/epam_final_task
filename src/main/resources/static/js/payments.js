@@ -1,15 +1,15 @@
-const urlPayments = "/api/payment/all";
-const urlPaymentsAdmin = "/api/admin/payments/all";
+const urlPayments = "/api/payment/all?size=10";
+const urlPaymentsAdmin = "/api/admin/payments/all?size=10";
 const urlAccounts = "/api/account/all?isBlocked=false";
 const addPaymentUrl = "/api/payment/create";
 
 const select = document.getElementById("account");
 const currencyElement = document.getElementById("currency");
 const addPaymentButton = document.getElementById("addPaymentButton");
-
+var decodedToken;
 
 document.addEventListener('DOMContentLoaded', function () {
-  var decodedToken = getDecodedToken(localStorage.token)
+  decodedToken = getDecodedToken(localStorage.token)
   if (isUserAdmin(decodedToken)) {
     loadPayments(urlPaymentsAdmin);
     hideElement(addPaymentButton);
@@ -90,8 +90,6 @@ function check() {
     makeInputFieldValid(sum);
   }
 
-
-
   if (!number.value) {
     makeInputFieldInvalid(number, translations["fieldRequiredError"]);
   } else if (!isValidNumber) {
@@ -120,7 +118,61 @@ function check() {
   }, "400");
 
 
+}
 
+function sort(element) {
+  var sortByElement = element.parentElement.id;
+  var sortByColumn;
+  switch (sortByElement) {
+    case 'numberH':
+      sortByColumn = "number";
+      break;
+    case 'sumH': sortByColumn = "amount";
+      break;
+    case 'dateH': sortByColumn = "updatedOn";
+      break;
+  }
 
+  var order = element.classList.contains("asc") ? "DESC" : "ASC";
+  if (isUserAdmin(decodedToken))
+    loadPayments(urlPaymentsAdmin, sortByColumn, order);
+  else
+    loadPayments(urlPayments, sortByColumn, order);
+
+  var sortBy;
+  switch (sortByColumn) {
+    case 'number':
+      sortBy = "numberH";
+      break;
+    case 'amount': sortBy = "sumH";
+      break;
+    case 'updatedOn': sortBy = "dateH";
+      break;
+  }
+
+  var list = document.getElementsByClassName("sort-arrow");
+
+  Array.prototype.forEach.call(list, elem => {
+    elem.innerHTML = "arrow_downward";
+    elem.classList.add("blue-grey-text");
+    elem.classList.add("text-lighten-4");
+  });
+
+  var sortedElem = document.getElementById(sortBy);
+  sortedElem = sortedElem.getElementsByClassName("sort-arrow")[0];
+
+  if (order === "ASC") {
+    sortedElem.innerHTML = "arrow_downward";
+    element.classList.add("asc");
+    element.classList.remove("desc")
+  }
+  else {
+    sortedElem.innerHTML = "arrow_upward";
+    element.classList.add("desc");
+    element.classList.remove("asc");
+  }
+
+  sortedElem.classList.remove("blue-grey-text")
+  sortedElem.classList.remove("text-lighten-4")
 
 }
