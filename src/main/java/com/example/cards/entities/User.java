@@ -72,7 +72,7 @@ public class User implements Serializable {
   @Setter
   private String role;
 
-  @Column(name = "isblocked", columnDefinition = "boolean default false")
+  @Column(name = "blocked", columnDefinition = "boolean default false")
   @Getter
   @Setter
   private boolean isBlocked;
@@ -82,14 +82,6 @@ public class User implements Serializable {
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
   private List<Payment> payments;
 
-  /*  @OneToMany(cascade = CascadeType.ALL)
-  private List<UserDocument> userDocuments = new ArrayList<>();*/
-
-  /**
-   * Gets id.
-   *
-   * @return the id
-   */
   public Long getId() {
     return id;
   }
@@ -113,14 +105,6 @@ public class User implements Serializable {
   public void setPassword(String password) {
     this.password = password;
   }
-
-  /*   public List<UserDocument> getUserDocuments() {
-    return userDocuments;
-  }
-
-  public void setUserDocuments(List<UserDocument> userDocuments) {
-    this.userDocuments = userDocuments;
-  }*/
 
   /**
    * Is user an admin.

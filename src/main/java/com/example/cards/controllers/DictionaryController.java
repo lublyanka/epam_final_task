@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /** The Dictionary controller. */
 @RestController
+@SuppressWarnings("SpringJavaAutowiringInspection")
 @RequestMapping("/api/dict")
 public class DictionaryController {
 

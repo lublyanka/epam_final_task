@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /** The User account cross-table entity. */
+@SuppressWarnings("unused")
 @Entity
 @Table(name = "user_accounts", schema = "public")
 public class UserAccount {

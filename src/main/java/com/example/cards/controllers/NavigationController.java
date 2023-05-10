@@ -3,7 +3,6 @@ package com.example.cards.controllers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /** The type Navigation controller. */
 @Controller
@@ -23,7 +22,7 @@ public class NavigationController {
    *
    * @return the account page
    */
-  @RequestMapping(value = "/account/{accountId}")
+  @GetMapping(value = "/account/{accountId}")
   public String getAccountPage() {
     return "account";
   }
@@ -63,7 +62,7 @@ public class NavigationController {
    *
    * @return the payment page
    */
-  @RequestMapping(value = "/payment/{paymentId}")
+  @GetMapping(value = "/payment/{paymentId}")
   public String getPaymentPage() {
     return "payment";
   }
@@ -103,7 +102,7 @@ public class NavigationController {
    *
    * @return the user page
    */
-  @RequestMapping(value = "/users/{userId}")
+  @GetMapping(value = "/users/{userId}")
   public String getUserPage() {
     return "user";
   }
@@ -125,7 +124,7 @@ public class NavigationController {
    */
   @GetMapping("/500test")
   public String get500test() {
-    return new ResponseEntity<String>("500", null, 500).getStatusCode().toString();
+    return new ResponseEntity<>("500", null, 500).getStatusCode().toString();
   }
 
   /**

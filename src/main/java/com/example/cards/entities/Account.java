@@ -14,12 +14,12 @@ import lombok.Setter;
 @Table(name = "accounts", schema = "public")
 public class Account {
 
-  @Column(name = "isblocked", columnDefinition = "boolean default false")
+  @Column(name = "blocked", columnDefinition = "boolean default false")
   @Getter
   @Setter
   boolean isBlocked;
 
-  @Column(name = "isrequested", columnDefinition = "boolean default false")
+  @Column(name = "requested", columnDefinition = "boolean default false")
   @Getter
   @Setter
   boolean isRequested;

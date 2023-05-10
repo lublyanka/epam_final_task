@@ -103,7 +103,7 @@ function sort(element) {
       break;
     case 'accountNameT': sortByColumn = "name";
       break;
-    case 'paymentDateT': sortByColumn = "currentBalance";
+    case 'accountCurrentBalanceT': sortByColumn = "currentBalance";
       break;
   }
 

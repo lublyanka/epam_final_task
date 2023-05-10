@@ -1,8 +1,8 @@
 const urlProfile = "/api/auth/profile";
-const urlAccountsDash = "/api/account/all?page=0&size=3";
+const urlAccountsDash = "/api/account/all?sortBy=updatedOn&page=0&size=3";
 const urlPaymentsDash = "/api/payment/all?sortBy=updatedOn&page=0&size=3";
-const urlAccountsAdminDash = "/api/admin/accounts/all?page=0&size=3";
-const urlPaymentsAdminDash = "/api/admin/payments/all?page=0&size=3";
+const urlAccountsAdminDash = "/api/admin/accounts/all?sortBy=updatedOn&page=0&size=3";
+const urlPaymentsAdminDash = "/api/admin/payments/all?sortBy=updatedOn&page=0&size=3";
 const urlUsersDash = "/api/admin/users/all?page=0&size=3";
 
 const addPaymentButton = document.getElementById("addPaymentButton");

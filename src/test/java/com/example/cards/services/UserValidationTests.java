@@ -32,6 +32,7 @@ public class UserValidationTests {
         user.setEmail("john@example.com");
         user.setPassword("Qwerty123");
         user.setPhone("1234567890");
+        user.setRole("USER");
     }
 
     @Test

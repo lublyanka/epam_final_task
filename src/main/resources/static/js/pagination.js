@@ -6,7 +6,10 @@ function generatePagination(currentPage, totalPages, onSelectPageFunc, url, cont
   this.container = container;
   this.url = url;
 
-//TODO remove page param from URL
+  let url2 = new URL(document.location.origin + url);
+  let params = url2.searchParams;
+  params.delete("page");
+  url = url2.pathname + (params.toString() ? "?" + params.toString() : "");
 
   this.onSelectPageFunc = onSelectPageFunc;
   let paginationHtml = '';
@@ -18,7 +21,6 @@ function generatePagination(currentPage, totalPages, onSelectPageFunc, url, cont
   if (currentPage > 1) {
     let scriptInline = onSelectPageFunc + "('" + url + "&page=" + (currentPage - 2) + "');";
     paginationHtml += '<li class="waves-effect"><a href="#!" onclick="event.preventDefault();' + scriptInline + '"><i class="material-icons">chevron_left</i></a></li>';
-    //paginationHtml += '<li class="waves-effect"><a href="#!" onclick="event.preventDefault(); onSelectPage(' + (currentPage - 1) + ', ' + totalPages + ');"><i class="material-icons">chevron_left</i></a></li>';
   } else {
     paginationHtml += '<li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>';
   }

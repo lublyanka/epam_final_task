@@ -39,9 +39,8 @@ public class WebSecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-    http.csrf()
-        .disable()
-        .sessionManagement(
+    http.csrf().disable();
+    http.sessionManagement(
             (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .securityContext(x -> x.securityContextRepository(securityContextRepository))
         .authorizeHttpRequests(
@@ -67,6 +66,7 @@ public class WebSecurityConfig {
                     .anyRequest()
                     .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER"));
     http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+    http.formLogin().disable();
     return http.build();
   }
 }

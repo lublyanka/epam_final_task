@@ -7,7 +7,7 @@ async function loadUsers(url) {
         table = document.getElementById("users");
         table.removeAttribute("style");
         insertUsers(jsonData);
-        activatePagination(jsonData);
+        activatePagination(jsonData, url, 'loadUsers');
     }
     if (response.status === 500) {
         window.location.href = "/Error500";
@@ -48,12 +48,3 @@ function insertUsers(jsonData) {
         table.getElementsByTagName("tbody")[0].appendChild(tr); // Append the table row to the table
     });
 }
-
-function activatePagination(jsonData) {
-    const container = document.getElementById('pagination');
-    if (container != null) {
-        var currentPage = jsonData.number;
-        var totalPages = jsonData.totalPages;
-        generatePagination(currentPage + 1, totalPages, 'loadUsers', '/api/admin/users/all?size=10', container);
-    }
-};

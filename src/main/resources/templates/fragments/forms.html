@@ -1,0 +1,46 @@
+<form th:fragment="user_profile_form" id="userProfileForm">
+    <div class="input-field col s6">
+        <label data-i18n-key="name" for="name">Name</label>
+        <input class="validate" data-length="255" id="name" name="name" type="text" disabled>
+    </div>
+    <div class="input-field col s6">
+        <label data-i18n-key="surname" for="surname">Surname</label>
+        <input class="validate" data-length="255" id="surname" name="surname" type="text" disabled>
+    </div>
+    <div class="input-field col s6">
+        <label data-i18n-key="middlename" for="middlename">Middlename</label>
+        <input class="validate" data-length="255" id="middlename" name="middlename" type="text" disabled>
+    </div>
+    <div class="input-field col s6">
+        <label data-i18n-key="email" for="email">Email</label>
+        <input class="validate" data-length="255" id="email" name="email" type="email">
+    </div>
+    <div class="input-field col s6">
+        <label data-i18n-key="birthDate" for="birthDate">Date of birth</label>
+        <input class="validate datepicker" id="birthDate" name="birthDate" required type="text" disabled>
+    </div>
+    <div class="input-field col s6">
+        <label data-i18n-key="role" for="role">Role</label>
+        <input class="validate" data-length="255" id="role" name="role" type="text" disabled>
+    </div>
+    <div class="input-field col s12">
+        <label data-i18n-key="phone" for="phone">Phone number</label>
+        <input class="validate" data-length="20" id="phone" name="phone" type="text">
+    </div>
+    <div class="input-field col s12">
+        <label data-i18n-key="address" for="address">Address</label>
+        <input class="validate" id="address" name="address" type="text">
+    </div>
+    <div class="btn-group">
+        <button data-i18n-key="save" class="waves-effect waves-light btn-small disabled" type="submit">Save</button>
+    </div>
+</form>
+
+<div th:fragment="user_documents">
+    <h2 lang="en">Documents</h2>
+    <h2 lang="es">Documentos</h2>
+    <ul>
+        <li lang="en">No documents available.</li>
+        <li lang="es">No hay documentos disponibles.</li>
+    </ul>
+</div>

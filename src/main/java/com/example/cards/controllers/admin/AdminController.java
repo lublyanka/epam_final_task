@@ -133,7 +133,7 @@ public class AdminController {
   public ResponseEntity<?> loadUserById(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long userId) {
     Optional<User> user = userService.getUserById(userId);
-    if (!(user.isEmpty())) return ResponseEntity.ok(user);
+    if (user.isPresent()) return ResponseEntity.ok(user);
     else return ResponseEntity.notFound().build();
   }
 

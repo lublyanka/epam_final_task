@@ -56,6 +56,7 @@ public class Payment {
   @JsonIgnore
   private User user;
 
+
   @Setter
   @Getter
   @ManyToOne(fetch = FetchType.EAGER)
