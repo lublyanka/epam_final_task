@@ -43,10 +43,10 @@ select.addEventListener("change", () => {
 
 async function addPayment() {
   var accountId = document.getElementById("account").value
-  var desc = document.getElementById("desc").value;
-  var sum = document.getElementById("sum").value;
-  var number = document.getElementById("number").value;
-  var currency = document.getElementById("currency").value;
+  var desc = document.getElementById("desc").value.trim();
+  var sum = document.getElementById("sum").value.trim();
+  var number = document.getElementById("number").value.trim();
+  var currency = document.getElementById("currency").value.trim();
   var data = {
     accountId: accountId,
     description: desc,
@@ -68,15 +68,14 @@ async function addPayment() {
     loadPayments(urlPayments);
     M.Modal.getInstance(document.getElementById("addPayment")).close();
     //document.getElementById("payment-creation").reset();
-  } else {
+  } else if(!(response.status === 204)){
     await insertTestErrorMessageFromResponse(response);
   }
 }
 
 
 function check() {
-  const { account, sum, number, currency } = document.getElementById("payment-creation");
-
+  const { account, sum, number, currency } = document.getElementById("payment-creation");s
   var isValidSum = /\d{1,8}\.{0,1}\d{1,2}$/.test(sum.value);
   var isValidNumber = /^\d{5,20}$/.test(number.value);
   var isAccountSelected = account.value

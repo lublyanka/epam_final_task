@@ -26,8 +26,8 @@ public class LoginController {
   @PostMapping("/login")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-    String email = loginRequest.getEmail();
-    String password = loginRequest.getPassword();
+    String email = loginRequest.getEmail().trim().toLowerCase();
+    String password = loginRequest.getPassword().trim();
 
     if (authenticationService.isRequestEmpty(email, password)) return REQUIRED_FIELDS_ARE_EMPTY;
 

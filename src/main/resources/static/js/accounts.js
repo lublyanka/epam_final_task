@@ -23,16 +23,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
 async function addAccount() {
   const addAccountUrl = "/api/account/create";
-  var name = document.getElementById("accountName").value;
-  var number = document.getElementById("number").value;
-  var currency = document.getElementById("currencySelect").value;
+  var name = document.getElementById("accountName").value.trim();
+  var number = document.getElementById("number").value.trim();
+  var currency = document.getElementById("currencySelect").value.trim();
   var data = {
     name: name,
     number: number,
     currency: currency,
   };
 
-  const response = getPutResponse(addAccountUrl, JSON.stringify(data));
+  const response = getPutResponse(addAccountUrl, data);
 
   if (response.status === 200) {
     if (language === "es")
@@ -43,14 +43,13 @@ async function addAccount() {
       window.location.href = "#!";
     }, "2000");
     loadAccounts(urlAccounts);
-  } else {
+  } else if(response.status != 204){
     await insertTestErrorMessageFromResponse(response);
   }
 }
 
 function check() {
   const { accountName, number, currencySelect } = document.getElementById("account-creation");
-
   function isValidTextString(str) {
     // Allow letters, spaces, apostrophes, and hyphens, as well as Cyrillic and Spanish characters
     return String(str).match("^[a-zA-Z\\u00C0-\\u024F\\u0400-\\u04FF\\u0500-\\u052F\\u1E00-\\u1EFF\\s'’\\-]+$") != null;

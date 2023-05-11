@@ -9,7 +9,7 @@ async function loadPayments(url, sortBy, orderBy) {
         hideElement(ul);
         insertPayments(jsonData);
         activatePagination(jsonData, url, 'loadPayments');
-    } else insertTestErrorMessageFromResponse(response);
+    } else if(!(response.status === 204)) insertTestErrorMessageFromResponse(response);
 
     function insertPayments(jsonData) {
         table.getElementsByTagName("tbody")[0].innerHTML = '';

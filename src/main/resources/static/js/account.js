@@ -106,12 +106,12 @@ function insertCards(jsonData) {
 
 async function addCard() {
   const addCardUrl = "/api/card/addCard";
-  var cardNumber = document.getElementById("cardNumberReg").value;
-  var cardType = document.getElementById("cardTypeReg").value;
-  var month = document.getElementById("monthReg").value;
-  var year = document.getElementById("yearReg").value;
-  var cardHolder = document.getElementById("cardHolderReg").value;
-  var cardTitle = document.getElementById("cardTitleReg").value;
+  var cardNumber = document.getElementById("cardNumberReg").value.trim()
+  var cardType = document.getElementById("cardTypeReg").value.trim();
+  var month = document.getElementById("monthReg").value.trim();
+  var year = document.getElementById("yearReg").value.trim();
+  var cardHolder = document.getElementById("cardHolderReg").value.trim();
+  var cardTitle = document.getElementById("cardTitleReg").value.trim();
 
 
   var data = {
@@ -125,7 +125,7 @@ async function addCard() {
   };
 
 
-    const response = await getPostResponse(addCardUrl, data);
+  const response = await getPostResponse(addCardUrl, data);
 
   if (response.status === 200) {
     if (localStorage.language === "es")
@@ -190,15 +190,29 @@ async function unblockAccount() {
 }
 
 async function refill() {
-  let amount = document.getElementById("refillsum").value;
+  let amount = document.getElementById("refillsum");
+  var isValidSum = /\d{1,8}\.{0,1}\d{1,2}$/.test(amount.value);
 
+  //check
+  if (!amount.value) {
+    makeInputFieldInvalid(amount, translations["fieldRequiredError"]);
+    return;
+  } else if (!isValidSum) {
+    makeInputFieldInvalid(amount, translations["sumNumberFormatError"]);
+    return;
+  }
+  else {
+    makeInputFieldValid(amount);
+  }  
+
+  //send
   const response = await fetch(urlRefill, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': localStorage.token
     },
-    body: amount
+    body: amount.value
   });
 
   if (response.status === 200) {
@@ -214,7 +228,6 @@ async function refill() {
     M.toast({ html: text, displayLength: 3000 });
   }
 }
-
 
 async function check() {
   const { cardTitleReg, cardNumberReg, cardTypeReg, monthReg, yearReg, cardHolderReg } = document.getElementById("card-creation");

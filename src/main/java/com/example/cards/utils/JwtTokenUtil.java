@@ -11,6 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class JwtTokenUtil {
 
   /** The constant TOKEN_VALIDITY_MS. */
-  public static final int TOKEN_VALIDITY_MS = 1000 * 60 * 60 * 10; // 10 hours
+  private final static int TOKEN_VALIDITY_MS = 1000 * 60 * 60 * 10; // 10 hours
 
   @Qualifier("jwtKey")
   private final Key jwtSecret;

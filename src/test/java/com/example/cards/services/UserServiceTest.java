@@ -1,27 +1,41 @@
 package com.example.cards.services;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 import com.example.cards.entities.User;
 import com.example.cards.repositories.UserRepository;
+import com.example.cards.utils.JwtTokenUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
 
 class UserServiceTest {
 
   private final PasswordEncoder passwordEncoder = mock(PasswordEncoder.class);
   private final UserRepository userRepository = mock(UserRepository.class);
-  private final UserService userService = new UserService(passwordEncoder, userRepository, null);
-
+  private final JwtTokenUtil jwtTokenUtil = mock(JwtTokenUtil.class);
+  private final UserService userService =
+      new UserService(passwordEncoder, userRepository, jwtTokenUtil);
 
   private User user;
 
   @BeforeEach
   void setUp() {
     user = new User();
+    user.setId(1L);
     user.setName("John");
     user.setSurname("Smith");
     user.setEmail("john@example.com");
@@ -30,36 +44,215 @@ class UserServiceTest {
   }
 
   @Test
-  void getAllUsers() {}
+  void getAllUsers() { // Prepare test data
+    String sortBy = "name";
+    String sortOrder = "asc";
+    int page = 0;
+    int size = 10;
+    User user2 = new User();
+    user2.setId(2L);
+    user2.setName("John2");
+    user2.setSurname("Smith2");
+    user2.setEmail("john2@example.com");
+    user2.setPassword("Qwerty1232");
+    user2.setPhone("123456");
+
+    User user3 = new User();
+    user3.setId(3L);
+    user3.setName("John3");
+    user3.setSurname("Smith3");
+    user3.setEmail("john3@example.com");
+    user3.setPassword("Qwerty1234");
+    user3.setPhone("0987465");
+    List<User> users = List.of(user, user2, user3);
+    Page<User> expectedPage = new PageImpl<>(users);
+
+    when(userRepository.findAll(any(PageRequest.class))).thenReturn(expectedPage);
+
+    Page<User> result = userService.getAllUsers(sortBy, sortOrder, page, size);
+
+    // Verify that the userRepository's findAll method is called with the correct arguments
+    ArgumentCaptor<PageRequest> pageRequestCaptor = ArgumentCaptor.forClass(PageRequest.class);
+    verify(userRepository, times(1)).findAll(pageRequestCaptor.capture());
+    PageRequest pageRequest = pageRequestCaptor.getValue();
+    assertEquals(page, pageRequest.getPageNumber());
+    assertEquals(size, pageRequest.getPageSize());
+    assertEquals(
+        Sort.Direction.fromString(sortOrder),
+        pageRequest.getSort().getOrderFor(sortBy).getDirection());
+
+    assertEquals(expectedPage, result);
+  }
 
   @Test
-  void getUserById() {}
+  void getUserById() {
+
+    Optional<User> expectedUser = Optional.of(user);
+    when(userRepository.findById(user.getId())).thenReturn(expectedUser);
+    Optional<User> result = userService.getUserById(user.getId());
+    assertEquals(expectedUser, result);
+  }
 
   @Test
-  void getUserByEmail() {}
+  void getUserByEmail() {
+    String email = "john@example.com";
+    String otherEmail = "XXXXXXXXXXXXXXXXX";
+    when(userRepository.findByEmail(email)).thenReturn(user);
+    User result = userService.getUserByEmail(email);
+    assertEquals(user, result);
+    result = userService.getUserByEmail(otherEmail);
+    assertNotEquals(user, result);
+  }
 
   @Test
-  void getUserByToken() {}
+  void getUserByToken() {
+    String token = "sample_token";
+    String email = "john@example.com";
+    when(jwtTokenUtil.extractUsername(token)).thenReturn(email);
+    when(userRepository.findByEmail(email)).thenReturn(user);
+    User result = userService.getUserByToken(token);
+    assertEquals(user, result);
+  }
 
   @Test
-  void getUserByTokenWithCountry() {}
+  void registerUser() {
+    when(userRepository.existsByEmail(user.getEmail())).thenReturn(false);
+    String encodedPassword = "$2a$10$FWZwsbqk/bNYz4tG0/D0s.0zyPbVL1VSomZqLmlVI.cdQxMZqCBce";
+    when(passwordEncoder.encode(user.getPassword())).thenReturn(encodedPassword);
+    User savedUser = new User();
+    savedUser.setName("John");
+    savedUser.setSurname("Smith");
+    savedUser.setEmail("john@example.com");
+    savedUser.setPassword("Qwerty123");
+    savedUser.setPhone("1234567890");
+    when(userRepository.save(user)).thenReturn(savedUser);
+    User result = userService.registerUser(user);
+    assertEquals(savedUser, result);
+  }
 
   @Test
-  void registerUser() {}
+  void updateUser() {
+    Long userId = 1L;
+    User existingUser = user;
+    Instant now = Instant.now();
+    existingUser.setUpdatedOn(Timestamp.from(now.minusMillis(10000)));
+
+    // Create an updated user with modified attributes
+    User updatedUser = new User();
+    updatedUser.setId(1L);
+    updatedUser.setName("John");
+    updatedUser.setSurname("Smith");
+    updatedUser.setEmail("john@example.com");
+    updatedUser.setPassword("Qwerty123");
+    updatedUser.setPhone("1234567890");
+    updatedUser.setAddress("123 Main Street");
+
+    when(userRepository.save(existingUser)).thenReturn(updatedUser);
+
+    User result = userService.updateUser(updatedUser, existingUser);
+
+    assertEquals(updatedUser.getSurname(), result.getSurname());
+    assertEquals(updatedUser.getPhone(), result.getPhone());
+    assertEquals(updatedUser.getAddress(), result.getAddress());
+    assertNotEquals(existingUser.getUpdatedOn(), result.getUpdatedOn());
+    verify(userRepository, times(1)).save(result);
+    verify(userRepository, times(1)).flush();
+  }
 
   @Test
-  void updateUser() {}
+  void testBlock_UserExistsAndIsNotBlocked() {
+    Long userId = 1L;
+    user.setBlocked(false);
+    Instant now = Instant.now();
+    user.setUpdatedOn(Timestamp.from(now));
+
+    when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+    Optional<User> result = userService.block(userId);
+
+    assertTrue(result.isPresent());
+    assertTrue(result.get().isBlocked());
+    assertEquals(user.getUpdatedOn(), result.get().getUpdatedOn());
+    verify(userRepository, times(1)).save(result.get());
+    verify(userRepository, times(1)).flush();
+  }
 
   @Test
-  void block() {}
+  void testBlock_UserExistsAndIsBlocked() {
+    Long userId = 1L;
+    user.setBlocked(true);
+
+    when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+    Optional<User> result = userService.block(userId);
+
+    assertTrue(result.isPresent());
+    assertTrue(result.get().isBlocked());
+    assertEquals(user.getUpdatedOn(), result.get().getUpdatedOn());
+    verify(userRepository, never()).save(any());
+    verify(userRepository, never()).flush();
+  }
 
   @Test
-  void unblock() {}
+  void testBlock_UserDoesNotExist() {
+    Long userId = 1L;
+    when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+    Optional<User> result = userService.block(userId);
+
+    assertFalse(result.isPresent());
+    verify(userRepository, never()).save(any());
+    verify(userRepository, never()).flush();
+  }
+
+  @Test
+  void testUnblock_UserExistsAndIsBlocked() {
+    Long userId = 1L;
+    user.setBlocked(true);
+    Instant now = Instant.now();
+    user.setUpdatedOn(Timestamp.from(now));
+    when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+    Optional<User> result = userService.unblock(userId);
+
+    assertTrue(result.isPresent());
+    assertFalse(result.get().isBlocked());
+    assertEquals(user.getUpdatedOn(), result.get().getUpdatedOn());
+    verify(userRepository, times(1)).save(result.get());
+    verify(userRepository, times(1)).flush();
+  }
+
+  @Test
+  void testUnblock_UserExistsAndIsNotBlocked() {
+    Long userId = 1L;
+    user.setBlocked(false);
+    when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+    Optional<User> result = userService.unblock(userId);
+
+    assertTrue(result.isPresent());
+    assertFalse(result.get().isBlocked());
+    assertEquals(user.getUpdatedOn(), result.get().getUpdatedOn());
+    verify(userRepository, never()).save(any());
+    verify(userRepository, never()).flush();
+  }
+
+  @Test
+  void testUnblock_UserDoesNotExist() {
+    Long userId = 1L;
+    when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+    Optional<User> result = userService.unblock(userId);
+
+    assertFalse(result.isPresent());
+    verify(userRepository, never()).save(any());
+    verify(userRepository, never()).flush();
+  }
 
   @Test
   void isExistsByEmail() {
-    Mockito.when(userRepository.existsByEmail("john@example.com")).thenReturn(true);
-    Mockito.when(userRepository.existsByEmail("john@example1.com")).thenReturn(false);
+    when(userRepository.existsByEmail("john@example.com")).thenReturn(true);
+    when(userRepository.existsByEmail("john@example1.com")).thenReturn(false);
     boolean result = userService.isExistsByEmail(user);
     assertTrue(result);
     User user1 = new User();
@@ -69,5 +262,11 @@ class UserServiceTest {
   }
 
   @Test
-  void updateUserLastLogin() {}
+  void updateUserLastLogin() {
+    userService.updateUserLastLogin(user);
+    verify(userRepository, times(1)).save(user);
+    verify(userRepository, times(1)).flush();
+    assertNotNull(user.getLastLogin());
+    assertNotNull(user.getUpdatedOn());
+  }
 }

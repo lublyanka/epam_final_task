@@ -6,10 +6,15 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 
 import com.example.cards.entities.User;
 import com.example.cards.enums.Responses;
+
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,11 +29,35 @@ public class UserValidationTests {
 
     private User user;
 
+    static Stream<String> invalidNames() {
+        return Stream.of("123", "John Smith1", "J0hn");
+    }
+
+    static Stream<String> validNames() {
+        return Stream.of("Andrés", "Juan Carlos", "Juan-Manuel","Moño", "JСветлана", "Борис");
+    }
+
+    private static Collection<Object[]> phones() {
+        return Arrays.asList(
+                new Object[][] {
+                        {"453914880343646745671", Optional.of(Responses.PHONE_IS_INVALID)},
+                        {"4539 1488", Optional.of(Responses.PHONE_IS_INVALID)},
+                        {"45391", Optional.empty()},
+                        {"45391488", Optional.empty()},
+                        {"", Optional.of(Responses.PHONE_IS_INVALID)},
+                        {"  6011-1111-1111-1117  ", Optional.of(Responses.PHONE_IS_INVALID)},
+                        {"1", Optional.of(Responses.PHONE_IS_INVALID)},
+                        {"ABCD EFGH IJKL MNOP", Optional.of(Responses.PHONE_IS_INVALID)}
+                });
+    }
+
     @BeforeEach
     void createBasicNormalUser() {
         user = new User();
+        user.setId(1L);
         user.setName("John");
         user.setSurname("Smith");
+        user.setMiddlename("Dow");
         user.setEmail("john@example.com");
         user.setPassword("Qwerty123");
         user.setPhone("1234567890");
@@ -129,26 +158,46 @@ public class UserValidationTests {
         Optional<?> error = userService.getValidationUserError(user);
         assertFalse(error.isPresent());
     }
-
-    static Stream<String> invalidNames() {
-        return Stream.of("123", "John Smith1", "J0hn");
+    @Test
+    void testIsAdmin() {
+        User adminUser = new User();
+        adminUser.setRole("ADMIN");
+        User regularUser = new User();
+        regularUser.setRole("USER");
+        assertTrue(adminUser.isAdmin());
+        assertFalse(regularUser.isAdmin());
     }
 
-    static Stream<String> validNames() {
-        return Stream.of("Andrés", "Juan Carlos", "Juan-Manuel","Moño", "JСветлана", "Борис");
+    @Test
+    void testUserEquals() {
+        User user1 = user;
+        User user2 = new User();
+        user2.setId(1L);
+        assertTrue(user1.equals(user2));
+        user2.setId(2L);
+        assertFalse(user1.equals(user2));
+        user1.setId(null);
+        assertFalse(user1.equals(user2));
+        user2.setId(null);
+        assertTrue(user1.equals(user2));
     }
 
-    private static Collection<Object[]> phones() {
-        return Arrays.asList(
-                new Object[][] {
-                        {"453914880343646745671", Optional.of(Responses.PHONE_IS_INVALID)},
-                        {"4539 1488", Optional.of(Responses.PHONE_IS_INVALID)},
-                        {"45391", Optional.empty()},
-                        {"45391488", Optional.empty()},
-                        {"", Optional.of(Responses.PHONE_IS_INVALID)},
-                        {"  6011-1111-1111-1117  ", Optional.of(Responses.PHONE_IS_INVALID)},
-                        {"1", Optional.of(Responses.PHONE_IS_INVALID)},
-                        {"ABCD EFGH IJKL MNOP", Optional.of(Responses.PHONE_IS_INVALID)}
-                });
+
+    @Test
+    void testUserFields() {
+        user.setAddress("Calle 1");
+        Assertions.assertEquals("Calle 1", user.getAddress());
+        Assertions.assertEquals("USER", user.getRole());
+        Timestamp now = Timestamp.from(Instant.now());
+        user.setLastLogin(now);
+        user.setBirthDate(now);
+        user.setCreatedOn(now);
+        Assertions.assertEquals(now, user.getLastLogin());
+        Assertions.assertEquals(now, user.getBirthDate());
+        Assertions.assertEquals(now, user.getCreatedOn());
+        Assertions.assertEquals("Dow", user.getMiddlename());
+        user.setMiddlename("Bow");
+        Assertions.assertNotEquals("Dow", user.getMiddlename());
+        Assertions.assertEquals("Bow", user.getMiddlename());
     }
 }

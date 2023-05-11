@@ -25,7 +25,7 @@ public class UserProfileController {
    */
   @GetMapping("")
   public ResponseEntity<?> loadUserProfile(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-    User user = userService.getUserByTokenWithCountry(token);
+    User user = userService.getUserByToken(token);
     return ResponseEntity.ok(user);
   }
 

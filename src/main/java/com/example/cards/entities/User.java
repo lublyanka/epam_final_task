@@ -18,6 +18,8 @@ public class User implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Getter
+  @Setter
   private Long id;
 
   @Column(name = "password", nullable = false)
@@ -65,7 +67,9 @@ public class User implements Serializable {
   @Setter
   private Timestamp lastLogin;
 
-  @Column() @Getter @Setter private Timestamp birthDate;
+  @Column()
+  @Getter @Setter
+  private Timestamp birthDate;
 
   @Column(name = "role", length = 10)
   @Getter
@@ -81,10 +85,6 @@ public class User implements Serializable {
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
   private List<Payment> payments;
-
-  public Long getId() {
-    return id;
-  }
 
   /**
    * Gets password.

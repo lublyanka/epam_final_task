@@ -1,7 +1,7 @@
 async function login() {
   var url = "/api/auth/login";
-  var username = document.getElementById('username').value;
-  var password = document.getElementById('password').value;
+  var username = document.getElementById('username').value.trim();
+  var password = document.getElementById('password').value.trim();
   var data = {
     "email": username,
     "password": password

@@ -1,4 +1,4 @@
-<ul  th:fragment="collapsible_refill_account" id="collapsible" class="collapsible col s2">
+<ul th:fragment="collapsible_refill_account" id="collapsible" class="collapsible col s3">
     <li>
         <div data-i18n-key="refill" class="collapsible-header waves-effect waves-light"><i
                 class="material-icons">attach_money</i>Refill
@@ -7,12 +7,12 @@
             <div class="row">
                 <div class="input-field col s12">
                     <label data-i18n-key="refillsum" for="refillsum">Sum to refill</label>
-                    <input class="validate" data-length="10" id="refillsum" name="refillsum"
-                           type="text"
-                           required>
+                    <input data-length="10" id="refillsum" name="refillsum"
+                           type="text" required>
+                    <span class="helper-text" data-error=""></span>
                 </div>
                 <div class="col s12">
-                    <a href="#!" data-i18n-key="refill" class="waves-effect waves-green btn"
+                    <a href="#!" data-i18n-key="refill" class="waves-effect waves-green btn" id="refillButton"
                        onclick="refill()">Refill</a>
                 </div>
             </div>
@@ -65,7 +65,7 @@
         </div>
         <div class="col s12" id="response-message"></div>
         <div class="modal-footer">
-            <a href="#!" data-i18n-key="save" class="waves-effect waves-green btn" id="saveButton"
+            <a href="#!" data-i18n-key="save" class="waves-effect waves-green btn disabled" id="saveButton"
                onclick="addPayment()">Save</a>
             <a href="#!" data-i18n-key="cancel" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
         </div>

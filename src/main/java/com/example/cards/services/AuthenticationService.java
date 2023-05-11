@@ -18,9 +18,9 @@ public class AuthenticationService {
   @Qualifier("passwordEncoder")
   private final PasswordEncoder passwordEncoder;
 
-  @Autowired UserService userService;
+  private final UserService userService;
 
-  @Autowired private JwtTokenUtil jwtTokenUtil;
+  private final JwtTokenUtil jwtTokenUtil;
 
   /**
    * Is user valid.
@@ -36,9 +36,11 @@ public class AuthenticationService {
       return Optional.empty();
     }
 
-    if (!isPasswordValid(password, user)) return Optional.empty();
+    if (!isPasswordValid(password, user))
+      return Optional.empty();
 
-    if (user.isBlocked()) return Optional.of(true);
+    if (user.isBlocked())
+      return Optional.of(true);
 
     return Optional.ofNullable(getToken(user));
   }
@@ -51,11 +53,7 @@ public class AuthenticationService {
    * @return the optional
    */
   private boolean isPasswordValid(String password, User user) {
-    return isPasswordMatch(password, user.getPassword());
-  }
-
-  private boolean isPasswordMatch(String password, String userPassword) {
-    return passwordEncoder.matches(password, userPassword);
+    return passwordEncoder.matches(password, user.getPassword());
   }
 
   /**

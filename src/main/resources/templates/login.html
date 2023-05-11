@@ -25,11 +25,11 @@
                         <label data-i18n-key="password" for="password">Password</label>
                         <input  id="password" name="password" type="password" class="validate" required="required">
                     </div>
-                    <button lang="en" class="btn-small waves-effect waves-light" name="action" onclick="login()" type="submit">
+                    <button lang="en" class="btn-small waves-effect waves-light" name="action" onclick="event.preventDefault();login()" type="submit">
                         Log In
                         <i class="material-icons right">chevron_right</i>
                     </button>
-                    <button lang="es" class="btn-small waves-effect waves-light" name="action" onclick="login()" type="submit">
+                    <button lang="es" class="btn-small waves-effect waves-light" name="action" onclick="event.preventDefault();login();" type="submit">
                         Acceder
                         <i class="material-icons right">chevron_right</i>
                     </button>
@@ -42,12 +42,8 @@
                         <a class="social-login__icon fab fa-facebook" href="#"><i class="material-icons prefix">lock_outline</i></a>
                         <a class="social-login__icon fab fa-twitter" href="#"><i class="material-icons prefix">lock_outline</i></a>
                     </div>
-                    <button lang="en" class="btn-small waves-effect waves-light" name="action" onclick="window.location.href='/register'" type="submit">
-                        Sign up
-                        <i class="material-icons right">chevron_right</i>
-                    </button>
-                    <button lang="es" class="btn-small waves-effect waves-light" name="action" onclick="window.location.href='/register'" type="submit">
-                        Inscribir
+                    <button  class="btn-small waves-effect waves-light" name="action" onclick="window.location.href='/register'" type="submit">
+                        <span data-i18n-key="signUp">Sign up</span>>
                         <i class="material-icons right">chevron_right</i>
                     </button>
                 </div>
@@ -63,7 +59,6 @@
     </div>
 </main>
 <div th:replace="~{fragments/base::footer}"></div>
-<div th:replace="~{fragments/button.html}"> </div>
 </body>
 
 

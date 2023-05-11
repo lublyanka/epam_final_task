@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
   @Qualifier("passwordEncoder")
   private final PasswordEncoder passwordEncoder;
+
   private final UserRepository userRepository;
   private final JwtTokenUtil jwtTokenUtil;
 
@@ -42,10 +43,6 @@ public class UserService {
     return userRepository.findByEmail(jwtTokenUtil.extractUsername(token));
   }
 
-  public User getUserByTokenWithCountry(String token) {
-    return userRepository.findByEmail(jwtTokenUtil.extractUsername(token));
-  }
-
   @Transactional
   public User registerUser(User user) {
     if (isExistsByEmail(user)) {
@@ -53,6 +50,7 @@ public class UserService {
     }
     user.setPassword(passwordEncoder.encode(user.getPassword()));
     user.setRole("USER");
+    user.setEmail(user.getEmail().toLowerCase());
     user = userRepository.save(user);
     userRepository.flush();
     return user;
@@ -68,12 +66,15 @@ public class UserService {
 
     if (!userToSave.getEmail().equals(updatedUser.getEmail()))
       userToSave.setEmail(updatedUser.getEmail());
+    if (userToSave.getPhone() != null) {
+      if (!userToSave.getPhone().equals(updatedUser.getPhone()))
+        userToSave.setPhone(updatedUser.getPhone());
+    } else userToSave.setPhone(updatedUser.getAddress());
 
-    if (!userToSave.getPhone().equals(updatedUser.getPhone()))
-      userToSave.setPhone(updatedUser.getPhone());
-
-    if (!userToSave.getAddress().equals(updatedUser.getAddress()))
-      userToSave.setAddress(updatedUser.getAddress());
+    if (userToSave.getAddress() != null) {
+      if (userToSave.getAddress().equals(updatedUser.getAddress()))
+        userToSave.setAddress(updatedUser.getAddress());
+    } else userToSave.setAddress(updatedUser.getAddress());
 
     userToSave.setUpdatedOn(Timestamp.from(Instant.now()));
 
@@ -137,9 +138,9 @@ public class UserService {
       return Optional.of(PASSWORD_IS_EMPTY);
     }
     if (user.getSurname() == null
-            || user.getSurname().isEmpty()
-            || user.getName() == null
-            || user.getName().isEmpty()) {
+        || user.getSurname().isEmpty()
+        || user.getName() == null
+        || user.getName().isEmpty()) {
       return Optional.of(NAME_IS_EMPTY);
     }
 
@@ -151,12 +152,13 @@ public class UserService {
       return Optional.of(SURNAME_IS_INVALID);
     }
 
-    //Allow only digits, from 5 to 20 characters length
+    // Allow only digits, from 5 to 20 characters length
     if (!user.getPhone().matches("^\\d{5,20}$")) {
       return Optional.of(PHONE_IS_INVALID);
     }
 
-    // Allow password not less than 8 character with  at least one digit, one uppercase letter, only in Latin
+    // Allow password not less than 8 character with  at least one digit, one uppercase letter, only
+    // in Latin
     if (!user.getPassword().matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$")) {
       return Optional.of(PASSWORD_IS_INVALID);
     }
@@ -175,6 +177,6 @@ public class UserService {
   private boolean isTextStringInvalid(String str) {
     // Allow letters, spaces, apostrophes, and hyphens, as well as Cyrillic and Spanish characters
     return !str.matches(
-            "[a-zA-Z\\u00C0-\\u024F\\u0400-\\u04FF\\u0500-\\u052F\\u1E00-\\u1EFF\\s'’\\-]+");
+        "[a-zA-Z\\u00C0-\\u024F\\u0400-\\u04FF\\u0500-\\u052F\\u1E00-\\u1EFF\\s'’\\-]+");
   }
 }

@@ -61,8 +61,8 @@ public class Account {
   @Setter
   private Timestamp updatedOn;
 
-  /** Instantiates a new Account. */
-  public Account() {}
+  /** Instantiates a new Account. *//*
+  public Account() {}*/
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "account")
   private List<Payment> payments;

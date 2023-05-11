@@ -39,6 +39,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("org.springframework.security:spring-security-test")
+    testCompileOnly("org.junit.jupiter:junit-jupiter:5.4.2")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 

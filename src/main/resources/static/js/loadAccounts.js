@@ -11,7 +11,7 @@ async function loadAccounts(url, sortBy, orderBy) {
     hideElement(ul);
     insertAccounts(accountJSONData);
     activatePagination(accountJSONData, url, 'loadAccounts');
-  } else insertTestErrorMessageFromResponse(response)
+  } else if(!(response.status === 204)) insertTestErrorMessageFromResponse(response);
 
   function insertAccounts(jsonData) {
     table.getElementsByTagName("tbody")[0].innerHTML = '';
