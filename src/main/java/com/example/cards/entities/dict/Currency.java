@@ -32,4 +32,9 @@ public class Currency {
 
   /** Instantiates a new Currency. */
   public Currency() {}
+
+  public Currency(String code, String name) {
+    this.code = code;
+      this.name = name;
+  }
 }

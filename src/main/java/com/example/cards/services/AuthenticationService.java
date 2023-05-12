@@ -1,11 +1,10 @@
 package com.example.cards.services;
 
+import com.example.cards.entities.User;
 import com.example.cards.utils.JwtTokenUtil;
 import com.example.cards.utils.UserPrincipal;
-import com.example.cards.entities.User;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,7 +29,7 @@ public class AuthenticationService {
    * @return the optional
    */
   @Transactional
-  public Optional<?> isUserValid(String password, String email) {
+  public Optional<String> isUserValid(String password, String email) {
     User user = userService.getUserByEmail(email);
     if (user == null) {
       return Optional.empty();
@@ -40,7 +39,7 @@ public class AuthenticationService {
       return Optional.empty();
 
     if (user.isBlocked())
-      return Optional.of(true);
+      return Optional.of("false");
 
     return Optional.ofNullable(getToken(user));
   }

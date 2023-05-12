@@ -16,22 +16,22 @@ import java.time.Instant;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /** The Payment service. */
 @Service
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer"})
+@RequiredArgsConstructor
 public class PaymentService {
 
-  @Autowired private PaymentRepository paymentRepository;
-  @Autowired private AccountRepository accountRepository;
-  @Autowired private UserService userService;
+  private final PaymentRepository paymentRepository;
+  private final AccountRepository accountRepository;
+  private final UserService userService;
 
   /**
    * Gets payment by id.
@@ -87,7 +87,7 @@ public class PaymentService {
         paymentRepository.findAllByUser_Id(
             user.getId(),
             PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy)));
-    //pageResult.forEach(x -> x.setAccount(null));
+    // pageResult.forEach(x -> x.setAccount(null));
     return pageResult;
     // paymentList.stream().sorted(getComparator(sortBy, sortOrder)).toList();
   }
@@ -108,7 +108,7 @@ public class PaymentService {
         paymentRepository.findAllByAccount(
             account,
             PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy)));
-    //pageResult.forEach(x -> x.setAccount(null));
+    // pageResult.forEach(x -> x.setAccount(null));
     return pageResult;
     // paymentList.stream().sorted(getComparator(sortBy, sortOrder)).toList();
   }
@@ -185,7 +185,7 @@ public class PaymentService {
    * @return the boolean
    */
   public boolean isPaymentSumPositive(BigDecimal sum, Account account) {
-    return account.getCurrentBalance().compareTo(sum) > 0;
+    return sum.compareTo(BigDecimal.ZERO) > 0 && account.getCurrentBalance().compareTo(sum) > 0;
   }
 
   /**
@@ -217,7 +217,7 @@ public class PaymentService {
    * @param size the size of page
    * @return the all payments
    */
-  @PreAuthorize("hasAuthority ('ROLE_ADMIN') ")
+  //@PreAuthorize("hasAuthority ('ROLE_ADMIN') ")
   public Page<Payment> getAllPayments(String sortBy, String sortOrder, int page, int size) {
     return paymentRepository.findAll(
         PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy)));

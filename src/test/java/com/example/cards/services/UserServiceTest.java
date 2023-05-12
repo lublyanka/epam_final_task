@@ -6,22 +6,22 @@ import static org.mockito.Mockito.*;
 import com.example.cards.entities.User;
 import com.example.cards.repositories.UserRepository;
 import com.example.cards.utils.JwtTokenUtil;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
-
+@SpringBootTest
 class UserServiceTest {
 
   private final PasswordEncoder passwordEncoder = mock(PasswordEncoder.class);
@@ -79,7 +79,7 @@ class UserServiceTest {
     assertEquals(size, pageRequest.getPageSize());
     assertEquals(
         Sort.Direction.fromString(sortOrder),
-        pageRequest.getSort().getOrderFor(sortBy).getDirection());
+        Objects.requireNonNull(pageRequest.getSort().getOrderFor(sortBy)).getDirection());
 
     assertEquals(expectedPage, result);
   }
@@ -129,10 +129,15 @@ class UserServiceTest {
     User result = userService.registerUser(user);
     assertEquals(savedUser, result);
   }
+  @Test
+  void registerUserAlreadyExists() {
+    when(userRepository.existsByEmail(user.getEmail())).thenReturn(true);
+    User result = userService.registerUser(user);
+    assertNull(result);
+  }
 
   @Test
   void updateUser() {
-    Long userId = 1L;
     User existingUser = user;
     Instant now = Instant.now();
     existingUser.setUpdatedOn(Timestamp.from(now.minusMillis(10000)));
@@ -140,18 +145,21 @@ class UserServiceTest {
     // Create an updated user with modified attributes
     User updatedUser = new User();
     updatedUser.setId(1L);
-    updatedUser.setName("John");
-    updatedUser.setSurname("Smith");
-    updatedUser.setEmail("john@example.com");
-    updatedUser.setPassword("Qwerty123");
-    updatedUser.setPhone("1234567890");
-    updatedUser.setAddress("123 Main Street");
+    updatedUser.setName("John1");
+    updatedUser.setSurname("Smith1");
+    updatedUser.setEmail("john@example.com1");
+    updatedUser.setPassword("Qwerty1231");
+    updatedUser.setPhone("12345678901");
+    updatedUser.setAddress("123 Main Street1");
 
     when(userRepository.save(existingUser)).thenReturn(updatedUser);
 
     User result = userService.updateUser(updatedUser, existingUser);
 
+    assertEquals(updatedUser.getId(), result.getId());
+    assertEquals(updatedUser.getName(), result.getName());
     assertEquals(updatedUser.getSurname(), result.getSurname());
+    assertEquals(updatedUser.getEmail(), result.getEmail());
     assertEquals(updatedUser.getPhone(), result.getPhone());
     assertEquals(updatedUser.getAddress(), result.getAddress());
     assertNotEquals(existingUser.getUpdatedOn(), result.getUpdatedOn());

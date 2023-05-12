@@ -1,13 +1,15 @@
 package com.example.cards.requests;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.RequiredArgsConstructor;
 
 /** The type Login request. */
+@RequiredArgsConstructor
 public class LoginRequest {
 
-  @NotBlank private String email;
+  @NotBlank private final String email;
 
-  @NotBlank private String password;
+  @NotBlank private final String password;
 
   /**
    * Gets email.

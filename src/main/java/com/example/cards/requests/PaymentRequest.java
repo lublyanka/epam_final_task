@@ -1,17 +1,15 @@
 package com.example.cards.requests;
 
 import com.example.cards.enums.PaymentStatus;
-import com.example.cards.repositories.dict.CurrencyRepository;
 import java.math.BigDecimal;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /** The type Payment request. */
 public class PaymentRequest {
 
-  @Autowired private CurrencyRepository currencyRepository;
+  //@Autowired private CurrencyRepository currencyRepository;
 
   @Getter @Setter private UUID accountId;
   @Getter @Setter private PaymentStatus status;

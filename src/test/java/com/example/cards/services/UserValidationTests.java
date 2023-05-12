@@ -6,21 +6,21 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 
 import com.example.cards.entities.User;
 import com.example.cards.enums.Responses;
-
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 public class UserValidationTests {
 
     private final UserService userService = new UserService(null, null, null);

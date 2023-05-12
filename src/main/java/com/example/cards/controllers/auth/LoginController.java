@@ -6,16 +6,17 @@ import com.example.cards.requests.LoginRequest;
 import com.example.cards.services.AuthenticationService;
 import jakarta.validation.Valid;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /** The Login controller. */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/auth")
 public class LoginController {
 
-  @Autowired private AuthenticationService authenticationService;
+  private final AuthenticationService authenticationService;
 
   /**
    * Authenticate user response entity.
@@ -26,6 +27,8 @@ public class LoginController {
   @PostMapping("/login")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
+    if (loginRequest == null|| loginRequest.getEmail() == null || loginRequest.getPassword() == null)
+      return REQUIRED_FIELDS_ARE_EMPTY;
     String email = loginRequest.getEmail().trim().toLowerCase();
     String password = loginRequest.getPassword().trim();
 
@@ -33,7 +36,7 @@ public class LoginController {
 
     Optional<?> user = authenticationService.isUserValid(password, email);
     if (user.isEmpty()) return INVALID_EMAIL_OR_PASSWORD;
-    if (user.get() instanceof Boolean) return USER_IS_BLOCKED;
+    if (user.get().equals("false")) return USER_IS_BLOCKED;
     String token = user.get().toString();
     if (token == null) return INVALID_EMAIL_OR_PASSWORD;
 

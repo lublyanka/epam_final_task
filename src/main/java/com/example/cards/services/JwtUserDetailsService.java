@@ -1,9 +1,9 @@
 package com.example.cards.services;
 
-import com.example.cards.utils.UserPrincipal;
 import com.example.cards.entities.User;
 import com.example.cards.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.cards.utils.UserPrincipal;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service;
 
 /** The Jwt user details service. */
 @Service
+@RequiredArgsConstructor
 public class JwtUserDetailsService implements UserDetailsService {
-  @Autowired private UserRepository userRepository;
+  private final UserRepository userRepository;
 
   /**
    * Load user by username.

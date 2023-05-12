@@ -3,6 +3,8 @@ package com.example.cards.services;
 import com.example.cards.entities.Account;
 import com.example.cards.entities.CreditCard;
 import com.example.cards.repositories.CreditCardRepository;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -65,6 +67,8 @@ public class CreditCardService {
     creditCard.setCardHolder(creditCard.getCardHolder().strip());
     creditCard.setCardType(creditCard.getCardType().strip());
     creditCard.setCardTitle(creditCard.getCardTitle().strip());
+    creditCard.setMonth(creditCard.getMonth().strip());
+    creditCard.setYear(creditCard.getYear().strip());
     CreditCard creditCardSaved = creditCardRepository.save(creditCard);
     creditCardRepository.flush();
     return creditCardSaved;
@@ -105,5 +109,13 @@ public class CreditCardService {
       alternate = !alternate;
     }
     return (sum % 10 == 0);
+  }
+
+
+  public boolean isDueDateAfterMonthStart(CreditCard creditCard) {
+    LocalDate dueDate =
+        LocalDate.of(
+            Integer.parseInt(creditCard.getYear()), Integer.parseInt(creditCard.getMonth()), 1);
+      return dueDate.isAfter(LocalDate.now().withDayOfMonth(1));
   }
 }

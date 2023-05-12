@@ -118,16 +118,6 @@ public class NavigationController {
   }
 
   /**
-   * Gets 500 test html page.
-   *
-   * @return the 500 test
-   */
-  @GetMapping("/500test")
-  public String get500test() {
-    return new ResponseEntity<>("500", null, 500).getStatusCode().toString();
-  }
-
-  /**
    * Gets 500 error html page.
    *
    * @return the 500

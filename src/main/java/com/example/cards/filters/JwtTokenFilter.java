@@ -1,7 +1,7 @@
 package com.example.cards.filters;
 
-import com.example.cards.utils.JwtTokenUtil;
 import com.example.cards.services.JwtUserDetailsService;
+import com.example.cards.utils.JwtTokenUtil;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;

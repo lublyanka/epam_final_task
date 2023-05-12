@@ -1,29 +1,21 @@
 package com.example.cards.utils;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import com.example.cards.entities.User;
-import com.example.cards.repositories.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.ExpiredJwtException;
-import lombok.extern.apachecommons.CommonsLog;
-import lombok.extern.java.Log;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-
 import java.security.Key;
 import java.time.Instant;
 import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 @SpringJUnitConfig
 @SpringBootTest
@@ -65,16 +57,26 @@ class JwtTokenUtilTest {
                 .getBody();
 
         assertEquals(userPrincipal.getUsername(), claims.getSubject());
-        assertEquals(authorities, claims.get("roles"));
+        String result = new ArrayList<>(authorities).get(0).getAuthority();
+        assertEquals(result, claims.get("roles", List.class).get(0));
       }
 
     @Test
     void validateToken() {
+        String username = "john@example.com";
+        UserPrincipal userDetails = mock(UserPrincipal.class);
+        JwtTokenUtil jwtTokenUtil2 = mock(JwtTokenUtil.class);
+        when(jwtTokenUtil2.extractUsername(token)).thenReturn(username);
+        when(userDetails.getUsername()).thenReturn(username);
+        when(jwtTokenUtil2.isTokenExpired(token)).thenReturn(false);
+        boolean result = jwtTokenUtil2.validateToken(token, userDetails);
+        //verify(jwtTokenUtil2).extractUsername(token);
+        assertTrue(result);
       }
 
     @Test
     void isTokenExpired() {
-        Boolean result = jwtTokenUtil.isTokenExpired(token);
+        boolean result = jwtTokenUtil.isTokenExpired(token);
         assertFalse(result);
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles", userPrincipal.getAuthorities());
@@ -110,6 +112,12 @@ class JwtTokenUtilTest {
 
     @Test
     void extractRoles() {
+        List<String> roles = Arrays.asList("ROLE_ADMIN", "ROLE_USER");
+        Claims claims = mock(Claims.class);
+        when(claims.get("roles", List.class)).thenReturn(roles);
+        List<String> result = jwtTokenUtil.extractRoles(token);
+        assertEquals(roles, result);
+        verify(claims).get("roles", List.class);
       }
 
     @Test
@@ -122,5 +130,18 @@ class JwtTokenUtilTest {
 
     @Test
     void extractAllClaims() {
+        String token = Jwts.builder()
+                .setSubject("testuser")
+                .claim("email", "testuser@example.com")
+                .claim("role", "USER")
+                .signWith(SignatureAlgorithm.HS256, key)
+                .compact();
+
+        JwtTokenUtil jwtTokenUtil = new JwtTokenUtil(key);
+        Claims claims = jwtTokenUtil.extractAllClaims(token);
+
+        assertEquals("testuser", claims.getSubject());
+        assertEquals("testuser@example.com", claims.get("email"));
+        assertEquals("USER", claims.get("role"));
       }
 }

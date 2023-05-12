@@ -112,7 +112,7 @@ public class User implements Serializable {
    * @return the boolean
    */
   public boolean isAdmin() {
-    return this.role.equals("ADMIN");
+    return getRole().equals("ADMIN");
   }
 
   @Override

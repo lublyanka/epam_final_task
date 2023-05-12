@@ -2,9 +2,9 @@ package com.example.cards.services;
 
 import static com.example.cards.enums.Responses.*;
 
-import com.example.cards.utils.JwtTokenUtil;
 import com.example.cards.entities.User;
 import com.example.cards.repositories.UserRepository;
+import com.example.cards.utils.JwtTokenUtil;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Optional;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,15 +67,11 @@ public class UserService {
 
     if (!userToSave.getEmail().equals(updatedUser.getEmail()))
       userToSave.setEmail(updatedUser.getEmail());
-    if (userToSave.getPhone() != null) {
-      if (!userToSave.getPhone().equals(updatedUser.getPhone()))
-        userToSave.setPhone(updatedUser.getPhone());
-    } else userToSave.setPhone(updatedUser.getAddress());
+    if (userToSave.getPhone() == null || (!userToSave.getPhone().equals(updatedUser.getPhone())))
+      userToSave.setPhone(updatedUser.getPhone());
 
-    if (userToSave.getAddress() != null) {
-      if (userToSave.getAddress().equals(updatedUser.getAddress()))
-        userToSave.setAddress(updatedUser.getAddress());
-    } else userToSave.setAddress(updatedUser.getAddress());
+    if (userToSave.getAddress() == null || userToSave.getAddress().equals(updatedUser.getAddress()))
+      userToSave.setAddress(updatedUser.getAddress());
 
     userToSave.setUpdatedOn(Timestamp.from(Instant.now()));
 
@@ -130,7 +127,7 @@ public class UserService {
     userRepository.flush();
   }
 
-  public Optional<?> getValidationUserError(User user) {
+  public Optional<ResponseEntity<String>> getValidationUserError(User user) {
     if (user.getEmail() == null || user.getEmail().isEmpty()) {
       return Optional.of(EMAIL_IS_EMPTY);
     }

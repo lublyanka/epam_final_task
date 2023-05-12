@@ -1,10 +1,11 @@
 package com.example.cards.utils;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.example.cards.entities.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 class UserPrincipalTest {
     private User user;
     @BeforeEach

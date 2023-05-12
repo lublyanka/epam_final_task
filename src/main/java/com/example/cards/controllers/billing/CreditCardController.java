@@ -1,19 +1,18 @@
 package com.example.cards.controllers.billing;
 
+import static com.example.cards.enums.Responses.*;
+
 import com.example.cards.entities.Account;
 import com.example.cards.entities.CreditCard;
 import com.example.cards.services.AccountService;
 import com.example.cards.services.CreditCardService;
+
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.util.Optional;
-
-import static com.example.cards.enums.Responses.*;
 
 /** The Credit card controller. */
 @RestController
@@ -42,10 +41,8 @@ public class CreditCardController {
     }
 
     try {
-      LocalDate dueDate =
-          LocalDate.of(
-              Integer.parseInt(creditCard.getYear()), Integer.parseInt(creditCard.getMonth()), 1);
-      if (dueDate.isBefore(LocalDate.now().plusMonths(1))) return INVALID_DUE_DATE;
+      boolean isDueDateAfterMonthStart = creditCardService.isDueDateAfterMonthStart(creditCard);
+      if (!isDueDateAfterMonthStart) return INVALID_DUE_DATE;
     } catch (NumberFormatException e) {
       return INVALID_DUE_DATE;
     }
