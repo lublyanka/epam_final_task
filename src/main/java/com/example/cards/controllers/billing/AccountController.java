@@ -204,7 +204,7 @@ public class AccountController {
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
       @PathVariable UUID accountId,
       @RequestBody String amountStr) {
-    if (!amountStr.matches("^\\d+(\\.|,){0,1}\\d{0,2}$"))
+    if (!amountStr.matches("^-?\\d+(\\.|,)?\\d{0,2}$"))
       return ResponseEntity.badRequest().body("Refilling sum is not numeric.");
     BigDecimal amount = new BigDecimal(amountStr);
     if (amount.compareTo(BigDecimal.ZERO) != 1) {

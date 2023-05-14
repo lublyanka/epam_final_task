@@ -106,7 +106,8 @@ public class AccountService {
   @Transactional
   public Optional<Account> refillAccount(String token, UUID accountId, BigDecimal amount) {
     Optional<Account> accountOptional = getOptionalAccount(token, accountId);
-    if (accountOptional.isEmpty()) return Optional.empty();
+    if (accountOptional.isEmpty())
+      return Optional.empty();
 
     if (amount.compareTo(BigDecimal.ZERO) != 1) {
       return accountOptional;
@@ -238,7 +239,7 @@ public class AccountService {
    * @param size the size of the page
    * @return the all accounts
    */
-  @PreAuthorize("hasAuthority ('ROLE_ADMIN')")
+  //@PreAuthorize("hasAuthority ('ROLE_ADMIN')")
   public Page<Account> getAllAccounts(String sortBy, String sortOrder, int page, int size) {
     return accountRepository.findAll(
         PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy)));
@@ -252,13 +253,14 @@ public class AccountService {
    * @return the optional
    */
   @Transactional
-  @PreAuthorize("hasAuthority ('ROLE_ADMIN')")
+  //@PreAuthorize("hasAuthority ('ROLE_ADMIN')")
   public Optional<Account> unblock(String token, UUID accountId) {
     Optional<Account> accountOptional = getOptionalAccount(token, accountId);
     if (accountOptional.isPresent()) {
       Account account = accountOptional.get();
       if (account.isBlocked() && account.isRequested()) {
         account.setBlocked(false);
+        account.setRequested(false);
         account.setUpdatedOn(Timestamp.from(Instant.now()));
         updateAccount(account);
       }

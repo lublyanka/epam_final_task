@@ -1,6 +1,7 @@
 package com.example.cards.services;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -27,7 +28,8 @@ class AuthenticationServiceTest {
     String email = "user@example.com";
     User user = new User();
     user.setEmail(email);
-    user.setPassword(passwordEncoder.encode(password));
+    String encodedPassword = passwordEncoder.encode(password);
+    user.setPassword(encodedPassword);
     user.setBlocked(false);
     Optional<?> result;
 
@@ -50,11 +52,15 @@ class AuthenticationServiceTest {
     assertTrue(result.isEmpty());
 
     // Test when user exists and password is valid
-    when(jwtTokenUtil.generateJwtToken(new UserPrincipal(user))).thenReturn("token");
+    user.setPassword(encodedPassword);
+    user.setBlocked(false);
+    when(userService.getUserByEmail(email)).thenReturn(user);
+    UserPrincipal up = new UserPrincipal(user);
+    when(jwtTokenUtil.generateJwtToken(any())).thenReturn("token");
    // when(userService.updateUserLastLogin(user)).then(user.setLastLogin(Timestamp.from(Instant.now()));
     result = authenticationService.isUserValid(password, email);
     assertTrue(result.isPresent());
-    assertEquals(jwtTokenUtil.generateJwtToken(new UserPrincipal(user)), result.get());
+    assertEquals(jwtTokenUtil.generateJwtToken(up), result.get());
 
 
 

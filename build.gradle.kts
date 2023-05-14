@@ -35,6 +35,7 @@ dependencies {
         exclude(group = "io.micrometer")
         //exclude(module = "mockito-core")
     }
+    testImplementation("org.mockito:mockito-inline:4.8.1")
     testImplementation("org.junit.jupiter:junit-jupiter:5.4.2")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")

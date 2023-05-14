@@ -12,9 +12,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.SecurityContextRepository;
 
@@ -35,48 +38,65 @@ class JwtTokenFilterTest {
 
   @Mock private SecurityContextRepository securityContextRepository;
   @Mock private JwtTokenUtil jwtTokenUtil;
-  @Mock private SecurityContextHolder securityContextHolder;
 
   @Test
   public void testDoFilterInternal_ValidToken_SetAuthentication()
       throws ServletException, IOException {
-    // Create the JwtTokenFilter instance
-    JwtTokenFilter jwtTokenFilter =
-        new JwtTokenFilter(
-            jwtSecret, jwtUserDetailsService, securityContextRepository, jwtTokenUtil);
 
-    // Create mock objects for HttpServletRequest, HttpServletResponse, and FilterChain
-    HttpServletRequest request = mock(HttpServletRequest.class);
-    HttpServletResponse response = mock(HttpServletResponse.class);
-    FilterChain filterChain = mock(FilterChain.class);
+    String token = "validToken";
+    try (MockedStatic<SecurityContextHolder> utilities =
+        Mockito.mockStatic(SecurityContextHolder.class)) {
+      // Create the JwtTokenFilter instance
+      JwtTokenFilter jwtTokenFilter =
+          new JwtTokenFilter(
+              jwtSecret, jwtUserDetailsService, securityContextRepository, jwtTokenUtil);
 
-    // Set up the behavior of the mock HttpServletRequest to return a valid JWT token
-    when(request.getHeader("Authorization")).thenReturn("Bearer validToken");
+      // Create mock objects for HttpServletRequest, HttpServletResponse, and FilterChain
+      HttpServletRequest request = mock(HttpServletRequest.class);
+      HttpServletResponse response = mock(HttpServletResponse.class);
+      FilterChain filterChain = mock(FilterChain.class);
 
-    // Set up the behavior of the mock JwtTokenUtil to indicate that the token is valid and not
-    // expired
-    when(jwtTokenUtil.isTokenExpired("validToken")).thenReturn(false);
-    when(jwtTokenUtil.extractUsername("validToken")).thenReturn("john@example.com");
-    List<String> roles = List.of("ROLE_USER");
-    Claims claims = mock(Claims.class);
-    when(claims.get("roles", List.class)).thenReturn(roles);
-    when(jwtTokenUtil.extractRoles("validToken")).thenReturn(roles);
-    UserPrincipal userPrincipal = mock(UserPrincipal.class);
-    Collection<GrantedAuthority> authorities = List.of(() -> "authority=ROLE_USER");
-    //when(userPrincipal.getAuthorities()).thenReturn(authorities);
-    when(jwtUserDetailsService.loadUserByUsername("1L")).thenReturn(userPrincipal);
+      // Set up the behavior of the mock HttpServletRequest to return a valid JWT token
+      when(request.getHeader("Authorization")).thenReturn(token);
 
-    when(response.getWriter()).thenReturn(new PrintWriter(System.out));
+      // Set up the behavior of the mock JwtTokenUtil to indicate that the token is valid and not
+      // expired
+      when(jwtTokenUtil.isTokenExpired(token)).thenReturn(false);
+      when(jwtTokenUtil.extractUsername(token)).thenReturn("john@example.com");
+      List<String> roles = List.of("ROLE_USER");
+      Claims claims = mock(Claims.class);
+      //when(claims.get("roles", List.class)).thenReturn(roles);
+      when(jwtTokenUtil.extractRoles(token)).thenReturn(roles);
+      UserPrincipal userPrincipal = mock(UserPrincipal.class);
+      Collection<? extends GrantedAuthority> authorities = List.of(new GrantedAuthorityMock());
+      // when(userPrincipal.getAuthorities()).thenReturn(authorities);
+      when(jwtUserDetailsService.loadUserByUsername("john@example.com")).thenReturn(userPrincipal);
+      //when(response.getWriter()).thenReturn(new PrintWriter(System.out));
+      SecurityContext securityContextMock = mock(SecurityContext.class);
+      utilities.when(() -> SecurityContextHolder.createEmptyContext()).thenReturn(securityContextMock);;
+      //utilities.when(() -> SecurityContextHolder.setContext(securityContextMock));
+      Authentication authentication = mock(Authentication.class);
+      when(securityContextMock.getAuthentication()).thenReturn(authentication);
+      when(authentication.getAuthorities()).thenReturn(List.of());
 
-    // Invoke the doFilterInternal method
-    jwtTokenFilter.doFilterInternal(request, response, filterChain);
+      // Invoke the doFilterInternal method
+      jwtTokenFilter.doFilterInternal(request, response, filterChain);
 
-    // Verify that the authentication is set in the SecurityContextHolder and saved in the
-    // SecurityContextRepository
-    verify(securityContextHolder, times(1)).setContext(any());
-    verify(securityContextRepository).saveContext(any(), eq(request), eq(response));
+      // Verify that the authentication is set in the SecurityContextHolder and saved in the
+      // SecurityContextRepository
 
-    // Verify that the filterChain.doFilter method is called
-    verify(filterChain).doFilter(request, response);
+      utilities.verify(() -> SecurityContextHolder.setContext(securityContextMock));
+      verify(securityContextRepository).saveContext(any(), eq(request), eq(response));
+
+      // Verify that the filterChain.doFilter method is called
+      verify(filterChain).doFilter(request, response);
+    }
+  }
+
+  private static class GrantedAuthorityMock implements GrantedAuthority {
+    @Override
+    public String getAuthority() {
+      return "ROLE_USER";
+    }
   }
 }

@@ -16,7 +16,6 @@ import org.springframework.web.util.WebUtils;
 
 /** The Loggable dispatcher servlet. */
 @CommonsLog
-
 public class LoggableDispatcherServlet extends DispatcherServlet {
 
   @Override

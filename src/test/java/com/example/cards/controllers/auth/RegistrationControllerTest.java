@@ -1,5 +1,6 @@
 package com.example.cards.controllers.auth;
 
+import static com.example.cards.enums.Responses.EMAIL_ALREADY_EXISTS;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -48,5 +49,20 @@ class RegistrationControllerTest {
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertEquals(errorResponse, response);
+  }
+
+  @Test
+  public void testRegisterUser_ValidUser_AlreadyExists() {
+    User user = new User();
+    user.setEmail("test@example.com");
+    user.setPassword("password");
+
+    when(userService.getValidationUserError(any(User.class))).thenReturn(Optional.empty());
+    when(userService.registerUser(any(User.class))).thenReturn(null);
+
+    ResponseEntity<?> response = registrationController.registerUser(user);
+
+    assertEquals(EMAIL_ALREADY_EXISTS.getStatusCode(), response.getStatusCode());
+    assertEquals(EMAIL_ALREADY_EXISTS.getBody(), response.getBody());
   }
 }

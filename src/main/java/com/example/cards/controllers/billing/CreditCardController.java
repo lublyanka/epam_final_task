@@ -64,11 +64,9 @@ public class CreditCardController {
   @PostMapping("/isValid")
   public ResponseEntity<String> isValidCreditCardNumber(
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody String cardNumber) {
-
     if (cardNumber != null && !cardNumber.isEmpty()) {
-      creditCardService.isValidCreditCardNumber(cardNumber);
-      return ResponseEntity.status(HttpStatus.OK)
-          .body(String.valueOf(creditCardService.isValidCreditCardNumber(cardNumber)));
+      boolean result = creditCardService.isValidCreditCardNumber(cardNumber);
+      return ResponseEntity.status(HttpStatus.OK).body(String.valueOf(result));
     } else return INVALID_CREDIT_CARD_NUMBER;
   }
 }

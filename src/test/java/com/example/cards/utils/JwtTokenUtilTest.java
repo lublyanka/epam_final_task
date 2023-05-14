@@ -46,20 +46,15 @@ class JwtTokenUtilTest {
 
     @Test
     void generateJwtToken() {
-
-        //Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>) userPrincipal.getAuthorities();
-        Collection<GrantedAuthority> authorities = List.of(() -> "authority=ROLE_USER");
-
-
         Claims claims = Jwts.parser()
                 .setSigningKey(key)
                 .parseClaimsJws(token)
                 .getBody();
 
         assertEquals(userPrincipal.getUsername(), claims.getSubject());
-        String result = new ArrayList<>(authorities).get(0).getAuthority();
-        assertEquals(result, claims.get("roles", List.class).get(0));
+        assertEquals(Map.of("authority","ROLE_USER"), claims.get("roles", List.class).get(0));
       }
+
 
     @Test
     void validateToken() {

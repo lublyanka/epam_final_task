@@ -10,7 +10,7 @@ public class Responses {
       ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account does not exist.");
   /** The constant CREDIT_CARD_DOES_NOT_EXIST. */
   public static final ResponseEntity<String> CREDIT_CARD_DOES_NOT_EXIST =
-      ResponseEntity.badRequest().body("Credit card does not exist");
+      ResponseEntity.status(HttpStatus.NOT_FOUND).body("Credit card does not exist");
   /** The constant EMAIL_ALREADY_EXISTS. */
   public static final ResponseEntity<String> EMAIL_ALREADY_EXISTS =
       ResponseEntity.status(409).body("Email already exists.");

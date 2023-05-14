@@ -3,6 +3,8 @@ package com.example.cards.advices;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,5 +29,13 @@ public class GlobalExceptionHandler {
       log.error(request.getMethod() + " not supported");
     else log.error(ex.getMessage());
     return "/error/500";
+  }
+
+
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
+    String errorMessage = "Invalid argument: " + ex.getMessage();
+
+    return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
   }
 }

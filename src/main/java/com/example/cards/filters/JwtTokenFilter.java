@@ -109,11 +109,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
    * @return new Authentication object
    */
   private Authentication getAuthentication(String jwt) {
-    String userId = jwtTokenUtil.extractUsername(jwt);
+    String userEmail = jwtTokenUtil.extractUsername(jwt);
     List<String> roles = jwtTokenUtil.extractRoles(jwt);
     log.info("Roles extracted from token: " + roles);
 
-    UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(userId);
+    UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(userEmail);
 
     return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
   }

@@ -15,11 +15,22 @@ class UserAccountKeyTest {
     assertEquals(account, userAccountKey.getAccountId());
   }
 
-  /*@Test
-  public void testDefaultConstructor() {
-    UserAccountKey userAccountKey = new UserAccountKey();
 
-    assertNotNull(userAccountKey.getUserId());
-    assertNotNull(userAccountKey.getAccountId());
-  }*/
+  @Test
+  void setUserId() {
+    User user = new User();
+    Account account = new Account();
+    UserAccountKey userAccountKey = new UserAccountKey(user, account);
+    userAccountKey.setUserId(user);
+    assertEquals(user, userAccountKey.getUserId());
     }
+
+  @Test
+  void setAccountId() {
+    User user = new User();
+    Account account = new Account();
+    UserAccountKey userAccountKey = new UserAccountKey(user, account);
+    userAccountKey.setAccountId(account);
+    assertEquals(account, userAccountKey.getAccountId());
+    }
+}
