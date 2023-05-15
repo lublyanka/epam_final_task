@@ -29,10 +29,6 @@ class UserProfileControllerTest {
         User user = new User();
         when(userService.getUserByToken(token)).thenReturn(user);
 
-        UserProfileController userProfileController = new UserProfileController();
-
-        ReflectionTestUtils.setField(userProfileController, "userService", userService);
-
         ResponseEntity<?> response = userProfileController.loadUserProfile(token);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -44,19 +40,20 @@ class UserProfileControllerTest {
         User userToUpdate = new User();
         userToUpdate.setId(1L);
         userToUpdate.setEmail("newemail@example.com");
+        userToUpdate.setRole("USER");
 
         User userToSave = new User();
         userToSave.setId(1L);
         userToSave.setEmail("oldemail@example.com");
 
+        String token = "your-token";
+        when(userService.getUserByToken(token)).thenReturn(userToUpdate);
+
         when(userService.getUserById(userToUpdate.getId())).thenReturn(Optional.of(userToSave));
         when(userService.getUserByEmail(userToUpdate.getEmail())).thenReturn(null);
         when(userService.updateUser(userToUpdate, userToSave)).thenReturn(userToSave);
-        UserProfileController userProfileController = new UserProfileController();
 
-        ReflectionTestUtils.setField(userProfileController, "userService", userService);
-
-        ResponseEntity<?> response = userProfileController.updateUser(userToUpdate);
+        ResponseEntity<?> response = userProfileController.updateUser(token,userToUpdate);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(userToSave, response.getBody());
     }
@@ -66,14 +63,14 @@ class UserProfileControllerTest {
         User userToUpdate = new User();
         userToUpdate.setId(1L);
         userToUpdate.setEmail("newemail@example.com");
+        userToUpdate.setRole("USER");
+
+        String token = "your-token";
+        when(userService.getUserByToken(token)).thenReturn(userToUpdate);
 
         when(userService.getUserById(userToUpdate.getId())).thenReturn(Optional.empty());
 
-        UserProfileController userProfileController = new UserProfileController();
-
-        ReflectionTestUtils.setField(userProfileController, "userService", userService);
-
-        ResponseEntity<?> response = userProfileController.updateUser(userToUpdate);
+        ResponseEntity<?> response = userProfileController.updateUser(token,userToUpdate);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
@@ -82,18 +79,18 @@ class UserProfileControllerTest {
         User userToUpdate = new User();
         userToUpdate.setId(1L);
         userToUpdate.setEmail("existingemail@example.com");
+        userToUpdate.setRole("USER");
 
         User userToSave = new User();
-        userToSave.setId(1L);
+        userToSave.setId(2L);
         userToSave.setEmail("existingemail@example.com");
+        String token = "your-token";
+        when(userService.getUserByToken(token)).thenReturn(userToUpdate);
 
-        when(userService.getUserById(userToUpdate.getId())).thenReturn(Optional.of(userToSave));
+        when(userService.getUserById(userToUpdate.getId())).thenReturn(Optional.of(userToUpdate));
         when(userService.getUserByEmail(userToUpdate.getEmail())).thenReturn(userToSave);
-        UserProfileController userProfileController = new UserProfileController();
 
-        ReflectionTestUtils.setField(userProfileController, "userService", userService);
-
-        ResponseEntity<?> response = userProfileController.updateUser(userToUpdate);
+        ResponseEntity<?> response = userProfileController.updateUser(token,userToUpdate);
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
     }
 

@@ -146,7 +146,7 @@ function checkTokenExpiration(token) {
 function transformTimestampToData(timestamp, withTime) {
     let date = new Date(timestamp);
     let formattedDate;
-    if (withTime)
+    if (withTime === "true")
         formattedDate = date.toLocaleDateString('en-GB') + " " + date.toLocaleTimeString('en-GB');
     else
         formattedDate = date.toLocaleDateString('en-GB');

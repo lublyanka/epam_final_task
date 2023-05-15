@@ -70,7 +70,7 @@ public class UserService {
     if (userToSave.getPhone() == null || (!userToSave.getPhone().equals(updatedUser.getPhone())))
       userToSave.setPhone(updatedUser.getPhone());
 
-    if (userToSave.getAddress() == null || userToSave.getAddress().equals(updatedUser.getAddress()))
+    if (userToSave.getAddress() == null || (!userToSave.getAddress().equals(updatedUser.getAddress())))
       userToSave.setAddress(updatedUser.getAddress());
 
     userToSave.setUpdatedOn(Timestamp.from(Instant.now()));

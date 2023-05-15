@@ -4,6 +4,7 @@ import com.example.cards.controllers.auth.RegistrationController;
 import com.example.cards.entities.User;
 import com.example.cards.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,16 +20,13 @@ public class RegIntegralTest {
   @Autowired private RegistrationController registrationController;
   @Autowired UserRepository  userRepository;
 
-  @BeforeAll
-  public static void init() {
-
-
-
+  @BeforeEach
+  public void init() {
+    userRepository.deleteAllInBatch(); //TODO this is unsafe better add here instantiation of docker test postgress
   }
 
   @Test
   void contextLoads() {
-    userRepository.deleteAllInBatch(); //TODO this is unsafe
     User user = new User();
     user.setName("John");
     user.setSurname("Smith");
