@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.security.Key;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -29,7 +29,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RequiredArgsConstructor
-@Log
+@Log4j2
 public class JwtTokenFilter extends OncePerRequestFilter {
 
   @Qualifier("jwtKey")
@@ -48,8 +48,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
    * @param request HTTP servlet request
    * @param response HTTP serblet response
    * @param filterChain Spring Servlet chain of filters
-   * @throws ServletException
-   * @throws IOException
    */
   @Override
   protected void doFilterInternal(

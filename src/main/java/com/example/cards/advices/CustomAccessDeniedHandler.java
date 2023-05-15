@@ -3,14 +3,14 @@ package com.example.cards.advices;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import lombok.extern.apachecommons.CommonsLog;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 /** The Custom access denied handler. */
-@CommonsLog
+@Log4j2
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
   /**

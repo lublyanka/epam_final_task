@@ -14,7 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 @SpringJUnitConfig
@@ -40,7 +39,15 @@ class JwtTokenUtilTest {
         user.setPhone("1234567890");
         user.setRole("USER");
         userPrincipal = new UserPrincipal(user);
-        token = jwtTokenUtil.generateJwtToken(userPrincipal);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("roles", userPrincipal.getAuthorities());
+        token = Jwts.builder()
+                .setClaims(claims)
+                .setSubject(userPrincipal.getUsername())
+                .setIssuedAt(new Date(Instant.now().toEpochMilli()))
+                .setExpiration(new Date(Instant.now().toEpochMilli() + TOKEN_VALIDITY_MS))
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
         log.info(token);
     }
 
@@ -60,12 +67,8 @@ class JwtTokenUtilTest {
     void validateToken() {
         String username = "john@example.com";
         UserPrincipal userDetails = mock(UserPrincipal.class);
-        JwtTokenUtil jwtTokenUtil2 = mock(JwtTokenUtil.class);
-        when(jwtTokenUtil2.extractUsername(token)).thenReturn(username);
         when(userDetails.getUsername()).thenReturn(username);
-        when(jwtTokenUtil2.isTokenExpired(token)).thenReturn(false);
-        boolean result = jwtTokenUtil2.validateToken(token, userDetails);
-        //verify(jwtTokenUtil2).extractUsername(token);
+        boolean result = jwtTokenUtil.validateToken(token, userDetails);
         assertTrue(result);
       }
 
@@ -110,6 +113,7 @@ class JwtTokenUtilTest {
         List<String> roles = Arrays.asList("ROLE_ADMIN", "ROLE_USER");
         Claims claims = mock(Claims.class);
         when(claims.get("roles", List.class)).thenReturn(roles);
+        when(Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody()).thenReturn(claims);
         List<String> result = jwtTokenUtil.extractRoles(token);
         assertEquals(roles, result);
         verify(claims).get("roles", List.class);

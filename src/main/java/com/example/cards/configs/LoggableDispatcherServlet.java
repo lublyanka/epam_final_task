@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import lombok.extern.apachecommons.CommonsLog;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.core.log.LogMessage;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -15,7 +15,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.springframework.web.util.WebUtils;
 
 /** The Loggable dispatcher servlet. */
-@CommonsLog
+@Log4j2
 public class LoggableDispatcherServlet extends DispatcherServlet {
 
   @Override
@@ -23,9 +23,11 @@ public class LoggableDispatcherServlet extends DispatcherServlet {
       @Nullable HttpServletRequest request, @Nullable HttpServletResponse response)
       throws Exception {
     if (!(request instanceof ContentCachingRequestWrapper)) {
+      assert request != null;
       request = new ContentCachingRequestWrapper(request);
     }
     if (!(response instanceof ContentCachingResponseWrapper)) {
+      assert response != null;
       response = new ContentCachingResponseWrapper(response);
     }
     HandlerExecutionChain handler = getHandler(request);
