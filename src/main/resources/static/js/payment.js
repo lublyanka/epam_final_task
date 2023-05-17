@@ -43,6 +43,12 @@ function insertPayment(jsonData) {
   if (jsonData.status === "SENT") {
     hideElement(sendPaymentDiv);
     var elem = document.getElementById("status");
+    elem.classList.remove("grey-text");
+    elem.classList.add("blue-text");
+    elem.classList.add("text-darken-4");
+    elem = document.getElementById("status_icon");
+    elem.innerHTML=  "mail";
+    elem.classList.remove("grey-text");
     elem.classList.add("blue-text");
     elem.classList.add("text-darken-4");
   }

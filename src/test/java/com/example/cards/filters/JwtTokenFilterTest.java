@@ -65,16 +65,12 @@ class JwtTokenFilterTest {
       when(jwtTokenUtil.extractUsername(token)).thenReturn("john@example.com");
       List<String> roles = List.of("ROLE_USER");
       Claims claims = mock(Claims.class);
-      //when(claims.get("roles", List.class)).thenReturn(roles);
       when(jwtTokenUtil.extractRoles(token)).thenReturn(roles);
       UserPrincipal userPrincipal = mock(UserPrincipal.class);
       Collection<? extends GrantedAuthority> authorities = List.of(new GrantedAuthorityMock());
-      // when(userPrincipal.getAuthorities()).thenReturn(authorities);
       when(jwtUserDetailsService.loadUserByUsername("john@example.com")).thenReturn(userPrincipal);
-      //when(response.getWriter()).thenReturn(new PrintWriter(System.out));
       SecurityContext securityContextMock = mock(SecurityContext.class);
-      utilities.when(() -> SecurityContextHolder.createEmptyContext()).thenReturn(securityContextMock);;
-      //utilities.when(() -> SecurityContextHolder.setContext(securityContextMock));
+      utilities.when(SecurityContextHolder::createEmptyContext).thenReturn(securityContextMock);;
       Authentication authentication = mock(Authentication.class);
       when(securityContextMock.getAuthentication()).thenReturn(authentication);
       when(authentication.getAuthorities()).thenReturn(List.of());

@@ -86,7 +86,7 @@ public class PaymentService {
     Page<Payment> pageResult =
         paymentRepository.findAllByUser_Id(
             user.getId(),
-            PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy)));
+           PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy)));
     // pageResult.forEach(x -> x.setAccount(null));
     return pageResult;
     // paymentList.stream().sorted(getComparator(sortBy, sortOrder)).toList();

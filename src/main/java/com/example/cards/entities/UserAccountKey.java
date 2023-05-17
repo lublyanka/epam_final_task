@@ -32,6 +32,6 @@ public class UserAccountKey implements Serializable {
     this.accountId = account;
   }
 
-  /** Instantiates a new User account key. *//*
-  public UserAccountKey() {}*/
+  /** Instantiates a new User account key. */
+  public UserAccountKey() {}
 }

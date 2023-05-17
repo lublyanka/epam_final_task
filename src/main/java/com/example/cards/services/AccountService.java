@@ -15,6 +15,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /** The Account service. */
 @Service
+@Log4j2
 public class AccountService {
 
   @Autowired private AccountRepository accountRepository;
@@ -84,13 +87,14 @@ public class AccountService {
               user,
               PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy)));
     } else {
-      boolean isBlocked = Boolean.getBoolean(status);
+      boolean isBlocked = Boolean.parseBoolean(status);
       pageResult =
           accountRepository.findAllByUserIdWithPaginationAndStatus(
               user,
               isBlocked,
               PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy)));
     }
+    log.info("Page is ready" + pageResult.toString());
     return pageResult;
   }
 
@@ -213,6 +217,7 @@ public class AccountService {
           case "balance" -> Comparator.comparing(Account::getCurrentBalance);
           default -> Comparator.comparing(x -> Integer.valueOf(x.getNumber()));
         };
+
 
     if (sortOrder.equals("desc")) {
       comparator = comparator.reversed();

@@ -70,7 +70,8 @@ public class UserService {
     if (userToSave.getPhone() == null || (!userToSave.getPhone().equals(updatedUser.getPhone())))
       userToSave.setPhone(updatedUser.getPhone());
 
-    if (userToSave.getAddress() == null || (!userToSave.getAddress().equals(updatedUser.getAddress())))
+    if (userToSave.getAddress() == null
+        || (!userToSave.getAddress().equals(updatedUser.getAddress())))
       userToSave.setAddress(updatedUser.getAddress());
 
     userToSave.setUpdatedOn(Timestamp.from(Instant.now()));
@@ -175,5 +176,13 @@ public class UserService {
     // Allow letters, spaces, apostrophes, and hyphens, as well as Cyrillic and Spanish characters
     return !str.matches(
         "[a-zA-Z\\u00C0-\\u024F\\u0400-\\u04FF\\u0500-\\u052F\\u1E00-\\u1EFF\\s'’\\-]+");
+  }
+
+  public boolean isValid(User userToUpdate) {
+    return userToUpdate.getEmail() != null
+        && userToUpdate.getPhone() != null
+        && userToUpdate.getSurname() != null
+        && userToUpdate.getName() != null
+        && userToUpdate.getBirthDate() != null;
   }
 }

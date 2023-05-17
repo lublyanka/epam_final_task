@@ -74,7 +74,7 @@ function insertAccount(jsonData) {
 
     if (jsonData.requested && !isUserAdmin(decodedToken)) {
       elem = unblockAccountButton.firstElementChild.firstElementChild;
-      elem.classList.add(" disabled");
+      elem.classList.add("disabled");
       elem.firstElementChild.innerHTML = "access_time";
       document.getElementById("requestSent").removeAttribute("style");
     }
@@ -182,7 +182,7 @@ async function unblockAccount() {
       else
         M.toast({ html: 'Account unblocked request is submitted.', displayLength: 3000 });
       let element = document.getElementById("unblockAccount").firstElementChild.firstElementChild;
-      element.classList.add(" disabled");
+      element.classList.add("disabled");
     } else {
       insertTestErrorMessageFromResponse(response);
     }

@@ -22,6 +22,8 @@ class AuthenticationServiceTest {
   private final AuthenticationService authenticationService =
       new AuthenticationService(passwordEncoder, userService, jwtTokenUtil);
 
+
+
   @Test
   void isUserValid() {
     String password = "password";
@@ -57,17 +59,10 @@ class AuthenticationServiceTest {
     when(userService.getUserByEmail(email)).thenReturn(user);
     UserPrincipal up = new UserPrincipal(user);
     when(jwtTokenUtil.generateJwtToken(any())).thenReturn("token");
-   // when(userService.updateUserLastLogin(user)).then(user.setLastLogin(Timestamp.from(Instant.now()));
+    // when(userService.updateUserLastLogin(user)).then(user.setLastLogin(Timestamp.from(Instant.now()));
     result = authenticationService.isUserValid(password, email);
     assertTrue(result.isPresent());
     assertEquals(jwtTokenUtil.generateJwtToken(up), result.get());
-
-
-
-
-
-
-
   }
 
   @Test

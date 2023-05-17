@@ -23,10 +23,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AccountServiceTest {
@@ -146,6 +143,31 @@ public class AccountServiceTest {
     assertEquals(accounts, result.getContent());
   }
 
+  @Test
+  void testGetAllUserAccounts_WithStatus() {
+    String status = "true";
+    String sortBy = "number";
+    String sortOrder = "asc";
+    int page = 0;
+    int size = 10;
+    String token = "valid_token";
+
+    User user = new User();
+    user.setId(1L);
+
+    List<Account> accounts = new ArrayList<>();
+    accounts.add(new Account());
+    accounts.add(new Account());
+    Page<Account> pageResult = new PageImpl<>(accounts);
+    when(userService.getUserByToken(anyString())).thenReturn(user);
+    when(accountRepository.findAllByUserIdWithPaginationAndStatus(
+            user, true, PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy))))
+            .thenReturn(pageResult);
+
+    Page<Account> result = accountService.getAllUserAccounts(status, sortBy, sortOrder, page, size, token);
+
+    assertEquals(pageResult, result);
+  }
   @Test
   public void testRefillAccount() {
     String token = "validToken";

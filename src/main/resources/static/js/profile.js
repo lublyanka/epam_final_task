@@ -236,7 +236,7 @@ function check() {
   }
 
   const submitButton = document.getElementById('saveProfile');
-  if (!(isValidName && isValidBirthDate && isValidPhone && isValidAddress))
+  if (!(isValidName && isValidBirthDate && isValidPhone && isValidAddress && email.value))
     submitButton.classList.add("disabled");
   else submitButton.classList.remove("disabled");
 }

@@ -75,7 +75,7 @@ async function addPayment() {
 
 
 function check() {
-  const { account, sum, number, currency } = document.getElementById("payment-creation");s
+  const { account, sum, number, currency } = document.getElementById("payment-creation");
   var isValidSum = /\d{1,8}\.{0,1}\d{1,2}$/.test(sum.value);
   var isValidNumber = /^\d{5,20}$/.test(number.value);
   var isAccountSelected = account.value

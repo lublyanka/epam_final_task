@@ -22,17 +22,21 @@ repositories {
 
 extra["snippetsDir"] = file("build/generated-snippets")
 
+configurations {
+    all { exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
+        exclude(group = "com.google")
+        exclude(group = "com.android")
+        exclude(group = "org.glassfish.jaxb")
+        exclude(group = "io.smallrye")
+        exclude(group = "org.hamcrest")
+        exclude(group = "com.vaadin")}
+}
+
 dependencies {
     testImplementation("org.projectlombok:lombok:1.18.26")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(module = "junit")
         exclude(module = "junit-vintage-engine")
-        exclude(group = "com.android")
-        exclude(group = "org.glassfish")
-        exclude(group = "com.google")
-        exclude(group = "io.smallrye")
-        exclude(group = "org.hamcrest")
-        exclude(group = "io.micrometer")
         //exclude(module = "mockito-core")
     }
     testImplementation("org.mockito:mockito-inline:4.8.1")
@@ -52,34 +56,18 @@ dependencies {
 
     annotationProcessor("org.projectlombok:lombok")
 
-    implementation("org.springframework.boot:spring-boot-starter-parent:3.0.5") {
-        exclude(group = "com.android")
-        exclude(group = "org.glassfish")
-        exclude(group = "com.google")
-        exclude(group = "io.smallrye")
-        exclude(group = "org.hamcrest")
-        exclude(group = "io.micrometer")
-    }
+    implementation("org.springframework.boot:spring-boot-starter-parent:3.0.5")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-rest")
-    implementation("org.springframework.boot:spring-boot-starter-security") {
-        exclude(group = "io.smallrye")
-    }
+    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-    implementation("org.springframework.boot:spring-boot-starter-web") {
-        exclude(group = "io.micrometer")
-        exclude(group = "org.glassfish")
-        exclude(group = "com.google")
-        exclude(group = "io.smallrye")
-        exclude(group = "org.hamcrest")
-        exclude(group = "io.micrometer")
-        exclude(group = "com.vaadin")
-    }
+    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
     implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.13.0")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
+    implementation("org.springframework.boot:spring-boot-starter-log4j2:3.0.6")
     implementation("com.google.googlejavaformat:google-java-format:1.15.0") //requirements from Iryna Afanasieva
 }
 

@@ -70,7 +70,7 @@ public class LoggableDispatcherServlet extends DispatcherServlet {
         try {
           return new String(buf, 0, length, wrapper.getCharacterEncoding());
         } catch (UnsupportedEncodingException ex) {
-          // NOOP
+          // TODO
         }
       }
     }

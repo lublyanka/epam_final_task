@@ -41,6 +41,7 @@ class UserServiceTest {
     user.setEmail("john@example.com");
     user.setPassword("Qwerty123");
     user.setPhone("1234567890");
+    user.setBirthDate(Timestamp.from(Instant.now()));
   }
 
   @Test
@@ -134,6 +135,31 @@ class UserServiceTest {
     when(userRepository.existsByEmail(user.getEmail())).thenReturn(true);
     User result = userService.registerUser(user);
     assertNull(result);
+  }
+
+  @Test
+  void updateUser_differentAddress() {
+    User existingUser = user;
+    Instant now = Instant.now();
+    existingUser.setUpdatedOn(Timestamp.from(now.minusMillis(10000)));
+    existingUser.setAddress("123 Main Street");
+
+    User updatedUser = new User();
+    updatedUser.setId(1L);
+    updatedUser.setName("John1");
+    updatedUser.setSurname("Smith1");
+    updatedUser.setEmail("john@example.com1");
+    updatedUser.setPassword("Qwerty1231");
+    updatedUser.setPhone("12345678901");
+    updatedUser.setAddress("123 Main Street1");
+
+    when(userRepository.save(existingUser)).thenReturn(updatedUser);
+
+    User result = userService.updateUser(updatedUser, existingUser);
+
+    assertEquals(updatedUser.getAddress(), result.getAddress());
+    verify(userRepository, times(1)).save(result);
+    verify(userRepository, times(1)).flush();
   }
 
   @Test
@@ -276,5 +302,18 @@ class UserServiceTest {
     verify(userRepository, times(1)).flush();
     assertNotNull(user.getLastLogin());
     assertNotNull(user.getUpdatedOn());
+  }
+
+  @Test
+  public void testIsValid_AllFieldsNonNull_ReturnsTrue() {
+    boolean isValid = userService.isValid(user);
+    assertTrue(isValid);
+  }
+
+  @Test
+  public void testIsValid_AnyFieldNull_ReturnsFalse() {
+    user.setName(null);
+    boolean isValid = userService.isValid(user);
+    assertFalse(isValid);
   }
 }

@@ -17,6 +17,7 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 @SpringJUnitConfig
@@ -55,9 +56,14 @@ class JwtTokenUtilTest {
   }
 
   @Test
-  void generateJwtToken() {
-    Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
-
+  void testGenerateJwtToken() {
+    /*
+    UserPrincipal userPrincipal = mock(UserPrincipal.class);
+    when(userPrincipal.getUsername()).thenReturn("john@example.com");
+    when(userPrincipal.getAuthorities()).thenReturn(Set.of("ROLE_USER"));*/
+    String result = jwtTokenUtil.generateJwtToken(userPrincipal);
+    assertNotNull(result);
+    Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(result).getBody();
     assertEquals(userPrincipal.getUsername(), claims.getSubject());
     assertEquals(Map.of("authority", "ROLE_USER"), claims.get("roles", List.class).get(0));
   }

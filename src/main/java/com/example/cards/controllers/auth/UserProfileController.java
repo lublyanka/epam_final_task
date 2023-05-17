@@ -1,8 +1,5 @@
 package com.example.cards.controllers.auth;
 
-import static com.example.cards.enums.Responses.EMAIL_ALREADY_EXISTS;
-import static com.example.cards.enums.Responses.USER_NOT_FOUND;
-
 import com.example.cards.entities.User;
 import com.example.cards.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
+
+import static com.example.cards.enums.Responses.*;
 
 /** The User profile controller. */
 @RestController
@@ -39,6 +38,8 @@ public class UserProfileController {
    */
   @PostMapping("/update")
   public ResponseEntity<?> updateUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody User userToUpdate) {
+    if(!userService.isValid(userToUpdate))
+      return REQUIRED_FIELDS_ARE_EMPTY;
     User userCurrent = userService.getUserByToken(token);
     if (userCurrent == null) return USER_NOT_FOUND;
 
