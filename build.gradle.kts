@@ -68,6 +68,7 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.13.0")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
     implementation("org.springframework.boot:spring-boot-starter-log4j2:3.0.6")
+    implementation ("io.springfox:springfox-swagger-ui:2.9.2")
     implementation("com.google.googlejavaformat:google-java-format:1.15.0") //requirements from Iryna Afanasieva
 }
 

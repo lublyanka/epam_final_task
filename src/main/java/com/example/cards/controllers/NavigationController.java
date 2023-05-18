@@ -2,8 +2,10 @@ package com.example.cards.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import springfox.documentation.annotations.ApiIgnore;
 
 /** The type Navigation controller. */
+@ApiIgnore
 @Controller
 public class NavigationController {
   /**
