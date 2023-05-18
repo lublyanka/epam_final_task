@@ -1,0 +1,69 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class accounts {
+   created_on: timestamp(6)
+   updated_on: timestamp(6)
+   currencycode: char(3)
+   available_balance: numeric(10,2)
+   name: varchar(255)
+   number: varchar(255)
+   blocked: boolean
+   requested: boolean
+   id: uuid
+}
+class credit_cards {
+   cardtype: varchar(10)
+   month: char(2)
+   year: char(4)
+   account: uuid
+   card_holder: varchar(255)
+   name: varchar(255)
+   card_number: varchar(19)
+}
+class dict_currencies {
+   name: varchar(50)
+   code: char(3)
+}
+class payments {
+   amount: numeric(10,2)
+   created_on: timestamp(6)
+   currencycode: char(3)
+   description: varchar(255)
+   status: varchar(10)
+   updated_on: timestamp(6)
+   account_id: uuid
+   number: varchar(255)
+   user_id: bigint
+   id: uuid
+}
+class user_accounts {
+   account_id: uuid
+   user_id: bigint
+}
+class users {
+   created_on: timestamp(6)
+   email: varchar(255)
+   last_login: timestamp(6)
+   middlename: varchar(255)
+   name: varchar(255)
+   password: varchar(255)
+   phone: varchar(20)
+   surname: varchar(255)
+   role: varchar(10)
+   updated_on: timestamp(6)
+   address: varchar(255)
+   birthdate: timestamp(6)
+   blocked: boolean
+   id: bigint
+}
+
+credit_cards     -[#595959,plain]-^  accounts        : "account:id"
+payments         -[#595959,plain]-^  accounts        : "account_id:id"
+payments         -[#595959,plain]-^  users           : "user_id:id"
+user_accounts    -[#595959,plain]-^  accounts        : "account_id:id"
+user_accounts    -[#595959,plain]-^  users           : "user_id:id"
+@enduml
