@@ -154,7 +154,7 @@ function transformTimestampToData(timestamp, withTime) {
 }
 
 function transformDataToTimestamp(data) {
-    let myDate = data.split(".");
+    let myDate = data.split("/");
     var newTimestamp = new Date(myDate[2], myDate[1], myDate[0]);
     return newTimestamp.getTime();
 }

@@ -70,7 +70,9 @@ function insertAccount(jsonData) {
     var elem = unblockAccountButton;
     elem.removeAttribute("style");
     elem = blockAccountButton;
-    hideElement(elem);;
+    hideElement(elem);
+    elem = document.getElementById("collapsible");
+    hideElement(elem);
 
     if (jsonData.requested && !isUserAdmin(decodedToken)) {
       elem = unblockAccountButton.firstElementChild.firstElementChild;
@@ -91,6 +93,10 @@ async function loadCards(url) {
     hideElement(document.getElementById("no-cards"));
     hideElement(addCardDiv)
     insertCards(jsonData);
+  }
+  else{
+    var elem = document.getElementById("collapsible");
+    hideElement(elem);
   }
 }
 

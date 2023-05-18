@@ -169,6 +169,35 @@ public class AccountServiceTest {
     assertEquals(pageResult, result);
   }
   @Test
+  public void testIsAmountNumeric_ValidAmount_ReturnsTrue() {
+    String amountStr = "10.50";
+    assertTrue(accountService.isAmountNumeric(amountStr));
+  }
+
+  @Test
+  public void testIsAmountNumeric_InvalidAmount_ReturnsFalse() {
+    String amountStr = "ABC";
+    assertFalse(accountService.isAmountNumeric(amountStr));
+  }
+
+  @Test
+  public void testIsAmountPositive_PositiveAmount_ReturnsTrue() {
+    BigDecimal amount = new BigDecimal("100.00");
+    assertTrue(accountService.isAmountPositive(amount));
+  }
+
+  @Test
+  public void testIsAmountPositive_NegativeAmount_ReturnsFalse() {
+    BigDecimal amount = new BigDecimal("-50.00");
+    assertFalse(accountService.isAmountPositive(amount));
+  }
+
+  @Test
+  public void testIsAmountPositive_ZeroAmount_ReturnsFalse() {
+    BigDecimal amount = BigDecimal.ZERO;
+    assertFalse(accountService.isAmountPositive(amount));
+  }
+  @Test
   public void testRefillAccount() {
     String token = "validToken";
     UUID accountId = UUID.fromString("e59c166d-dd39-406b-a27d-408a28a9a643");

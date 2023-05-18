@@ -65,7 +65,7 @@
   "wrongYearError": "Debe contener año completo",
   "wrongMonthError": "Debe contener mes completo",
   "wrongCreditCardFormat": "Numero de tarjeta invalido",
-  "dateFormatError": "Debe ser dd.mm.yyyy",
+  "dateFormatError": "Debe ser dd/mm/yyyy",
   "passwordFormatError": "Debe tener al menos 8 caracteres, contener al menos una letra minúscula, una letra mayúscula y un número",
   "sumNumberFormatError" : "Debe ser en 123.45 formato"
 }

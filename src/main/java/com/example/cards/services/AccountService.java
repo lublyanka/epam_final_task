@@ -47,6 +47,7 @@ public class AccountService {
   @Transactional
   public Optional<Account> getOptionalAccount(String token, UUID accountId) {
     User user = userService.getUserByToken(token);
+    log.info("Getting Account by Id: " + accountId);
     Optional<Account> accountOptional = accountRepository.findById(accountId);
     if (accountOptional.isPresent()) {
       if (user.isAdmin()) {
@@ -82,19 +83,21 @@ public class AccountService {
     User user = userService.getUserByToken(token);
     Page<Account> pageResult;
     if (status == null || status.isEmpty()) {
+      log.info("Getting all user accounts");
       pageResult =
           accountRepository.findAllByUserIdWithPagination(
               user,
               PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy)));
     } else {
       boolean isBlocked = Boolean.parseBoolean(status);
+      log.info("Getting all user accounts (only active ones)");
       pageResult =
           accountRepository.findAllByUserIdWithPaginationAndStatus(
               user,
               isBlocked,
               PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy)));
     }
-    log.info("Page is ready" + pageResult.toString());
+    log.info("Page is ready: " + pageResult.toString());
     return pageResult;
   }
 
@@ -112,12 +115,20 @@ public class AccountService {
     if (accountOptional.isEmpty())
       return Optional.empty();
 
-    if (amount.compareTo(BigDecimal.ZERO) != 1) {
+    if (!isAmountPositive(amount)) {
       return accountOptional;
     }
     Account account = accountOptional.get();
+    log.info(String.format("Top up account with Id %s with %f amount",accountId, amount));
     account.setCurrentBalance(account.getCurrentBalance().add(amount));
     return Optional.of(updateAccount(account));
+  }
+
+  public boolean isAmountNumeric(String amountStr) {
+    return amountStr.matches("^-?\\d+(\\.|,)?\\d{0,2}$");
+  }
+  public boolean isAmountPositive(BigDecimal amount) {
+    return amount.compareTo(BigDecimal.ZERO) > 0;
   }
 
   /**
@@ -136,6 +147,7 @@ public class AccountService {
     accountToSave.setUpdatedOn(Timestamp.from(Instant.now()));
     accountToSave = updateAccount(account);
     UserAccountKey userAccountKey = new UserAccountKey(user, accountToSave);
+    log.info("Saving account with ID " + account.getId());
     userAccountRepository.save(new UserAccount(userAccountKey));
     accountRepository.flush();
     userAccountRepository.flush();
@@ -149,6 +161,7 @@ public class AccountService {
    * @return the account
    */
   public Account updateAccount(Account account) {
+    log.info("Updating account with Id: " + account.getId());
     return accountRepository.save(account);
   }
 
@@ -163,6 +176,7 @@ public class AccountService {
   public Optional<Account> block(String token, UUID accountId) {
     Optional<Account> accountOptional = getOptionalAccount(token, accountId);
     if (accountOptional.isPresent()) {
+      log.info("Blocking account with id: " + accountId);
       Account account = accountOptional.get();
       if (!account.isBlocked()) {
         account.setBlocked(true);
@@ -184,6 +198,7 @@ public class AccountService {
   public Optional<Account> unblockRequest(String token, UUID accountId) {
     Optional<Account> accountOptional = getOptionalAccount(token, accountId);
     if (accountOptional.isPresent()) {
+      log.info("Unblocking request for account with id: " + accountId);
       Account account = accountOptional.get();
       if (account.isBlocked() && !account.isRequested()) {
         account.setRequested(true);
@@ -231,6 +246,7 @@ public class AccountService {
    * @return the all currencies
    */
   public List<Currency> getAllCurrencies() {
+    log.info("Loading currencies from dictionary");
     return currencyRepository.findAll();
   }
 
@@ -245,6 +261,7 @@ public class AccountService {
    */
   //@PreAuthorize("hasAuthority ('ROLE_ADMIN')")
   public Page<Account> getAllAccounts(String sortBy, String sortOrder, int page, int size) {
+    log.info("Admin. Loading all accounts");
     return accountRepository.findAll(
         PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy)));
   }
@@ -261,6 +278,7 @@ public class AccountService {
   public Optional<Account> unblock(String token, UUID accountId) {
     Optional<Account> accountOptional = getOptionalAccount(token, accountId);
     if (accountOptional.isPresent()) {
+      log.info("Admin. Unblocking account with Id: " + accountId);
       Account account = accountOptional.get();
       if (account.isBlocked() && account.isRequested()) {
         account.setBlocked(false);

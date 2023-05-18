@@ -58,7 +58,7 @@ function check() {
   const isValidName = isValidFirstName && isValidSurname;
   //const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value);
   const isValidPassword = passPattern.test(password.value);
-  const isValidBirthDate = /^(\d{2})\.(\d{2})\.(\d{4})$/.test(birthDate.value);
+  const isValidBirthDate = /^(\d{2})\/(\d{2})\/(\d{4})$/.test(birthDate.value);
   const isValidPhone = /^\d{5,20}$/.test(phone.value);
 
 

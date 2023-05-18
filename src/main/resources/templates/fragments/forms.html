@@ -19,7 +19,7 @@
     </div>
     <div class="input-field col s6">
         <label data-i18n-key="email" for="email">Email</label>
-        <input class="validate" data-length="255" id="email" name="email" type="email" onchange="check()">
+        <input class="validate" data-length="255" id="email" name="email" type="email" onchange="check()" disabled>
         <span class="helper-text" data-error=""></span>
     </div>
     <div class="input-field col s6">
@@ -42,7 +42,7 @@
         <input class="validate" id="address" name="address" type="text" onchange="check()">
         <span class="helper-text" data-error=""></span>
     </div>
-    <div class="btn-group">
+    <div class="btn-group col s2">
         <button data-i18n-key="save" class="waves-effect waves-light btn-small disabled" type="submit" id="saveProfile" onclick="event.preventDefault();updateProfile();">Save</button>
     </div>
     <div class="col s12" id="response-message"></div>

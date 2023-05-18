@@ -32,10 +32,10 @@ async function addAccount() {
     currency: currency,
   };
 
-  const response = getPutResponse(addAccountUrl, data);
+  const response = await getPutResponse(addAccountUrl, data);
 
   if (response.status === 200) {
-    if (language === "es")
+    if (localStorage.language === "es")
       M.toast({ html: 'Cuenta añadida!', displayLength: 3000 });
     else
       M.toast({ html: 'Account added!', displayLength: 3000 });

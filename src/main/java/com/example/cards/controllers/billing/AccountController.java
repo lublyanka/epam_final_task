@@ -204,10 +204,10 @@ public class AccountController {
       @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
       @PathVariable UUID accountId,
       @RequestBody String amountStr) {
-    if (!amountStr.matches("^-?\\d+(\\.|,)?\\d{0,2}$"))
+    if (!accountService.isAmountNumeric(amountStr))
       return ResponseEntity.badRequest().body("Refilling sum is not numeric.");
     BigDecimal amount = new BigDecimal(amountStr);
-    if (amount.compareTo(BigDecimal.ZERO) != 1) {
+    if (!accountService.isAmountPositive(amount)) {
       return ResponseEntity.badRequest().body("Refilling sum can't be zero or negative.");
     }
     Optional<Account> optionalAccount = accountService.refillAccount(token, accountId, amount);

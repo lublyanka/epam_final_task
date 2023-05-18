@@ -42,9 +42,11 @@ class AccountControllerTest {
     int size = 10;
 
     Page<Account> mockPage = new PageImpl<>(Collections.emptyList());
-    when(accountService.getAllUserAccounts(isBlocked, sortBy, sortOrder, page, size, token)).thenReturn(mockPage);
+    when(accountService.getAllUserAccounts(isBlocked, sortBy, sortOrder, page, size, token))
+        .thenReturn(mockPage);
 
-    ResponseEntity<?> response = accountController.loadUserAccounts(token, isBlocked, sortBy, sortOrder, page, size);
+    ResponseEntity<?> response =
+        accountController.loadUserAccounts(token, isBlocked, sortBy, sortOrder, page, size);
 
     assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     assertNull(response.getBody());
@@ -68,9 +70,11 @@ class AccountControllerTest {
     mockAccounts.add(account2);
 
     Page<Account> mockPage = new PageImpl<>(mockAccounts);
-    when(accountService.getAllUserAccounts(isBlocked, sortBy, sortOrder, page, size, token)).thenReturn(mockPage);
+    when(accountService.getAllUserAccounts(isBlocked, sortBy, sortOrder, page, size, token))
+        .thenReturn(mockPage);
 
-    ResponseEntity<?> response = accountController.loadUserAccounts(token, isBlocked, sortBy, sortOrder, page, size);
+    ResponseEntity<?> response =
+        accountController.loadUserAccounts(token, isBlocked, sortBy, sortOrder, page, size);
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertTrue(response.getBody() instanceof Page);
@@ -162,10 +166,7 @@ class AccountControllerTest {
     String token = "mock-token";
     UUID accountId = UUID.randomUUID();
     Account mockAccount = new Account();
-    List<CreditCard> mockCreditCards = Arrays.asList(
-            new CreditCard(),
-            new CreditCard()
-    );
+    List<CreditCard> mockCreditCards = Arrays.asList(new CreditCard(), new CreditCard());
     when(accountService.getOptionalAccount(token, accountId)).thenReturn(Optional.of(mockAccount));
     when(creditCardService.getCreditCards(mockAccount)).thenReturn(mockCreditCards);
 
@@ -209,7 +210,8 @@ class AccountControllerTest {
     Account mockAccount = new Account();
     CreditCard mockCreditCard = new CreditCard();
     when(accountService.getOptionalAccount(token, accountId)).thenReturn(Optional.of(mockAccount));
-    when(creditCardService.getCreditCard(cardNumber, mockAccount)).thenReturn(Optional.of(mockCreditCard));
+    when(creditCardService.getCreditCard(cardNumber, mockAccount))
+        .thenReturn(Optional.of(mockCreditCard));
 
     ResponseEntity<?> response = accountController.loadCreditCard(token, accountId, cardNumber);
 
@@ -255,16 +257,15 @@ class AccountControllerTest {
     int size = 10;
     Account mockAccount = new Account();
 
-    List<Payment> mockPayments = Arrays.asList(
-            new Payment(),
-            new Payment()
-    );
+    List<Payment> mockPayments = Arrays.asList(new Payment(), new Payment());
 
     Page<Payment> mockPaymentPage = new PageImpl<>(mockPayments);
     when(accountService.getOptionalAccount(token, accountId)).thenReturn(Optional.of(mockAccount));
-    when(paymentService.getAllAccountPayments(sortBy, sortOrder, page, size, mockAccount)).thenReturn(mockPaymentPage);
+    when(paymentService.getAllAccountPayments(sortBy, sortOrder, page, size, mockAccount))
+        .thenReturn(mockPaymentPage);
 
-    ResponseEntity<?> response = accountController.loadAccountPayments(token, sortBy, sortOrder, page, size, accountId);
+    ResponseEntity<?> response =
+        accountController.loadAccountPayments(token, sortBy, sortOrder, page, size, accountId);
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertEquals(mockPaymentPage, response.getBody());
@@ -283,9 +284,11 @@ class AccountControllerTest {
     Page<Payment> mockEmptyPaymentPage = new PageImpl<>(Collections.emptyList());
 
     when(accountService.getOptionalAccount(token, accountId)).thenReturn(Optional.of(mockAccount));
-    when(paymentService.getAllAccountPayments(sortBy, sortOrder, page, size, mockAccount)).thenReturn(mockEmptyPaymentPage);
+    when(paymentService.getAllAccountPayments(sortBy, sortOrder, page, size, mockAccount))
+        .thenReturn(mockEmptyPaymentPage);
 
-    ResponseEntity<?> response = accountController.loadAccountPayments(token, sortBy, sortOrder, page, size, accountId);
+    ResponseEntity<?> response =
+        accountController.loadAccountPayments(token, sortBy, sortOrder, page, size, accountId);
 
     assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     assertNull(response.getBody());
@@ -302,7 +305,8 @@ class AccountControllerTest {
 
     when(accountService.getOptionalAccount(token, accountId)).thenReturn(Optional.empty());
 
-    ResponseEntity<?> response = accountController.loadAccountPayments(token, sortBy, sortOrder, page, size, accountId);
+    ResponseEntity<?> response =
+        accountController.loadAccountPayments(token, sortBy, sortOrder, page, size, accountId);
 
     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     assertEquals(ACCOUNT_DOES_NOT_EXIST.getBody(), response.getBody());
@@ -316,8 +320,10 @@ class AccountControllerTest {
     BigDecimal amount = new BigDecimal(amountStr);
 
     Account mockAccount = new Account();
-
-    when(accountService.refillAccount(token, accountId, amount)).thenReturn(Optional.of(mockAccount));
+    when(accountService.isAmountNumeric(amountStr)).thenReturn(true);
+    when(accountService.isAmountPositive(amount)).thenReturn(true);
+    when(accountService.refillAccount(token, accountId, amount))
+        .thenReturn(Optional.of(mockAccount));
 
     ResponseEntity<?> response = accountController.replenishAccount(token, accountId, amountStr);
 
@@ -330,6 +336,7 @@ class AccountControllerTest {
     String token = "mock-token";
     UUID accountId = UUID.randomUUID();
     String amountStr = "abc";
+    when(accountService.isAmountNumeric(amountStr)).thenReturn(false);
 
     ResponseEntity<?> response = accountController.replenishAccount(token, accountId, amountStr);
 
@@ -343,6 +350,8 @@ class AccountControllerTest {
     UUID accountId = UUID.randomUUID();
     String amountStr = "-50";
     BigDecimal amount = new BigDecimal(amountStr);
+    when(accountService.isAmountNumeric(amountStr)).thenReturn(true);
+    when(accountService.isAmountPositive(amount)).thenReturn(false);
 
     ResponseEntity<?> response = accountController.replenishAccount(token, accountId, amountStr);
 
@@ -357,6 +366,9 @@ class AccountControllerTest {
     String amountStr = "0";
     BigDecimal amount = new BigDecimal(amountStr);
 
+    when(accountService.isAmountNumeric(amountStr)).thenReturn(true);
+    when(accountService.isAmountPositive(amount)).thenReturn(false);
+
     ResponseEntity<?> response = accountController.replenishAccount(token, accountId, amountStr);
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -370,6 +382,8 @@ class AccountControllerTest {
     String amountStr = "100.50";
     BigDecimal amount = new BigDecimal(amountStr);
 
+    when(accountService.isAmountNumeric(amountStr)).thenReturn(true);
+    when(accountService.isAmountPositive(amount)).thenReturn(true);
     when(accountService.refillAccount(token, accountId, amount)).thenReturn(Optional.empty());
 
     ResponseEntity<?> response = accountController.replenishAccount(token, accountId, amountStr);
@@ -377,6 +391,7 @@ class AccountControllerTest {
     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     assertEquals(ACCOUNT_DOES_NOT_EXIST.getBody(), response.getBody());
   }
+
   @Test
   public void testCreateAccount_ValidAccount_ReturnsCreatedAccount() {
     String token = "mock-token";
