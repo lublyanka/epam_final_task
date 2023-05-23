@@ -9,8 +9,6 @@ import lombok.Setter;
 /** The type Payment request. */
 public class PaymentRequest {
 
-  //@Autowired private CurrencyRepository currencyRepository;
-
   @Getter @Setter private UUID accountId;
   @Getter @Setter private PaymentStatus status;
   @Getter @Setter private BigDecimal amount;

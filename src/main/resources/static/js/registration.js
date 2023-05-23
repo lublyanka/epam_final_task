@@ -13,35 +13,53 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 async function registerUser() {
-  var url = "/api/auth/registration";
-  const { firstname, surname, email, password, phone, birthDate } = document.getElementById("registration-form");
-  let timestamp = transformDataToTimestamp(birthDate.value);
-  const data = {
-    name: firstname.value.trim(),
-    surname: surname.value.trim(),
-    email: email.value.trim(),
-    password: password.value.trim(),
-    phone: phone.value.trim(),
-    birthDate: timestamp
-  };
+  var captcha = grecaptcha.getResponse();
+
+  if (!captcha.length) {
+    languageGlobal === "en" ? insertErrorMessage("No CAPTCHA") : insertErrorMessage("No hay CAPTCHA");
+    return;
+  }// else {
+  //  insertErrorMessage(text);
+  // }
+
+  if ((check()) && (captcha.length)) {
+    var url = "/api/auth/registration";
+    const { firstname, surname, email, password, phone, birthDate } = document.getElementById("registration-form");
+    let timestamp = transformDataToTimestamp(birthDate.value);
+
+    const data = {
+      name: firstname.value.trim(),
+      surname: surname.value.trim(),
+      email: email.value.trim(),
+      password: password.value.trim(),
+      phone: phone.value.trim(),
+      birthDate: timestamp
+    };
 
 
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  });
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'gRecaptchaResponse': captcha
+      },
+      body: JSON.stringify(data)
+    });
 
-  if (response.status === 200) {
-    M.toast({ html: 'Successfully registered!', displayLength: 2000 });
-    setTimeout(() => {
-      window.location.href = "/login";
-    }, "2000");
-  } else {
-    insertTestErrorMessageFromResponse(response);
+    if (response.status === 200) {
+      M.toast({ html: 'Successfully registered!', displayLength: 2000 });
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, "2000");
+    } else {
+      insertTestErrorMessageFromResponse(response);
+    }
   }
+
+  grecaptcha.reset();
+  // if ($data.msg) {
+  //   insertTestErrorMessageFromResponse(captcha);
+  // }
 }
 
 function check() {
@@ -113,5 +131,6 @@ function check() {
 
   const submitButton = document.getElementById('registerButton');
   submitButton.disabled = !(isValidName && isValidPassword && isValidBirthDate && isValidPhone);
+  return isValidName && isValidPassword && isValidBirthDate && isValidPhone;
 }
 

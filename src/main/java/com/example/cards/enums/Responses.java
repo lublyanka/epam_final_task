@@ -76,4 +76,8 @@ public class Responses {
       ResponseEntity.status(HttpStatus.BAD_REQUEST)
           .body(
               "Email must contain a prefix, @ and an email domain. For example: example@mail.com");
+
+  /** The constant CAPTCHA_IS_INVALID. */
+  public static final ResponseEntity<String> INVALID_CAPTCHA =
+          ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid captcha");
 }
