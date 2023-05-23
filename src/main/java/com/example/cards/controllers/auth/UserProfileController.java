@@ -1,15 +1,13 @@
 package com.example.cards.controllers.auth;
 
+import static com.example.cards.enums.Responses.*;
+
 import com.example.cards.entities.User;
 import com.example.cards.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Objects;
-
-import static com.example.cards.enums.Responses.*;
 
 /** The User profile controller. */
 @RestController

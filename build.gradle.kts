@@ -78,4 +78,5 @@ tasks.withType<Test> {
     systemProperty("ENV_DB_URL", "jdbc:postgresql://0.0.0.0:5433/test")
     systemProperty("ENV_DB_PASS", "password")
     environment("ENV_JWT", "3hLlrwrZS8NwKAlhV72NY3M7mmp74Y86/ZPS9wWMsO70BBude+UGxGo1oqC52VRP7P6fG1925mveNn1ta6xAPnywcQ5U+2xw6kqiHQqRf/1GT7dCvialwBucPJiwkf/lTL18GZDsXbuZEsLIuQp+LeZ1bcYgnG4qIS+vg74Da5MNHZV/elYGZPmtmMyITvFgmAGYof5nxpE4Vt8GG8oGkhstgMa4wXYpt8Zo2Q==")
+
 }
