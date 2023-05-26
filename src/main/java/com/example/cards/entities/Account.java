@@ -66,4 +66,7 @@ public class Account {
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "account")
   private List<Payment> payments;
+
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "account")
+  private List<CreditCard> cards;
 }

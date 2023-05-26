@@ -89,25 +89,68 @@ async function loadCards(url) {
   const response = await getGetResponse(url);
   if (response.status === 200) {
     var jsonData = await getJSONData(response);
-    document.getElementById("cards").removeAttribute("style");
+    //document.getElementById("cards").removeAttribute("style");
     hideElement(document.getElementById("no-cards"));
-    hideElement(addCardDiv)
+    //hideElement(addCardDiv)
     insertCards(jsonData);
   }
-  else{
+  else {
     var elem = document.getElementById("collapsible");
     hideElement(elem);
   }
 }
 
 function insertCards(jsonData) {
+  var cardsBlock = document.getElementById("cards");
+  cardsBlock.removeAttribute("style");
   jsonData.forEach(item => {
-    document.getElementById("cardTitle").innerHTML = item.cardTitle;
-    document.getElementById("cardHolder").innerHTML = item.cardHolder;
-    document.getElementById("cardNumber").innerHTML = `••••${item.cardNumber.substr(-4)}`;
-    document.getElementById("cardType").innerHTML = item.cardType;
-    document.getElementById("dueDate").innerHTML = `${item.month}/${item.year}`;
-  });
+    let divRoot = document.createElement("div");
+    divRoot.classList.add("col");
+    divRoot.classList.add("s12");
+    divRoot.classList.add("m4");
+
+    let divCard = document.createElement("div");
+    divCard.classList.add("card");
+    divCard.classList.add("blue");
+    divCard.classList.add("darken-1");
+
+    let divCardContent = document.createElement("div");
+    divCardContent.classList.add("card-content");
+    divCardContent.classList.add("white-text");
+
+    let cardTitle = document.createElement("span");
+    cardTitle.classList.add("card-title");
+    cardTitle.innerHTML = item.cardTitle;
+    divCardContent.appendChild(cardTitle);
+
+    let cardType = document.createElement("div");
+    cardType.classList.add("col");
+    cardType.classList.add("s12");
+    cardType.classList.add("right-align");
+    cardType.innerHTML = item.cardType;
+    divCardContent.appendChild(cardType);
+
+    let cardNumber = document.createElement("div");
+    cardNumber.classList.add("col");
+    cardNumber.classList.add("s9");
+    cardNumber.innerHTML = `••••${item.cardNumber.substr(-4)}`;
+    divCardContent.appendChild(cardNumber);
+
+    let dueDate = document.createElement("div");
+    dueDate.classList.add("col");
+    dueDate.classList.add("s3");
+    dueDate.classList.add("right-align");
+    dueDate.innerHTML = `${item.month}/${item.year}`;
+    divCardContent.appendChild(dueDate);
+
+    let cardHolder = document.createElement("div");
+    cardHolder.innerHTML = item.cardHolder;
+    divCardContent.appendChild(cardHolder);
+
+    divCard.appendChild(divCardContent);
+    divRoot.appendChild(divCard);
+    cardsBlock.appendChild(divRoot);
+  })
 }
 
 async function addCard() {
@@ -209,7 +252,7 @@ async function refill() {
   }
   else {
     makeInputFieldValid(amount);
-  }  
+  }
 
   //send
   const response = await fetch(urlRefill, {

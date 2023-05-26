@@ -31,8 +31,9 @@ https://coolors.co/palette/8ecae6-219ebc-023047-ffb703-fb8500
 ## Configuration
 ### Add environmental variables for [application.properties]
 ```
-ENV_DB_URL
-ENV_DB_USER
-ENV_JWT
-ENV_DB_PAS
+ENV_DB_URL - DB connection url
+ENV_DB_USER - DB user url
+ENV_DB_PASS - DB password
+ENV_JWT - JWT secret
+ENV_GSECRET - Google captcha secret
 ```

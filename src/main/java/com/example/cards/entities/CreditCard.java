@@ -46,7 +46,7 @@ public class CreditCard {
     private String year;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @Setter
     @JoinColumn(name = "account")
     private Account account;
