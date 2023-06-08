@@ -1,5 +1,6 @@
 package com.example.cards.entities;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 
 /** The User account key for User Account cross-table entity. */
 @Embeddable
+@Hidden
 public class UserAccountKey implements Serializable {
 
   @ManyToOne(fetch = FetchType.LAZY)

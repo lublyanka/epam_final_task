@@ -2,6 +2,7 @@ package com.example.cards.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
@@ -13,6 +14,7 @@ import lombok.Setter;
  * The Credit card entity table.
  */
 @Entity
+@Hidden
 @Table(name = "credit_cards", schema = "public")
 public class CreditCard {
 

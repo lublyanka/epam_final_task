@@ -1,11 +1,13 @@
 package com.example.cards.repositories;
 
 import com.example.cards.entities.User;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /** The interface User repository. */
 @Repository
+@Hidden
 public interface UserRepository extends JpaRepository<User, Long> {
 
   /**

@@ -3,13 +3,18 @@ package com.example.cards.repositories;
 import com.example.cards.entities.Account;
 import com.example.cards.entities.User;
 import java.util.UUID;
+
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.models.annotations.OpenAPI30;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import springfox.documentation.annotations.ApiIgnore;
 
 /** The interface Account repository. */
+@Hidden
 public interface AccountRepository extends JpaRepository<Account, UUID> {
 
   /**

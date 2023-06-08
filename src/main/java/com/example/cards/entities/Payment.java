@@ -3,6 +3,7 @@ package com.example.cards.entities;
 import com.example.cards.enums.PaymentStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -13,6 +14,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 /** The Payment entity table. */
 @Entity
+@Hidden
 @Table(name = "payments", schema = "public")
 public class Payment {
 

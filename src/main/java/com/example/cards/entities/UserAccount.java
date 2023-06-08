@@ -1,5 +1,6 @@
 package com.example.cards.entities;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -9,6 +10,7 @@ import lombok.Setter;
 /** The User account cross-table entity. */
 @SuppressWarnings("unused")
 @Entity
+@Hidden
 @Table(name = "user_accounts", schema = "public")
 public class UserAccount {
   @EmbeddedId @Getter @Setter private UserAccountKey userAccountKey;
