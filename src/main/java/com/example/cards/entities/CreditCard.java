@@ -3,6 +3,8 @@ package com.example.cards.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
+
+import java.sql.Timestamp;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,6 +37,7 @@ public class CreditCard {
     @Setter
     private String cardHolder;
 
+/*
     @Column(name = "month", columnDefinition = "character(2)")
     @Getter
     @Setter
@@ -44,6 +47,12 @@ public class CreditCard {
     @Getter
     @Setter
     private String year;
+*/
+
+    @Column(name = "valid_till")
+    @Getter
+    @Setter
+    private Timestamp validTill;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

@@ -140,7 +140,8 @@ function insertCards(jsonData) {
     dueDate.classList.add("col");
     dueDate.classList.add("s3");
     dueDate.classList.add("right-align");
-    dueDate.innerHTML = `${item.month}/${item.year}`;
+    dueDate.innerHTML = transformTimestampToData(item.validTill, false).substring(3);
+    //dueDate.innerHTML = `${item.month}/${item.year}`;
     divCardContent.appendChild(dueDate);
 
     let cardHolder = document.createElement("div");
@@ -166,8 +167,7 @@ async function addCard() {
   var data = {
     cardNumber: cardNumber,
     accountId: accountId,
-    month: month,
-    year: year,
+    validTill: getCardValidTillDate(month, year),
     cardHolder: cardHolder,
     cardType: cardType,
     cardTitle: cardTitle
@@ -184,7 +184,9 @@ async function addCard() {
     /*setTimeout(() => {
       window.location.href = "#!";
     }, "2000");*/
-    M.Modal.getInstance(document.getElementById('modal1')).close()
+    M.Modal.getInstance(document.getElementById('modal1')).close();
+    var cardsBlock = document.getElementById("cards");
+    cardsBlock.innerHTML = "";
     loadCards(urlAccount + "/cards");
   } else {
     await insertTestErrorMessageFromResponse(response);

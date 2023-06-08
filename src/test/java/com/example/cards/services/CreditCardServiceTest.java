@@ -8,6 +8,9 @@ import static org.springframework.test.util.AssertionErrors.assertTrue;
 import com.example.cards.entities.Account;
 import com.example.cards.entities.CreditCard;
 import com.example.cards.repositories.CreditCardRepository;
+
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
 import org.junit.jupiter.api.Assertions;
@@ -130,8 +133,7 @@ public class CreditCardServiceTest {
         creditCard.setCardHolder("John Doe");
         creditCard.setCardType("VISA");
         creditCard.setCardTitle("My Credit Card");
-        creditCard.setYear(String.valueOf(LocalDate.now().plusYears(3).getYear()));
-        creditCard.setMonth(String.valueOf(LocalDate.now().getMonth().getValue()));
+        creditCard.setValidTill(Timestamp.valueOf(LocalDate.now().plusYears(3L).withDayOfMonth(1).atStartOfDay()));
 
         when(creditCardRepository.save(creditCard)).thenReturn(creditCard);
 
@@ -148,14 +150,12 @@ public class CreditCardServiceTest {
     @Test
     public void testIsDueDateBeforeNextMonth() {
         CreditCard creditCard = new CreditCard();
-        creditCard.setYear(String.valueOf(LocalDate.now().plusMonths(1L).getYear()));
-        creditCard.setMonth(String.valueOf(LocalDate.now().plusMonths(1L).withDayOfMonth(1).getMonth().getValue()));
+        creditCard.setValidTill(Timestamp.valueOf(LocalDate.now().plusMonths(1L).withDayOfMonth(1).atStartOfDay()));
 
         boolean result = creditCardService.isDueDateAfterMonthStart(creditCard);
 
         Assertions.assertTrue(result);
-        creditCard.setYear((String.valueOf( LocalDate.now().getYear())));
-        creditCard.setMonth((String.valueOf( LocalDate.now().minusDays(1L).getMonth().getValue())));
+        creditCard.setValidTill(Timestamp.valueOf(LocalDate.now().minusDays(1L).withDayOfMonth(1).atStartOfDay()));
         result = creditCardService.isDueDateAfterMonthStart(creditCard);
         Assertions.assertFalse(result);
     }

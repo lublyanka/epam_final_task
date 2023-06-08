@@ -153,6 +153,11 @@ function transformTimestampToData(timestamp, withTime) {
     return formattedDate;
 }
 
+function getCardValidTillDate(month, year) {
+    var newTimestamp = new Date(year, month, 1);
+    return newTimestamp.getTime();
+}
+
 function transformDataToTimestamp(data) {
     let myDate = data.split("/");
     var newTimestamp = new Date(myDate[2], myDate[1], myDate[0]);

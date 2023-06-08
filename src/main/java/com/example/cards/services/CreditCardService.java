@@ -4,6 +4,7 @@ import com.example.cards.entities.Account;
 import com.example.cards.entities.CreditCard;
 import com.example.cards.repositories.CreditCardRepository;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -66,8 +67,7 @@ public class CreditCardService {
     creditCard.setCardHolder(creditCard.getCardHolder().strip());
     creditCard.setCardType(creditCard.getCardType().strip());
     creditCard.setCardTitle(creditCard.getCardTitle().strip());
-    creditCard.setMonth(creditCard.getMonth().strip());
-    creditCard.setYear(creditCard.getYear().strip());
+    creditCard.setValidTill(creditCard.getValidTill());
     CreditCard creditCardSaved = creditCardRepository.save(creditCard);
     creditCardRepository.flush();
     return creditCardSaved;
@@ -112,9 +112,8 @@ public class CreditCardService {
 
 
   public boolean isDueDateAfterMonthStart(CreditCard creditCard) {
-    LocalDate dueDate =
-        LocalDate.of(
-            Integer.parseInt(creditCard.getYear()), Integer.parseInt(creditCard.getMonth()), 1);
+
+    LocalDate dueDate = creditCard.getValidTill().toInstant().atZone(ZoneId.systemDefault() ).toLocalDate();
       return dueDate.isAfter(LocalDate.now().withDayOfMonth(1));
   }
 }
